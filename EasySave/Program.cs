@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasySave.Contract;
+using EasySave.View;
 
 namespace EasySave
 {
@@ -10,6 +12,9 @@ namespace EasySave
     {
         static void Main(string[] args)
         {
+            IDisplay display = new Display();
+            
+            Console.Read();   
         }
     }
 }
