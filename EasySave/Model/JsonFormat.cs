@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace EasySave.Model
 {
     class JsonFormat
+    // Class used during the generation of the Json log file
     {
         public string writing_time { get; set; }
         public int eligible_files_nbr { get; set; }

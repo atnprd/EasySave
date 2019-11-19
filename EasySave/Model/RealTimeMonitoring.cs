@@ -11,6 +11,7 @@ namespace EasySave.Model
 
 {
     class RealTimeMonitoring
+    // Class that provides two main methods to generate a real-time Json file containing infos on the directory
     {
         private DirectoryInfo path_dir_to_backup;
         private string timestamp_information_writing;
@@ -22,6 +23,7 @@ namespace EasySave.Model
         private string backing_up_file;
 
         public RealTimeMonitoring(string path_file)
+        // Constructor of the RealTimeMonitoring classs
         {
             path_dir_to_backup = new DirectoryInfo(path_file);
             timestamp_information_writing = "N/A";
@@ -34,6 +36,7 @@ namespace EasySave.Model
         }
 
         public void updateInfos(int current_file_number)
+        // Method that updates all attributes
         {
             updateTimestampInfos();
             updateNbrEligibleFiles();
@@ -45,6 +48,7 @@ namespace EasySave.Model
         }
 
         public void writeJSON(string path)
+        // Method that writes a Json file containing all the attributes
         {
             List<JsonFormat> _data = new List<JsonFormat>();
             _data.Add(new JsonFormat()
@@ -65,6 +69,7 @@ namespace EasySave.Model
         }
 
         private void updateTimestampInfos()
+        // Method that updates the timestamp_information_writing attribute
         {
             DateTime localDate = DateTime.Now;
             var culture = new CultureInfo("fr-FR");
@@ -72,12 +77,14 @@ namespace EasySave.Model
         }
 
         private void updateNbrEligibleFiles()
+        // Method that updates the nbr_eligible_files attribute
         {
             nbr_eligible_files = path_dir_to_backup.GetFiles().Length-1;
         }
 
         private void updateSizeFilesToBackup()
-        {   
+        // Method that updates the total_size_files_to_backup attribute
+        {
             long files_size = 0;
             FileInfo[] files = path_dir_to_backup.GetFiles("*");
 
@@ -89,17 +96,20 @@ namespace EasySave.Model
         }
 
         private void updateProgress(int current_file_number)
+        // Method that updates the progress attribute
         {
             double tmp_progress = (double)current_file_number / (double)nbr_eligible_files;
             progress = (int)(Math.Round(tmp_progress, 2) * 100);
         }
 
         private void updateLeftFilesNbr(int current_file_number)
+        // Method that updates the nbr_files_left attribute
         {
             nbr_files_left = nbr_eligible_files - current_file_number;
         }
 
         private void updateLeftFileSize(int current_file_number)
+        // Method that updates the size_files_left attribute
         {
             long files_size = 0;
             int i = 0;
@@ -117,6 +127,7 @@ namespace EasySave.Model
         }
 
         private void updateCurrentFileName(int file_number)
+        // Method that updates the backing_up_file attribute
         {
             FileInfo[] files = path_dir_to_backup.GetFiles("*");
             int i = 0;
@@ -131,6 +142,7 @@ namespace EasySave.Model
         }
 
         private string adaptFileSize(long files_size)
+        // Method that adapts total_size_files_to_backup and size_files_left attributes depending on their content
         {
             string size_files = "";
             if (files_size < 999)
