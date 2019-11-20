@@ -12,9 +12,11 @@ namespace EasySave
     {
         static void Main(string[] args)
         {
+            while(true){
             IDisplay display = new Display();
             
-            Console.Read();   
+            Console.ReadKey();   
+             }
         }
     }
 }

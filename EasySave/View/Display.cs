@@ -10,24 +10,48 @@ namespace EasySave.View
     class Display : IDisplay
     {
 
-        private string path;
-        private string backuptype;
-
+        
         public Display()
         {
-            Console.WriteLine("Enter -help to ask for help");
-            string capture = Console.ReadLine();
-            Commande(capture);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Enter -help to view all command console");
+            Console.WriteLine("Enter -add <name> <type of backup> <source folder> <target folder> to add file in queue");
+            Console.WriteLine("Enter -remove <name> or <all> to remove file in queue");
+            Console.WriteLine("Enter -save <name> or <all> to save your files");
+            Console.ResetColor();
+
+            string _capture = Console.ReadLine();
+            string[] _capture_split = _capture.Split(' ');
+           
+            Commande(_capture_split[0],_capture_split[1],_capture_split[2],_capture_split[3],_capture_split[4]);
+        
+            
         }
-        public void Commande(string cmd)
+        public void Commande(string _cmd, string _name, string _backuptype  ,string _source_folder, string _target_folder)
         {
-            switch (cmd)
+            switch (_cmd)
             {
-                case "-help":   
+                case "-help": 
+                        
                     break;
                 case "-save":
-                    break;
+                   if(_name == null){
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("please enter <name> or <all>" );
+                        Console.ResetColor();
+                    }else{
+
+                    }
+                   break;
                 case "-add":
+                   if(_name == null | _backuptype == null | _source_folder == null | _target_folder == null){
+                         Console.ForegroundColor = ConsoleColor.Red;
+                         Console.WriteLine("please enter <name> or <all>" );
+                         Console.ResetColor();
+                    }
+                    break;
+                case "-remove":
+                        
                     break;
                 
             }
