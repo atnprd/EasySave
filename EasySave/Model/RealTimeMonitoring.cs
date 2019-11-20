@@ -161,12 +161,12 @@ namespace EasySave.Model
             }
             else if (files_size < 999999999999)
             {
-                double left_files_size_go = files_size / 1000000d;
+                double left_files_size_go = files_size / 1000000000d;
                 size_files = Math.Round(left_files_size_go, 2).ToString() + " Go";
             }
             else
             {
-                double left_files_size_to = files_size / 1000000d;
+                double left_files_size_to = files_size / 1000000000000d;
                 size_files = Math.Round(left_files_size_to, 2).ToString() + " To";
             }
 
