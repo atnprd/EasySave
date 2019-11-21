@@ -12,8 +12,6 @@ namespace EasySave
     {
         static void Main(string[] args)
         {
-            IDisplay display = new Display();
-            Console.ReadKey();   
             
         }
     }
