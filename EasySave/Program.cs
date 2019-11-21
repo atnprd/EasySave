@@ -12,18 +12,6 @@ namespace EasySave
     {
         static void Main(string[] args)
         {
-            IBackup save = new BackupDiff("test", "D:/projet/copy", "D:/projet/Test");
-            save.LaunchSave();
-
-            Console.WriteLine("");
-            Console.WriteLine("Enter continuer");
-            Console.Read();
-
-            save.LaunchSave();
-
-            Console.WriteLine("");
-            Console.WriteLine("Enter pour terminer le programe");
-            Console.Read();
         }
     }
 }
