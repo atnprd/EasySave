@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave.Contract;
 
 namespace EasySave.View
 {
@@ -16,7 +15,7 @@ namespace EasySave.View
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Enter -help to view all command console");
-            Console.WriteLine("Enter -add <name> <type of backup> <source folder> <target folder> to add file in queue");
+            Console.WriteLine("Enter -add <name> <mir|diff> <source folder> <target folder> to add file in queue");
             Console.WriteLine("Enter -remove <id> or <all> to remove file in queue");
             Console.WriteLine("Enter -save <id> or <all> to save your files");
             Console.WriteLine("Enter -show to show all files");
