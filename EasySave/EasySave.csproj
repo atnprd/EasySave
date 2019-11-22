@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Model\JsonFormat.cs" />
     <Compile Include="Model\DailyLog.cs" />
