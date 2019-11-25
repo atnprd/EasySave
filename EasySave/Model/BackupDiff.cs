@@ -119,10 +119,16 @@ namespace EasySave.Model
                 //check if it is a new file or if the file was modified based on the full save
                 if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
                 {
+                    m_daily_log = new DailyLog(fi.FullName, source_folder, target_folder);
+                    m_daily_log.millisecondEarly();
+
                     m_realTimeMonitoring.GenerateLog(current_file);
                     current_file++;
                     string temp_path = target_path + '/' + fi.Name;
                     fi.CopyTo(temp_path, true);
+
+                    m_daily_log.millisecondFinal();
+                    m_daily_log.write(target_folder);
                 }
             }
             DirectoryInfo[] dirs = di.GetDirectories();
