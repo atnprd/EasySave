@@ -13,19 +13,17 @@ namespace EasySave.Controller
     {
 
         List<IBackup> backup = new List<IBackup>();
-        
         IDisplay display = new Display();
 
         public MainController()
         {
-
-            
             while (true) {
-                string _capture = Console.ReadLine();
+                string _capture = display.Readline();
                 string[] _capture_split = _capture.Split(' ');
                 Process(_capture_split);
             }
         }
+        //method that process data
         private void Process(string[]  _capture)
         {
             switch (_capture[0])
@@ -40,6 +38,7 @@ namespace EasySave.Controller
                         foreach (IBackup file in backup)
                         {
                             file.LaunchSave();
+                            display.Success("-save");
                         }
                     }
                     else
@@ -51,8 +50,8 @@ namespace EasySave.Controller
                             {
                                 if(file.GetType() == typeof(BackupDiff) )
                                 {
-                                    Console.WriteLine("do you want to make a backup diff full or no? [y/n]");
-                                    string response = Console.ReadLine();
+                                    display.Success("diff full");
+                                    string response = display.Readline();
                                     if (response == "y")
                                     {
                                         file.LaunchSave(true);
@@ -65,6 +64,7 @@ namespace EasySave.Controller
                                 else { 
                                     file.LaunchSave();
                                 }
+                                display.Success("-save");
                             }
                         }
                     }
@@ -85,6 +85,7 @@ namespace EasySave.Controller
                         {
                             backup.Add(new BackupMirror(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
                         }
+                        display.Success("-add");
                     }
                     break;
                 case "-remove":
@@ -95,6 +96,7 @@ namespace EasySave.Controller
                     else if (_capture[1] == "all")
                     {
                         backup.Clear();
+                        display.Success("-remove all");
                     }
                     else
                     {
@@ -104,7 +106,7 @@ namespace EasySave.Controller
                             if (backup.IndexOf(backup[i])+1 == id)
                             {
                                 backup.Remove(backup[i]);
-                                
+                                display.Success("-remove");
                             }
                         }
 
@@ -117,7 +119,7 @@ namespace EasySave.Controller
                     } 
                     break;
                 case "-help":
-                    display.Help("-help");
+                    display.Help();
                     break;
             }
         }

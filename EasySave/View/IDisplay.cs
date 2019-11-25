@@ -8,7 +8,9 @@ namespace EasySave.View
 {
     interface IDisplay
     {
-        void Help(string _capture);
+        void Help();
         void Error(string error);
+        string Readline();
+        void Success(string success);
     }
 }

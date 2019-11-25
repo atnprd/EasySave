@@ -8,31 +8,25 @@ namespace EasySave.View
 {
     public class Display : IDisplay
     {
-       
+       //Constructor of Display
         public Display()
         {
-            Help("-help");
+            Help();
 
         }
-
-        public void Help(string _capture)
+        //method that display the different cmd
+        public void Help()
         {
-            switch (_capture)
-            {
-                case "-help":
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Enter -help to view all commands console");
-                    Console.WriteLine("Enter -add <name> <mir|diff> <source folder> <target folder> to add file in queue");
-                    Console.WriteLine("Enter -remove <id> or <all> to remove file in queue");
-                    Console.WriteLine("Enter -save <id> or <all> to save your files");
-                    Console.WriteLine("Enter -show to show all files");
-                    Console.ResetColor();
-                    break;
-                default:
-                    break;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Enter -help to view all commands console");
+            Console.WriteLine("Enter -add <name> <mir|diff> <source folder> <target folder> to add file in queue");
+            Console.WriteLine("Enter -remove <id> or <all> to remove file in queue");
+            Console.WriteLine("Enter -save <id> or <all> to save your files");
+            Console.WriteLine("Enter -show to show all files");
+            Console.ResetColor();
 
-            }
         }
+        //method that contains the different error message
         public void Error(string error)
         {
             switch(error)
@@ -58,6 +52,41 @@ namespace EasySave.View
                     Console.ResetColor();
                     break;
             }
+        }
+        //method that contains the different Success message
+        public void Success(string success)
+        {
+            switch (success)
+            {
+                case "-add":
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Task successfully added");
+                    Console.ResetColor();
+                    break;
+                case "-remove":
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Task successfully removed");
+                    Console.ResetColor();
+                    break;
+                case "-remove all":
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Tasks successfully removed");
+                    Console.ResetColor();
+                    break;
+                case "diff full":
+                    Console.WriteLine("do you want to make a backup diff full or no? [y/n]");
+                    break;
+                case "-save":
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Task successfully saved");
+                    Console.ResetColor();
+                    break;
+            }
+        }
+        //method that read user text
+        public string Readline()
+        {
+            return Console.ReadLine();
         }
     }
 }
