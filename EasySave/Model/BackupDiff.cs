@@ -10,7 +10,7 @@ namespace EasySave.Model
     class BackupDiff : IBackup
 
     {
-        public BackupDiff(string _name, string _source_folder, string _target_folder)
+        public BackupDiff(string _name, string _source_folder, string _target_folder, RealTimeMonitoring realTimeMonitoring)
         {
             DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
             if (!diSource.Exists)
@@ -22,12 +22,15 @@ namespace EasySave.Model
             source_folder = _source_folder;
             target_folder = _target_folder;
             first_save = true;
+            m_realTimeMonitoring = realTimeMonitoring;
         }
 
+        private int current_file;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
         private bool m_first_save;
+        private RealTimeMonitoring m_realTimeMonitoring;
 
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
@@ -36,6 +39,7 @@ namespace EasySave.Model
 
         public void LaunchSave()
         {
+            current_file = 0;
             DirectoryInfo di = new DirectoryInfo(m_source_folder);
             if (first_save)
             {
@@ -54,6 +58,7 @@ namespace EasySave.Model
 
         public void LaunchSave(bool full_save)
         {
+            current_file = 0;
             DirectoryInfo di = new DirectoryInfo(m_source_folder);
             if (!full_save && !first_save)
             {
@@ -82,7 +87,8 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
-
+                m_realTimeMonitoring.GenerateLog(current_file);
+                current_file++;
                 string temp_path = target_path + '/' + fi.Name;
                 Console.WriteLine("copy : " + fi.Name);
                 fi.CopyTo(temp_path, true);
@@ -90,7 +96,7 @@ namespace EasySave.Model
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
             {
-                target_path += subdir.Name;
+                target_path += '/' + subdir.Name;
                 FullSave(subdir, target_path);
             }
         }
@@ -107,6 +113,8 @@ namespace EasySave.Model
             {
                 if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
                 {
+                    m_realTimeMonitoring.GenerateLog(current_file);
+                    current_file++;
                     string temp_path = target_path + '/' + fi.Name;
                     Console.WriteLine("copy : " + fi.Name);
                     fi.CopyTo(temp_path, true);
@@ -115,7 +123,7 @@ namespace EasySave.Model
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
             {
-                target_path += subdir.Name;
+                target_path += '/' + subdir.Name;
                 FullSave(subdir, target_path);
             }
         }

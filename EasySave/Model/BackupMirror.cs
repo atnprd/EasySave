@@ -9,7 +9,7 @@ namespace EasySave.Model
 {
     class BackupMirror : IBackup
     {
-        public BackupMirror(string _name, string _source_folder, string _target_folder)
+        public BackupMirror(string _name, string _source_folder, string _target_folder, RealTimeMonitoring realTimeMonitoring)
         {
             DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
             if (!diSource.Exists)
@@ -19,9 +19,12 @@ namespace EasySave.Model
 
             m_name = _name;
             m_source_folder = _source_folder;
-            m_target_folder = _target_folder + '/' + _name;
+            m_target_folder = _target_folder;
+            m_realTimeMonitoring = realTimeMonitoring;
         }
 
+        private int currentFile;
+        private RealTimeMonitoring m_realTimeMonitoring;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
@@ -32,8 +35,10 @@ namespace EasySave.Model
 
         public void LaunchSave()
         {
+            currentFile = 0;
             DirectoryInfo di = new DirectoryInfo(m_source_folder);
-            FullSave(di, m_target_folder);
+            string path = target_folder + '/' + name;
+            FullSave(di, path);
         }
 
         public void FullSave(DirectoryInfo di, string target_path)
@@ -45,7 +50,8 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
-
+                m_realTimeMonitoring.GenerateLog(currentFile);
+                currentFile++;
                 string temp_path = target_path + '/' + fi.Name;
                 Console.WriteLine("copy : " + fi.Name);
                 fi.CopyTo(temp_path, true);
@@ -53,8 +59,8 @@ namespace EasySave.Model
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
             {
-                target_path += subdir.Name;
-                FullSave(subdir, target_path);
+                string temp_path = target_path +'/'+ subdir.Name;
+                FullSave(subdir, temp_path);
             }
         }
 
