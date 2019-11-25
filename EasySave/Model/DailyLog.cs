@@ -70,9 +70,6 @@ namespace EasySave.Model
         {
             file_name = file.Name;
         }
-       
-        
-
 
 
         public void write(string path)

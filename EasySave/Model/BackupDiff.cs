@@ -12,6 +12,7 @@ namespace EasySave.Model
     {
         public BackupDiff(string _name, string _source_folder, string _target_folder)
         {
+            //check if source directory exist
             DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
             if (!diSource.Exists)
             {
@@ -37,6 +38,8 @@ namespace EasySave.Model
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
         public bool first_save { get => m_first_save; set => m_first_save = value; }
 
+
+        //launch save, check if it is the first save, if it is do a full save, else do an incremental save
         public void LaunchSave()
         {
             current_file = 0;
@@ -55,7 +58,7 @@ namespace EasySave.Model
                 IncrementSave(di, target_path, complete_path);
             }
         }
-
+        //launch save, user choose if it is a full or incremental save, if it is the first save he can't force incremental save
         public void LaunchSave(bool full_save)
         {
             current_file = 0;
@@ -78,6 +81,7 @@ namespace EasySave.Model
             }
         }
 
+        //Mirror save
         public void FullSave(DirectoryInfo di, string target_path)
         {
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
@@ -101,6 +105,7 @@ namespace EasySave.Model
             }
         }
 
+        //IncrementalSave
         public void IncrementSave(DirectoryInfo di, string target_path, string complete_path)
         {
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
@@ -108,9 +113,11 @@ namespace EasySave.Model
             {
                 diTarget.Create();
             }
+            // for each file in the directory, check if it was modified
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
+                //check if it is a new file or if the file was modified based on the full save
                 if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
                 {
                     m_realTimeMonitoring.GenerateLog(current_file);
@@ -128,6 +135,7 @@ namespace EasySave.Model
             }
         }
 
+        //check if a file don t exist in a given directory
         private bool CheckNewFile(FileInfo fiBase, DirectoryInfo dirTarget)
         {
             bool new_file = true;
@@ -140,7 +148,7 @@ namespace EasySave.Model
             }
             return new_file;
         }
-
+        //check if a file got a modified version on an other target
         private bool CheckModification(FileInfo fiBase, DirectoryInfo dirTarget)
         {
             bool update_file = false;
