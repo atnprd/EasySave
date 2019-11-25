@@ -18,4 +18,3 @@ namespace EasySave.Model
         void LaunchSave(bool full_save);
     }
 }
-

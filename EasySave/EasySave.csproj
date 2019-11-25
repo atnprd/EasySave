@@ -49,20 +49,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controller\MainController.cs" />
-	<Compile Include="Controller\Controller.cs" />
-    <Compile Include="Controller\Controller.cs" />
     <Compile Include="Model\JsonFormat.cs" />
     <Compile Include="Model\DailyLog.cs" />
-	<Compile Include="Model\BackupDiff.cs" />
+    <Compile Include="Model\BackupDiff.cs" />
     <Compile Include="Model\BackupMirror.cs" />
     <Compile Include="Model\IBackup.cs" />
     <Compile Include="Model\RealTimeMonitoring.cs" />
-	<Compile Include="Model\DailyLog.cs" />
-    <Compile Include="Model\RealTimeMonitoring.cs" />
-	<Compile Include="Model\JsonFormat.cs" />
-    <Compile Include="Model\DailyLog.cs" />
-    <Compile Include="Model\RealTimeMonitoring.cs" />
     <Compile Include="View\IDisplay.cs" />
+	<Compile Include="View\Display.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
