@@ -10,44 +10,50 @@ using Newtonsoft.Json;
 namespace EasySave.Model
 
 {
-    class RealTimeMonitoring
+    public class RealTimeMonitoring
     // Class that provides two main methods to generate a real-time Json file containing infos on the directory
     {
         private DirectoryInfo path_dir_to_backup;
         private string timestamp_information_writing;
         private int nbr_eligible_files;
-        private string total_size_files_to_backup;
+        private long total_size_files_to_backup;
         private int progress;
         private int nbr_files_left;
-        private string size_files_left;
+        private long size_files_left;
         private string backing_up_file;
+        private string write_path;
 
-        public RealTimeMonitoring(string path_file)
+        public RealTimeMonitoring(string path_directory, string _write_path)
         // Constructor of the RealTimeMonitoring classs
         {
-            path_dir_to_backup = new DirectoryInfo(path_file);
+            path_dir_to_backup = new DirectoryInfo(path_directory);
             timestamp_information_writing = "N/A";
-            nbr_eligible_files = 0;
-            total_size_files_to_backup = "N/A";
+            nbr_eligible_files = updateNbrEligibleFiles();
+            total_size_files_to_backup = updateSizeFilesToBackup(); ;
             progress = 0;
             nbr_files_left = 0;
-            size_files_left = "N/A";
+            size_files_left = 0;
             backing_up_file = "N/A";
+            write_path = _write_path;
         }
 
-        public void updateInfos(int current_file_number)
+        public void GenerateLog(int current_file_number)
+        {
+            updateInfos(current_file_number);
+            writeJSON();
+        }
+
+        private void updateInfos(int current_file_number)
         // Method that updates all attributes
         {
             updateTimestampInfos();
-            updateNbrEligibleFiles();
-            updateSizeFilesToBackup();
-            updateProgress(current_file_number);
             updateLeftFilesNbr(current_file_number);
             updateLeftFileSize(current_file_number);
             updateCurrentFileName(current_file_number);
+            updateProgress();
         }
 
-        public void writeJSON(string path)
+        private void writeJSON()
         // Method that writes a Json file containing all the attributes
         {
             List<JsonFormat> _data = new List<JsonFormat>();
@@ -55,13 +61,13 @@ namespace EasySave.Model
             {
                 writing_time = timestamp_information_writing,
                 eligible_files_nbr = nbr_eligible_files,
-                total_size_backup = total_size_files_to_backup,
+                total_size_backup = adaptFileSize(total_size_files_to_backup),
                 backup_progress = progress,
                 left_files_nbr = nbr_files_left,
-                left_files_size = size_files_left,
+                left_files_size = adaptFileSize(size_files_left),
                 current_backup_file = backing_up_file
             }) ;
-            using (StreamWriter file = File.CreateText(path + "\\realtime_log.json"))
+            using (StreamWriter file = File.CreateText(write_path + "\\realtime_log.json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, _data);
@@ -76,29 +82,29 @@ namespace EasySave.Model
             timestamp_information_writing = localDate.ToString(culture);
         }
 
-        private void updateNbrEligibleFiles()
+        private int updateNbrEligibleFiles()
         // Method that updates the nbr_eligible_files attribute
         {
-            nbr_eligible_files = path_dir_to_backup.GetFiles().Length-1;
+            return path_dir_to_backup.GetFiles("*", SearchOption.AllDirectories).Length;
         }
 
-        private void updateSizeFilesToBackup()
+        private long updateSizeFilesToBackup()
         // Method that updates the total_size_files_to_backup attribute
         {
             long files_size = 0;
-            FileInfo[] files = path_dir_to_backup.GetFiles("*");
+            FileInfo[] files = path_dir_to_backup.GetFiles("*", SearchOption.AllDirectories);
 
             foreach (FileInfo file in files)
             {   
                 files_size += file.Length;
             }
-            total_size_files_to_backup = adaptFileSize(files_size);
+            return files_size;
         }
 
-        private void updateProgress(int current_file_number)
+        private void updateProgress()
         // Method that updates the progress attribute
         {
-            double tmp_progress = (double)current_file_number / (double)nbr_eligible_files;
+            double tmp_progress = (double)nbr_files_left / (double)total_size_files_to_backup;
             progress = (int)(Math.Round(tmp_progress, 2) * 100);
         }
 
@@ -113,7 +119,7 @@ namespace EasySave.Model
         {
             long files_size = 0;
             int i = 0;
-            FileInfo[] files = path_dir_to_backup.GetFiles("*");
+            FileInfo[] files = path_dir_to_backup.GetFiles("*", SearchOption.AllDirectories);
 
             foreach (FileInfo file in files)
             {   
@@ -123,13 +129,13 @@ namespace EasySave.Model
                 }
                 i++;
             }
-            size_files_left = adaptFileSize(files_size);
+            size_files_left = files_size;
         }
 
         private void updateCurrentFileName(int file_number)
         // Method that updates the backing_up_file attribute
         {
-            FileInfo[] files = path_dir_to_backup.GetFiles("*");
+            FileInfo[] files = path_dir_to_backup.GetFiles("*", SearchOption.AllDirectories);
             int i = 0;
             foreach (FileInfo file in files)
             {
@@ -159,15 +165,10 @@ namespace EasySave.Model
                 double left_files_size_mo = files_size / 1000000d;
                 size_files = Math.Round(left_files_size_mo, 2).ToString() + " Mo";
             }
-            else if (files_size < 999999999999)
+            else
             {
                 double left_files_size_go = files_size / 1000000000d;
                 size_files = Math.Round(left_files_size_go, 2).ToString() + " Go";
-            }
-            else
-            {
-                double left_files_size_to = files_size / 1000000000000d;
-                size_files = Math.Round(left_files_size_to, 2).ToString() + " To";
             }
 
             return size_files;
