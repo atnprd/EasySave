@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\Controller.cs" />
+    <Compile Include="Model\FormatDailylog.cs" />
     <Compile Include="Model\Backup.cs" />
     <Compile Include="Model\JsonFormat.cs" />
     <Compile Include="Model\DailyLog.cs" />
