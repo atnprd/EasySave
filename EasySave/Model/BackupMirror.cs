@@ -65,7 +65,6 @@ namespace EasySave.Model
                 m_realTimeMonitoring.GenerateLog(currentFile);
                 currentFile++;
                 string temp_path = target_path + '/' + fi.Name;
-                Console.WriteLine("copy : " + fi.Name);
                 fi.CopyTo(temp_path, true);
 
                 m_daily_log.millisecondFinal();

@@ -94,7 +94,6 @@ namespace EasySave.Model
                 m_realTimeMonitoring.GenerateLog(current_file);
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
-                Console.WriteLine("copy : " + fi.Name);
                 fi.CopyTo(temp_path, true);
             }
             DirectoryInfo[] dirs = di.GetDirectories();
@@ -123,7 +122,6 @@ namespace EasySave.Model
                     m_realTimeMonitoring.GenerateLog(current_file);
                     current_file++;
                     string temp_path = target_path + '/' + fi.Name;
-                    Console.WriteLine("copy : " + fi.Name);
                     fi.CopyTo(temp_path, true);
                 }
             }
