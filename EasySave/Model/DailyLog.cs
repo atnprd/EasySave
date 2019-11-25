@@ -16,7 +16,6 @@ namespace EasySave.Model
     class DailyLog
     {
         private DirectoryInfo path_backup;
-        private string path;
         private FileInfo file;
         private long file_size;
         private string file_name;
@@ -29,7 +28,6 @@ namespace EasySave.Model
 
         public DailyLog(string path)
         {
-            this.path = path;
             this.file = new FileInfo(path);
             
             file_size = 0;
@@ -49,15 +47,8 @@ namespace EasySave.Model
         public void millisecondFinal()
         {
             stopwatch.Stop();
-        }
-
-        public void transferTime()
-        {
             transfer_time = stopwatch.Elapsed.TotalMilliseconds;
         }
-
-
-
 
         public void fileSize()
         {

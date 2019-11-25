@@ -14,6 +14,7 @@ namespace EasySave.Model
         public string total_size_backup { get; set; }
         public int backup_progress { get; set; }
         public string left_files_size { get; set; }
+        public int left_files_nbr { get; set; }
         public string current_backup_file { get; set; }
     }
 }

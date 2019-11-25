@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace EasySave.Model
 {
     class BackupMirror : IBackup
@@ -23,8 +24,10 @@ namespace EasySave.Model
             m_realTimeMonitoring = new RealTimeMonitoring(source_folder, target_folder);
         }
 
-        private int currentFile;
         private RealTimeMonitoring m_realTimeMonitoring;
+        private DailyLog m_daily_log;
+
+        private int currentFile;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
@@ -50,11 +53,17 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
+                m_daily_log = new DailyLog(fi.FullName);
+                m_daily_log.millisecondEarly();
+
                 m_realTimeMonitoring.GenerateLog(currentFile);
                 currentFile++;
                 string temp_path = target_path + '/' + fi.Name;
                 Console.WriteLine("copy : " + fi.Name);
                 fi.CopyTo(temp_path, true);
+
+                m_daily_log.millisecondFinal();
+                m_daily_log.write(target_folder);
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)

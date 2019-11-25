@@ -13,6 +13,6 @@ namespace EasySave
         public string name_file { get; set; }
         public string last_date_file { get; set; }
         public int nbr_files { get; set; }
-        public int time_transfer { get; set; }
+        public double time_transfer { get; set; }
     }
 }
