@@ -17,7 +17,7 @@ namespace EasySave.Model
     {
         private DirectoryInfo path_backup;
         private FileInfo file;
-        private long file_size;
+        private string file_size;
         private string file_name;
         private string file_date;
         private double transfer_time;
@@ -31,7 +31,7 @@ namespace EasySave.Model
         {
             this.file = new FileInfo(path);
             
-            file_size = 0;
+            file_size = "0";
             today = DateTime.Today;
             todayString = today.ToString("yyyyMMdd");
             transfer_time = 0;
@@ -54,7 +54,7 @@ namespace EasySave.Model
 
         public void fileSize()
         {
-            file_size = file.Length;
+            file_size = file.Length + " ko";
             
         }
         public void fileDate()
