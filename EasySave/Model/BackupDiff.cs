@@ -10,7 +10,7 @@ namespace EasySave.Model
     class BackupDiff : IBackup
 
     {
-        public BackupDiff(string _name, string _source_folder, string _target_folder, RealTimeMonitoring realTimeMonitoring)
+        public BackupDiff(string _name, string _source_folder, string _target_folder)
         {
             DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
             if (!diSource.Exists)
@@ -22,7 +22,7 @@ namespace EasySave.Model
             source_folder = _source_folder;
             target_folder = _target_folder;
             first_save = true;
-            m_realTimeMonitoring = realTimeMonitoring;
+            m_realTimeMonitoring = new RealTimeMonitoring(source_folder, target_folder);
         }
 
         private int current_file;

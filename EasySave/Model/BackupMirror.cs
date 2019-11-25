@@ -9,7 +9,7 @@ namespace EasySave.Model
 {
     class BackupMirror : IBackup
     {
-        public BackupMirror(string _name, string _source_folder, string _target_folder, RealTimeMonitoring realTimeMonitoring)
+        public BackupMirror(string _name, string _source_folder, string _target_folder)
         {
             DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
             if (!diSource.Exists)
@@ -17,10 +17,10 @@ namespace EasySave.Model
                 Console.WriteLine("Source file not found");
             }
 
-            m_name = _name;
-            m_source_folder = _source_folder;
-            m_target_folder = _target_folder;
-            m_realTimeMonitoring = realTimeMonitoring;
+            name = _name;
+            source_folder = _source_folder;
+            target_folder = _target_folder;
+            m_realTimeMonitoring = new RealTimeMonitoring(source_folder, target_folder);
         }
 
         private int currentFile;
