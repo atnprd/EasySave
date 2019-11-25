@@ -12,6 +12,7 @@ namespace EasySave.Model
     {
         public BackupMirror(string _name, string _source_folder, string _target_folder)
         {
+            //check if source directory exist 
             DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
             if (!diSource.Exists)
             {
@@ -36,6 +37,8 @@ namespace EasySave.Model
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
 
+
+        //Launching save, setting directory to copy and create save path
         public void LaunchSave()
         {
             currentFile = 0;
@@ -44,13 +47,16 @@ namespace EasySave.Model
             FullSave(di, path);
         }
 
+        //Mirror save
         public void FullSave(DirectoryInfo di, string target_path)
         {
+            //check if target directory exist, in case he doesn't create the directory
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
             if (!diTarget.Exists)
             {
                 diTarget.Create();
             }
+            //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
                 m_daily_log = new DailyLog(fi.FullName);
@@ -65,6 +71,7 @@ namespace EasySave.Model
                 m_daily_log.millisecondFinal();
                 m_daily_log.write(target_folder);
             }
+            //get all sub-directory and foreach call the save function(recursive)
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
             {
