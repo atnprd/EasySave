@@ -33,7 +33,7 @@ namespace EasySave.Model
             
             file_size = 0;
             today = DateTime.Today;
-            todayString = String.Format("{0:y yy yyy yyyy}", today);
+            todayString = today.ToString("yyyyMMdd");
             transfer_time = 0;
             path_backup = new DirectoryInfo(path);
         }
@@ -106,8 +106,6 @@ namespace EasySave.Model
                  serializer.Serialize(file, data);
              }*/
             //var today = new CultureInfo("de-DE");
-
-            Console.WriteLine(todayString);
 
             TextWriter tsw = new StreamWriter(path + "\\"+todayString + ".json", true);
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
