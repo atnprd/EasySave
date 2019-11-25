@@ -8,6 +8,7 @@ namespace EasySave.View
 {
     interface IDisplay
     {
-        void Commande(string[] _capture);
+        void Help(string _capture);
+        void Error(string error);
     }
 }

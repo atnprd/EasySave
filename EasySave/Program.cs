@@ -12,6 +12,7 @@ namespace EasySave
         static void Main(string[] args)
         {
             MainController controller = new MainController();
+            Console.Read();
         }
     }
 }

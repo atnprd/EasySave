@@ -11,9 +11,115 @@ namespace EasySave.Controller
 {
     public class MainController
     {
+
+        List<IBackup> backup = new List<IBackup>();
+        
+        IDisplay display = new Display();
+
         public MainController()
         {
-            IDisplay display = new Display();
+
+            
+            while (true) {
+                string _capture = Console.ReadLine();
+                string[] _capture_split = _capture.Split(' ');
+                Process(_capture_split);
+            }
+        }
+        private void Process(string[]  _capture)
+        {
+            switch (_capture[0])
+            {
+                case "-save":
+                    if (_capture.Length < 2)
+                    {
+                        display.Error("-save");
+                    }
+                    else if (_capture[1] == "all")
+                    {
+                        foreach (IBackup file in backup)
+                        {
+                            file.LaunchSave();
+                        }
+                    }
+                    else
+                    {
+                        int id = Convert.ToInt32(_capture[1]);
+                        foreach (IBackup file in backup)
+                        {
+                            if (backup.IndexOf(file)+1 == id)
+                            {
+                                if(file.GetType() == typeof(BackupDiff) )
+                                {
+                                    Console.WriteLine("do you want to make a backup diff full or no? [y/n]");
+                                    string response = Console.ReadLine();
+                                    if (response == "y")
+                                    {
+                                        file.LaunchSave(true);
+                                    }
+                                    else
+                                    {
+                                        file.LaunchSave(false);
+                                    }                                 
+                                }
+                                else { 
+                                    file.LaunchSave();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "-add":
+                    if (_capture.Length < 4)
+                    {
+                        display.Error("-add");
+                    } else if (backup.Count == 5)
+                    {
+                        display.Error("-add fullqueue");
+                    }
+                    else {
+                        if (_capture[2] == "diff")
+                        {
+                            backup.Add(new BackupDiff(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
+                        }else if (_capture[2] == "mir")
+                        {
+                            backup.Add(new BackupMirror(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
+                        }
+                    }
+                    break;
+                case "-remove":
+                    if (_capture.Length < 2)
+                    {
+                        display.Error("-remove");
+                    }
+                    else if (_capture[1] == "all")
+                    {
+                        backup.Clear();
+                    }
+                    else
+                    {
+                        int id = Convert.ToInt32(_capture[1]);
+                        for (int i = 0; i < backup.Count; i++)
+                        {
+                            if (backup.IndexOf(backup[i])+1 == id)
+                            {
+                                backup.Remove(backup[i]);
+                                
+                            }
+                        }
+
+                    }
+                    break;
+                case "-show":
+                    foreach (IBackup file in backup) { 
+
+                        Console.WriteLine(backup.IndexOf(file)+1 +"." + file.name);
+                    } 
+                    break;
+                case "-help":
+                    display.Help("-help");
+                    break;
+            }
         }
     }
 }
