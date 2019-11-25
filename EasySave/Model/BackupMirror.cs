@@ -68,7 +68,7 @@ namespace EasySave.Model
                 fi.CopyTo(temp_path, true);
 
                 m_daily_log.millisecondFinal();
-                m_daily_log.write(target_folder);
+                m_daily_log.generateDailylog(target_folder);
             }
             //get all sub-directory and foreach call the save function(recursive)
             DirectoryInfo[] dirs = di.GetDirectories();

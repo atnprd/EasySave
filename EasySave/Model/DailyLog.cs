@@ -24,14 +24,16 @@ namespace EasySave.Model
 
         Stopwatch stopwatch = new Stopwatch();
 
-        private DateTime today ;
+        private DateTime today;
+        private string todayString;
 
         public DailyLog(string path)
         {
             this.file = new FileInfo(path);
             
             file_size = 0;
-            today = DateTime.Now;
+            today = DateTime.Today;
+            todayString = String.Format("{0:y yy yyy yyyy}", today);
             transfer_time = 0;
             path_backup = new DirectoryInfo(path);
         }
@@ -52,12 +54,7 @@ namespace EasySave.Model
 
         public void fileSize()
         {
-            FileInfo[] files = path_backup.GetFiles("*");
-            
-            foreach (FileInfo file in files)
-            {
-                file_size += file.Length;
-            }
+            file_size = file.Length;
             
         }
         public void fileDate()
@@ -70,9 +67,27 @@ namespace EasySave.Model
         {
             file_name = file.Name;
         }
+       
+        public void generateDailylog(string path, string source_folder, string target_folder)
+        {
+            dataFiles();
+            write(path, source_folder, target_folder);
+        }
 
 
-        public void write(string path)
+        public void dataFiles()
+        {
+            fileDate();
+            fileSize();
+            fileName();
+
+        }
+
+
+
+
+
+        public void write(string path, string source_folder, string target_folder)
         {
             List<FormatDailylog> data = new List<FormatDailylog>();
             data.Add(new FormatDailylog()
@@ -80,14 +95,25 @@ namespace EasySave.Model
                 size_file = file_size,
                 name_file = file_name,
                 last_date_file = file_date,
-                time_transfer = transfer_time
+                time_transfer = transfer_time,
+                folder_source = source_folder,
+                folder_target = target_folder
+
             });
-            using (StreamWriter file = File.CreateText(path + "\\Dailylog.json"))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, data);
-            }
-          
+            /* using (StreamWriter file = File.CreateText(path + "\\Dailylog.json"))
+             {
+                 JsonSerializer serializer = new JsonSerializer();
+                 serializer.Serialize(file, data);
+             }*/
+            //var today = new CultureInfo("de-DE");
+
+            Console.WriteLine(todayString);
+
+            TextWriter tsw = new StreamWriter(path + "\\"+todayString + ".json", true);
+            string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+            tsw.WriteLine(json);
+            tsw.Close();
+
 
         }
         
