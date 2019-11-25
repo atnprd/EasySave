@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave.Controller
+namespace EasySave.View
 {
-    class Class1
+    interface IDisplay
     {
+        void Help(string _capture);
+        void Error(string error);
     }
 }
