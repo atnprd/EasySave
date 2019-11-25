@@ -104,8 +104,8 @@ namespace EasySave.Model
         private void updateProgress()
         // Method that updates the progress attribute
         {
-            double tmp_progress = (double)nbr_files_left / (double)total_size_files_to_backup;
-            progress = (int)(Math.Round(tmp_progress, 2) * 100);
+            double tmp_progress = (double)size_files_left / (double)total_size_files_to_backup;
+            progress = (int)(100 -((Math.Round(tmp_progress, 2) * 100)));
         }
 
         private void updateLeftFilesNbr(int current_file_number)
