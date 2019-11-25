@@ -26,13 +26,15 @@ namespace EasySave.Model
             m_realTimeMonitoring = new RealTimeMonitoring(source_folder, target_folder);
         }
 
+        private RealTimeMonitoring m_realTimeMonitoring;
+        private DailyLog m_daily_log;
+
         private int current_file;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
         private bool m_first_save;
-        private RealTimeMonitoring m_realTimeMonitoring;
-
+       
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
@@ -119,7 +121,7 @@ namespace EasySave.Model
                 //check if it is a new file or if the file was modified based on the full save
                 if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
                 {
-                    m_daily_log = new DailyLog(fi.FullName, source_folder, target_folder);
+                    m_daily_log = new DailyLog(fi.FullName);
                     m_daily_log.millisecondEarly();
 
                     m_realTimeMonitoring.GenerateLog(current_file);
@@ -128,7 +130,7 @@ namespace EasySave.Model
                     fi.CopyTo(temp_path, true);
 
                     m_daily_log.millisecondFinal();
-                    m_daily_log.write(target_folder);
+                    m_daily_log.write(target_folder, source_folder);
                 }
             }
             DirectoryInfo[] dirs = di.GetDirectories();

@@ -68,10 +68,10 @@ namespace EasySave.Model
             file_name = file.Name;
         }
        
-        public void generateDailylog(string path, string source_folder, string target_folder)
+        public void generateDailylog(string path, string source_folder)
         {
             dataFiles();
-            write(path, source_folder, target_folder);
+            write(path, source_folder);
         }
 
 
@@ -87,7 +87,7 @@ namespace EasySave.Model
 
 
 
-        public void write(string path, string source_folder, string target_folder)
+        public void write(string path, string source_folder)
         {
             List<FormatDailylog> data = new List<FormatDailylog>();
             data.Add(new FormatDailylog()
@@ -97,7 +97,7 @@ namespace EasySave.Model
                 last_date_file = file_date,
                 time_transfer = transfer_time,
                 folder_source = source_folder,
-                folder_target = target_folder
+                folder_target = path
 
             });
             /* using (StreamWriter file = File.CreateText(path + "\\Dailylog.json"))

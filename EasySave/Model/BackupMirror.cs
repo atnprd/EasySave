@@ -59,7 +59,7 @@ namespace EasySave.Model
             //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
-                m_daily_log = new DailyLog(fi.FullName, source_folder, target_folder);
+                m_daily_log = new DailyLog(fi.FullName);
                 m_daily_log.millisecondEarly();
 
                 m_realTimeMonitoring.GenerateLog(currentFile);
@@ -68,7 +68,7 @@ namespace EasySave.Model
                 fi.CopyTo(temp_path, true);
 
                 m_daily_log.millisecondFinal();
-                m_daily_log.generateDailylog(target_folder);
+                m_daily_log.generateDailylog(target_folder, source_folder);
             }
             //get all sub-directory and foreach call the save function(recursive)
             DirectoryInfo[] dirs = di.GetDirectories();
