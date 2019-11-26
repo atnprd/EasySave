@@ -28,7 +28,7 @@ namespace EasySave.Model
         private RealTimeMonitoring m_realTimeMonitoring;
         private DailyLog m_daily_log;
 
-        private int currentFile;
+        private int current_file;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
@@ -41,7 +41,7 @@ namespace EasySave.Model
         //Launching save, setting directory to copy and create save path
         public void LaunchSave()
         {
-            currentFile = 0;
+            current_file = 0;
             DirectoryInfo di = new DirectoryInfo(m_source_folder);
             string path = target_folder + '/' + name;
             FullSave(di, path);
@@ -62,13 +62,13 @@ namespace EasySave.Model
                 m_daily_log = new DailyLog(fi.FullName);
                 m_daily_log.millisecondEarly();
 
-                m_realTimeMonitoring.GenerateLog(currentFile);
-                currentFile++;
+                m_realTimeMonitoring.GenerateLog(current_file);
+                current_file++;
                 string temp_path = target_path + '/' + fi.Name;
                 fi.CopyTo(temp_path, true);
 
                 m_daily_log.millisecondFinal();
-                m_daily_log.write(target_folder);
+                m_daily_log.generateDailylog(target_folder, source_folder);
             }
             //get all sub-directory and foreach call the save function(recursive)
             DirectoryInfo[] dirs = di.GetDirectories();

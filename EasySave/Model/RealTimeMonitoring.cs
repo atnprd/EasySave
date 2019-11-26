@@ -24,7 +24,7 @@ namespace EasySave.Model
         private string write_path;
 
         public RealTimeMonitoring(string path_directory, string _write_path)
-        // Constructor of the RealTimeMonitoring classs
+        // Constructor of the RealTimeMonitoring class
         {
             path_dir_to_backup = new DirectoryInfo(path_directory);
             timestamp_information_writing = "N/A";
@@ -104,8 +104,8 @@ namespace EasySave.Model
         private void updateProgress()
         // Method that updates the progress attribute
         {
-            double tmp_progress = (double)nbr_files_left / (double)total_size_files_to_backup;
-            progress = (int)(Math.Round(tmp_progress, 2) * 100);
+            double tmp_progress = (double)size_files_left / (double)total_size_files_to_backup;
+            progress = (int)(100 -((Math.Round(tmp_progress, 2) * 100)));
         }
 
         private void updateLeftFilesNbr(int current_file_number)

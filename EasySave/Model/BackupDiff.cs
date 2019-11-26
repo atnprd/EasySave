@@ -26,13 +26,15 @@ namespace EasySave.Model
             m_realTimeMonitoring = new RealTimeMonitoring(source_folder, target_folder);
         }
 
+        private RealTimeMonitoring m_realTimeMonitoring;
+        private DailyLog m_daily_log;
+
         private int current_file;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
         private bool m_first_save;
-        private RealTimeMonitoring m_realTimeMonitoring;
-
+       
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
@@ -67,17 +69,13 @@ namespace EasySave.Model
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 string target_path = target_folder + '/' + name + "/tempBackup/";
-                if (Directory.Exists(target_folder))
-                {
-                    Directory.Delete(target_folder, true);
-                }
-                IncrementSave(di, target_folder, complete_path);
+                IncrementSave(di, target_path, complete_path);
             }
             else
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 first_save = false;
-                FullSave(di, m_target_folder);
+                FullSave(di, complete_path);
             }
         }
 
@@ -91,10 +89,16 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
+                m_daily_log = new DailyLog(fi.FullName);
+                m_daily_log.millisecondEarly();
+
                 m_realTimeMonitoring.GenerateLog(current_file);
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
                 fi.CopyTo(temp_path, true);
+
+                m_daily_log.millisecondFinal();
+                m_daily_log.generateDailylog(target_folder, source_folder);
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
@@ -119,18 +123,40 @@ namespace EasySave.Model
                 //check if it is a new file or if the file was modified based on the full save
                 if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
                 {
+                    m_daily_log = new DailyLog(fi.FullName);
+                    m_daily_log.millisecondEarly();
+
                     m_realTimeMonitoring.GenerateLog(current_file);
                     current_file++;
                     string temp_path = target_path + '/' + fi.Name;
                     fi.CopyTo(temp_path, true);
+
+                    m_daily_log.millisecondFinal();
+                    m_daily_log.generateDailylog(target_folder, source_folder);
                 }
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
             {
                 target_path += '/' + subdir.Name;
-                FullSave(subdir, target_path);
+                complete_path += '/' + subdir.Name;
+                IncrementSave(subdir, target_path,complete_path);
             }
+            DeleteEmptyFolder(diTarget);
+        }
+
+        //recursive method that delete all empty folder
+        public void DeleteEmptyFolder(DirectoryInfo dir)
+        {
+            DirectoryInfo[] subdirs = dir.GetDirectories();
+            foreach (DirectoryInfo subdir in subdirs)
+            {
+                DeleteEmptyFolder(subdir);
+            }
+            if (dir.GetFiles("*", SearchOption.AllDirectories).Length == 0)
+            {
+                dir.Delete();
+            } 
         }
 
         //check if a file don t exist in a given directory
@@ -154,18 +180,10 @@ namespace EasySave.Model
             {
                 if (fiBase.Name == fi.Name)
                 {
-                    if (fiBase.Length == fi.Length)
+                    if (fiBase.Length != fi.Length)
                     {
                         update_file = true;
                     }
-                    else
-                    {
-                        update_file = false;
-                    }
-                }
-                else
-                {
-                    update_file = false;
                 }
             }
             return update_file;
