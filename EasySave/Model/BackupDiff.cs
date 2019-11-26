@@ -79,7 +79,7 @@ namespace EasySave.Model
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 first_save = false;
-                FullSave(di, m_target_folder);
+                FullSave(di, complete_path);
             }
         }
 
@@ -130,7 +130,7 @@ namespace EasySave.Model
                     fi.CopyTo(temp_path, true);
 
                     m_daily_log.millisecondFinal();
-                    m_daily_log.write(target_folder, source_folder);
+                    m_daily_log.write(target_folder,  source_folder);
                 }
             }
             DirectoryInfo[] dirs = di.GetDirectories();
