@@ -98,7 +98,7 @@ namespace EasySave.Model
                 fi.CopyTo(temp_path, true);
 
                 m_daily_log.millisecondFinal();
-                m_daily_log.write(target_folder, source_folder);
+                m_daily_log.generateDailylog(target_folder, source_folder);
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
@@ -132,7 +132,7 @@ namespace EasySave.Model
                     fi.CopyTo(temp_path, true);
 
                     m_daily_log.millisecondFinal();
-                    m_daily_log.write(target_folder,  source_folder);
+                    m_daily_log.generateDailylog(target_folder, source_folder);
                 }
             }
             DirectoryInfo[] dirs = di.GetDirectories();
