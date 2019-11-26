@@ -69,11 +69,7 @@ namespace EasySave.Model
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 string target_path = target_folder + '/' + name + "/tempBackup/";
-                if (Directory.Exists(target_folder))
-                {
-                    Directory.Delete(target_folder, true);
-                }
-                IncrementSave(di, target_folder, complete_path);
+                IncrementSave(di, target_path, complete_path);
             }
             else
             {
@@ -93,10 +89,16 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
+                m_daily_log = new DailyLog(fi.FullName);
+                m_daily_log.millisecondEarly();
+
                 m_realTimeMonitoring.GenerateLog(current_file);
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
                 fi.CopyTo(temp_path, true);
+
+                m_daily_log.millisecondFinal();
+                m_daily_log.write(target_folder, source_folder);
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
@@ -137,8 +139,24 @@ namespace EasySave.Model
             foreach (DirectoryInfo subdir in dirs)
             {
                 target_path += '/' + subdir.Name;
-                FullSave(subdir, target_path);
+                complete_path += '/' + subdir.Name;
+                IncrementSave(subdir, target_path,complete_path);
             }
+            DeleteEmptyFolder(diTarget);
+        }
+
+        //recursive method that delete all empty folder
+        public void DeleteEmptyFolder(DirectoryInfo dir)
+        {
+            DirectoryInfo[] subdirs = dir.GetDirectories();
+            foreach (DirectoryInfo subdir in subdirs)
+            {
+                DeleteEmptyFolder(subdir);
+            }
+            if (dir.GetFiles("*", SearchOption.AllDirectories).Length == 0)
+            {
+                dir.Delete();
+            } 
         }
 
         //check if a file don t exist in a given directory
@@ -162,18 +180,10 @@ namespace EasySave.Model
             {
                 if (fiBase.Name == fi.Name)
                 {
-                    if (fiBase.Length == fi.Length)
+                    if (fiBase.Length != fi.Length)
                     {
                         update_file = true;
                     }
-                    else
-                    {
-                        update_file = false;
-                    }
-                }
-                else
-                {
-                    update_file = false;
                 }
             }
             return update_file;
