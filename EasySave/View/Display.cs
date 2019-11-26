@@ -54,13 +54,13 @@ namespace EasySave.View
             }
         }
         //method that contains the different Success message
-        public void Success(string success)
+        public void Success(string success, string name)
         {
             switch (success)
             {
                 case "-add":
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Task successfully added");
+                    Console.WriteLine("Task"+" "+name+" "+"successfully added");
                     Console.ResetColor();
                     break;
                 case "-remove":
@@ -73,14 +73,22 @@ namespace EasySave.View
                     Console.WriteLine("Tasks successfully removed");
                     Console.ResetColor();
                     break;
-                case "diff full":
-                    Console.WriteLine("do you want to make a backup diff full or no? [y/n]");
-                    break;
+                
                 case "-save":
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Task successfully saved");
+                    Console.WriteLine("Task" + " " + name + " " + " successfully saved");
                     Console.ResetColor();
                     break;
+            }
+        }
+        public void AskSave(string ask, string name)
+        {
+            switch (ask)
+            {
+                case "diff full":
+                    Console.WriteLine("Do you want to do a full save for"+" " + name+ " " +"? [y/n]");
+                    break;
+                
             }
         }
         //method that read user text

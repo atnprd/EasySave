@@ -11,6 +11,7 @@ namespace EasySave.View
         void Help();
         void Error(string error);
         string Readline();
-        void Success(string success);
+        void Success(string success, string name);
+        void AskSave(string ask, string name);
     }
 }

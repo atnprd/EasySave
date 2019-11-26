@@ -20,6 +20,8 @@ namespace EasySave.Controller
             while (true) {
                 string _capture = display.Readline();
                 string[] _capture_split = _capture.Split(' ');
+               
+
                 Process(_capture_split);
             }
         }
@@ -35,14 +37,72 @@ namespace EasySave.Controller
                     }
                     else if (_capture[1] == "all")
                     {
+                        int count = 0;
+                        
                         foreach (IBackup file in backup)
                         {
-                            file.LaunchSave();
-                            display.Success("-save");
+                            if (file.GetType() == typeof(BackupDiff))
+                            {
+                                count++; 
+                            }   
+                        }
+                        IBackup[] backupdiff = new IBackup[count];
+                        bool[] backupdifffull = new bool[count];
+                        int y = 0;
+                        for (int i = 0; i < backup.Count; i++)
+                        {
+                            if (backup[i].GetType() == typeof(BackupDiff)) {
+                                backupdiff[y] = backup[i];
+
+                                display.AskSave("diff full", backup[i].name);
+                                string response = display.Readline();
+                                if (response == "y")
+                                {
+                                    backupdifffull[y] = true;
+                                }
+                                else
+                                {
+                                    backupdifffull[y] = false;
+                                }
+                                y++;
+                            }
+                        }
+                        foreach (IBackup file in backup)
+                        {
+                            if (file.GetType() == typeof(BackupDiff))
+                            {
+                                for(int i=0; i<count;i++)
+                                if(backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
+                                {
+                                    file.LaunchSave(backupdifffull[i]);
+                                    
+                                }
+                            }
+                            else
+                            {
+                                file.LaunchSave();
+                            }
                         }
                     }
                     else
                     {
+                        foreach(IBackup file in backup)
+                        {
+                        string temp = file.source_folder.Substring(0, 2);
+                        if (temp == @"\\")
+                            {
+                                Console.WriteLine("enter domaine:");
+                                string domaine = display.Readline();
+                                Console.WriteLine("enter User name:");
+                                string username = display.Readline();
+                                Console.WriteLine("enter password:");
+                                string password = display.Readline();
+
+                                System.Diagnostics.Process.Start("net", @"use " + _capture[3] + @" /USER:" + domaine + @"\" + username + " " + password + " /p:no");
+                                break;
+                            }
+                        }
+                        
                         int id = Convert.ToInt32(_capture[1]);
                         foreach (IBackup file in backup)
                         {
@@ -50,7 +110,7 @@ namespace EasySave.Controller
                             {
                                 if(file.GetType() == typeof(BackupDiff) )
                                 {
-                                    display.Success("diff full");
+                                    display.AskSave("diff full",file.name);
                                     string response = display.Readline();
                                     if (response == "y")
                                     {
@@ -64,13 +124,13 @@ namespace EasySave.Controller
                                 else { 
                                     file.LaunchSave();
                                 }
-                                display.Success("-save");
+                                display.Success("-save",file.name);
                             }
                         }
                     }
                     break;
                 case "-add":
-                    if (_capture.Length < 4)
+                    if (_capture.Length < 5)
                     {
                         display.Error("-add");
                     } else if (backup.Count == 5)
@@ -81,11 +141,14 @@ namespace EasySave.Controller
                         if (_capture[2] == "diff")
                         {
                             backup.Add(new BackupDiff(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
-                        }else if (_capture[2] == "mir")
+                            display.Success("-add", _capture[1]);
+                        }
+                        else if (_capture[2] == "mir")
                         {
                             backup.Add(new BackupMirror(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
+                            display.Success("-add", _capture[1]);
                         }
-                        display.Success("-add");
+                        
                     }
                     break;
                 case "-remove":
@@ -96,7 +159,7 @@ namespace EasySave.Controller
                     else if (_capture[1] == "all")
                     {
                         backup.Clear();
-                        display.Success("-remove all");
+                        display.Success("-remove all",null);
                     }
                     else
                     {
@@ -106,7 +169,7 @@ namespace EasySave.Controller
                             if (backup.IndexOf(backup[i])+1 == id)
                             {
                                 backup.Remove(backup[i]);
-                                display.Success("-remove");
+                                display.Success("-remove",null);
                             }
                         }
 
