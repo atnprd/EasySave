@@ -13,12 +13,13 @@ namespace EasySave.Model
         public BackupDiff(string _name, string _source_folder, string _target_folder)
         {
             //check if source directory exist
+            /**
             DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
             if (!diSource.Exists)
             {
                 Console.WriteLine("Source file not found");
             }
-
+    */
             name = _name;
             source_folder = _source_folder;
             target_folder = _target_folder;
