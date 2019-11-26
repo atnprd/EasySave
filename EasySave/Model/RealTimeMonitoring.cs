@@ -24,7 +24,7 @@ namespace EasySave.Model
         private string write_path;
 
         public RealTimeMonitoring(string path_directory, string _write_path)
-        // Constructor of the RealTimeMonitoring classs
+        // Constructor of the RealTimeMonitoring class
         {
             path_dir_to_backup = new DirectoryInfo(path_directory);
             timestamp_information_writing = "N/A";

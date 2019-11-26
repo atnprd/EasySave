@@ -14,6 +14,7 @@ using System.Diagnostics;
 namespace EasySave.Model
 {
     class DailyLog
+        //Class that generate the daily saves in a JSON file
     {
         private DirectoryInfo path_backup;
         private FileInfo file;
@@ -28,6 +29,7 @@ namespace EasySave.Model
         private string todayString;
 
         public DailyLog(string path)
+            //DailyLog's constructor that instanciate some viariables
         {
             this.file = new FileInfo(path);
             
@@ -42,28 +44,33 @@ namespace EasySave.Model
 
 
         public void millisecondEarly()
+            //method begining a stopwatch
         {
             stopwatch.Restart();
         }
 
         public void millisecondFinal()
+            //method ending the stopwatch and then get the transfer time in milliseconds
         {
             stopwatch.Stop();
             transfer_time = stopwatch.Elapsed.TotalMilliseconds;
         }
 
         public void fileSize()
+            //method getting the file's size 
         {
             file_size = file.Length + " ko";
             
         }
         public void fileDate()
+            //method getting the file's date
         {
             var culture = new CultureInfo("fr-FR");
             file_date = file.LastWriteTime.ToString();
         }
 
         public void fileName()
+            //method getting the file's name 
         {
             file_name = file.Name;
         }
@@ -76,6 +83,7 @@ namespace EasySave.Model
 
 
         public void dataFiles()
+        //method getting all the attributes
         {
             fileDate();
             fileSize();
@@ -88,6 +96,7 @@ namespace EasySave.Model
 
 
         public void write(string path, string source_folder)
+        // Method that writes a Json file containing all the attributes
         {
             List<FormatDailylog> data = new List<FormatDailylog>();
             data.Add(new FormatDailylog()
@@ -100,12 +109,7 @@ namespace EasySave.Model
                 folder_target = path
 
             });
-            /* using (StreamWriter file = File.CreateText(path + "\\Dailylog.json"))
-             {
-                 JsonSerializer serializer = new JsonSerializer();
-                 serializer.Serialize(file, data);
-             }*/
-            //var today = new CultureInfo("de-DE");
+          
 
             TextWriter tsw = new StreamWriter(path + "\\"+todayString + ".json", true);
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -115,7 +119,7 @@ namespace EasySave.Model
 
         }
         
-}
+    }
 
 
     
