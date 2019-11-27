@@ -98,7 +98,7 @@ namespace EasySave.Controller
                                 Console.WriteLine("enter password:");
                                 string password = display.Readline();
 
-                                System.Diagnostics.Process.Start("net", @"use " + _capture[3] + @" /USER:" + domaine + @"\" + username + " " + password + " /p:no");
+                                System.Diagnostics.Process.Start("net", @"use " + file.source_folder + @" /USER:" + domaine + @"\" + username + " " + password + " /p:no");
                                 break;
                             }
                         }
