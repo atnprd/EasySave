@@ -9,16 +9,13 @@ using EasySave.Model;
 
 namespace EasySave.Controller
 {
-    public sealed class MainController
-    {
-        private static readonly Lazy<MainController> lazy = new Lazy<MainController>(() => new MainController());
-
-        public static MainController Instance { get { return lazy.Value; } }
+    public class MainController
+    { 
 
         List<IBackup> backup = new List<IBackup>();
         IDisplay display = new Display();
 
-        private MainController()
+        public MainController()
         {
             while (true) {
                 string _capture = display.Readline();
