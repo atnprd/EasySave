@@ -12,11 +12,14 @@ namespace EasySave.Model
     {
         public BackupMirror(string _name, string _source_folder, string _target_folder)
         {
-            //check if source directory exist 
-            DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
-            if (!diSource.Exists)
+            //check if source directory exist if it is not an extern storage
+            if (_source_folder[0] != '\\')
             {
-                Console.WriteLine("Source file not found");
+                DirectoryInfo diSource = new DirectoryInfo(_source_folder);
+                if (!diSource.Exists)
+                {
+                    Console.WriteLine("Source file not found");
+                }
             }
 
             name = _name;
