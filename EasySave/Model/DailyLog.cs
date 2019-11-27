@@ -13,10 +13,15 @@ using System.Diagnostics;
 
 namespace EasySave.Model
 {
-    class DailyLog
+    public sealed class DailyLog
         //Class that generate the daily saves in a JSON file
     {
-        private DirectoryInfo path_backup;
+        private static readonly Lazy<DailyLog> lazy =
+      new Lazy<DailyLog>(() => new DailyLog());
+
+        public static DailyLog Instance { get { return lazy.Value; } }
+
+
         private FileInfo file;
         private string file_size;
         private string file_name;
@@ -28,18 +33,20 @@ namespace EasySave.Model
         private DateTime today;
         private string todayString;
 
-        public DailyLog(string path)
+        private DailyLog()
             //DailyLog's constructor that instanciate some viariables
         {
-            this.file = new FileInfo(path);
-            
             file_size = "0";
             today = DateTime.Today;
             todayString = today.ToString("yyyyMMdd");
             transfer_time = 0;
-            path_backup = new DirectoryInfo(path);
+            ;
         }
 
+        public void SetPaths( string _path)
+        {
+            this.file = new FileInfo(_path);
+        }
 
 
 
@@ -56,20 +63,20 @@ namespace EasySave.Model
             transfer_time = stopwatch.Elapsed.TotalMilliseconds;
         }
 
-        public void fileSize()
+        private void fileSize()
             //method getting the file's size 
         {
             file_size = file.Length + " ko";
             
         }
-        public void fileDate()
+        private void fileDate()
             //method getting the file's date
         {
             var culture = new CultureInfo("fr-FR");
             file_date = file.LastWriteTime.ToString();
         }
 
-        public void fileName()
+        private void fileName()
             //method getting the file's name 
         {
             file_name = file.Name;
@@ -82,7 +89,7 @@ namespace EasySave.Model
         }
 
 
-        public void dataFiles()
+        private void dataFiles()
         //method getting all the attributes
         {
             fileDate();
