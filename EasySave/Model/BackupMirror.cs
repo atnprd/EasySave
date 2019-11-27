@@ -12,13 +12,13 @@ namespace EasySave.Model
     {
         public BackupMirror(string _name, string _source_folder, string _target_folder)
         {
-            //check if source directory exist if it is not an extern storage
+            //check if source directory exist 
             if (_source_folder[0] != '\\')
             {
                 DirectoryInfo diSource = new DirectoryInfo(_source_folder);
                 if (!diSource.Exists)
                 {
-                    Console.WriteLine("Source file not found");
+                    Console.WriteLine("source folder not found");
                 }
             }
 
@@ -63,7 +63,8 @@ namespace EasySave.Model
             //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
-                m_daily_log = new DailyLog(fi.FullName);
+                m_daily_log = DailyLog.Instance;
+                m_daily_log.SetPaths(fi.FullName);
                 m_daily_log.millisecondEarly();
 
                 m_realTimeMonitoring.GenerateLog(current_file);

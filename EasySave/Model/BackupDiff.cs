@@ -92,7 +92,8 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
-                m_daily_log = new DailyLog(fi.FullName);
+                m_daily_log = DailyLog.Instance;
+                m_daily_log.SetPaths(fi.FullName);
                 m_daily_log.millisecondEarly();
 
                 m_realTimeMonitoring.GenerateLog(current_file);
@@ -126,7 +127,8 @@ namespace EasySave.Model
                 //check if it is a new file or if the file was modified based on the full save
                 if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
                 {
-                    m_daily_log = new DailyLog(fi.FullName);
+                    m_daily_log = DailyLog.Instance;
+                    m_daily_log.SetPaths(fi.FullName);
                     m_daily_log.millisecondEarly();
 
                     m_realTimeMonitoring.GenerateLog(current_file);
