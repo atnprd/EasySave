@@ -10,9 +10,34 @@ using Newtonsoft.Json;
 namespace EasySave.Model
 
 {
-    public class RealTimeMonitoring
+    public sealed class RealTimeMonitoring
     // Class that provides two main methods to generate a real-time Json file containing infos on the directory
     {
+        private static readonly Lazy<RealTimeMonitoring> lazy =
+       new Lazy<RealTimeMonitoring>(() => new RealTimeMonitoring());
+
+        public static RealTimeMonitoring Instance { get { return lazy.Value; } }
+
+        private RealTimeMonitoring()
+        // Constructor of the RealTimeMonitoring class
+        {
+            
+            timestamp_information_writing = "N/A";
+            nbr_eligible_files = updateNbrEligibleFiles();
+            total_size_files_to_backup = updateSizeFilesToBackup(); ;
+            progress = 0;
+            nbr_files_left = 0;
+            size_files_left = 0;
+            backing_up_file = "N/A";
+            
+        }
+
+        public void SetPaths(string path_directory, string _write_path)
+        {
+            path_dir_to_backup = new DirectoryInfo(path_directory);
+            write_path = _write_path;
+        }
+
         private DirectoryInfo path_dir_to_backup;
         private string timestamp_information_writing;
         private int nbr_eligible_files;
@@ -22,20 +47,6 @@ namespace EasySave.Model
         private long size_files_left;
         private string backing_up_file;
         private string write_path;
-
-        public RealTimeMonitoring(string path_directory, string _write_path)
-        // Constructor of the RealTimeMonitoring class
-        {
-            path_dir_to_backup = new DirectoryInfo(path_directory);
-            timestamp_information_writing = "N/A";
-            nbr_eligible_files = updateNbrEligibleFiles();
-            total_size_files_to_backup = updateSizeFilesToBackup(); ;
-            progress = 0;
-            nbr_files_left = 0;
-            size_files_left = 0;
-            backing_up_file = "N/A";
-            write_path = _write_path;
-        }
 
         public void GenerateLog(int current_file_number)
         {

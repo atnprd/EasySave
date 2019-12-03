@@ -12,19 +12,21 @@ namespace EasySave.Model
     {
         public BackupDiff(string _name, string _source_folder, string _target_folder)
         {
-            //check if source directory exist
-            /**
-            DirectoryInfo diSource = new DirectoryInfo(@_source_folder);
-            if (!diSource.Exists)
-            {
-                Console.WriteLine("Source file not found");
+            //check if source directory exist if it is not an extern storage
+            if (_source_folder[0] != '\\'){
+                DirectoryInfo diSource = new DirectoryInfo(_source_folder);
+                if (!diSource.Exists)
+                {
+                    Console.WriteLine("Source file not found");
+                }
             }
-    */
+
             name = _name;
             source_folder = _source_folder;
             target_folder = _target_folder;
             first_save = true;
-            m_realTimeMonitoring = new RealTimeMonitoring(source_folder, target_folder);
+            m_realTimeMonitoring = RealTimeMonitoring.Instance;
+            m_realTimeMonitoring.SetPaths(source_folder, target_folder);
         }
 
         private RealTimeMonitoring m_realTimeMonitoring;
@@ -90,7 +92,8 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
-                m_daily_log = new DailyLog(fi.FullName);
+                m_daily_log = DailyLog.Instance;
+                m_daily_log.SetPaths(fi.FullName);
                 m_daily_log.millisecondEarly();
 
                 m_realTimeMonitoring.GenerateLog(current_file);
@@ -124,7 +127,8 @@ namespace EasySave.Model
                 //check if it is a new file or if the file was modified based on the full save
                 if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
                 {
-                    m_daily_log = new DailyLog(fi.FullName);
+                    m_daily_log = DailyLog.Instance;
+                    m_daily_log.SetPaths(fi.FullName);
                     m_daily_log.millisecondEarly();
 
                     m_realTimeMonitoring.GenerateLog(current_file);
