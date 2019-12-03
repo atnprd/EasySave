@@ -23,8 +23,6 @@ namespace EasySave.Model
         {
             
             timestamp_information_writing = "N/A";
-            nbr_eligible_files = updateNbrEligibleFiles();
-            total_size_files_to_backup = updateSizeFilesToBackup(); ;
             progress = 0;
             nbr_files_left = 0;
             size_files_left = 0;
@@ -35,6 +33,8 @@ namespace EasySave.Model
         public void SetPaths(string path_directory, string _write_path)
         {
             path_dir_to_backup = new DirectoryInfo(path_directory);
+            nbr_eligible_files = updateNbrEligibleFiles();
+            total_size_files_to_backup = updateSizeFilesToBackup();
             write_path = _write_path;
         }
 
