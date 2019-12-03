@@ -94,7 +94,7 @@ namespace EasySave.Controller
                         string temp = file.source_folder.Substring(0, 2);
                         if (temp == @"\\")
                             {
-                                Console.WriteLine("enter domaine:");
+                                Console.WriteLine("enter domain:");
                                 string domaine = display.Readline();
                                 Console.WriteLine("enter User name:");
                                 string username = display.Readline();
@@ -180,12 +180,14 @@ namespace EasySave.Controller
                     break;
                 case "-show":
                     foreach (IBackup file in backup) { 
-
-                        Console.WriteLine(backup.IndexOf(file)+1 +"." + file.name);
+                        string show = backup.IndexOf(file)+1 +"." + file.name;
+                        display.Writeline(show);
                     } 
                     break;
                 case "-help":
                     display.Help();
+                    break;
+                case "-exit":
                     break;
             }
         }

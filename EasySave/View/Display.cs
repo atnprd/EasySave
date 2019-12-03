@@ -81,6 +81,7 @@ namespace EasySave.View
                     break;
             }
         }
+        //method that ask if the user want to make a full save
         public void AskSave(string ask, string name)
         {
             switch (ask)
@@ -95,6 +96,11 @@ namespace EasySave.View
         public string Readline()
         {
             return Console.ReadLine();
+        }
+        //method that writeline
+        public void Writeline(string write)
+        {
+            Console.WriteLine(write);
         }
     }
 }
