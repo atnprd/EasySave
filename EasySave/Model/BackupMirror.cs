@@ -70,7 +70,16 @@ namespace EasySave.Model
                 m_realTimeMonitoring.GenerateLog(current_file);
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
-                Utils.Crypt(fi.FullName, temp_path);
+                if (Utils.IsToCrypt(fi.Extension))
+                {
+                    m_daily_log.SetCryptTime(Utils.Crypt(fi.FullName, temp_path));
+                }
+                else
+                {
+                    fi.CopyTo(temp_path, true);
+                    m_daily_log.SetCryptTime("0");
+                }
+                
 
                 m_daily_log.millisecondFinal();
                 m_daily_log.generateDailylog(target_folder, source_folder);

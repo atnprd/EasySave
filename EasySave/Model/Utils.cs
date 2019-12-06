@@ -11,38 +11,61 @@ namespace EasySave.Model
 {
     static class Utils
     {
-        public static int Crypt(string source_file, string target_file)
+        public static string Crypt(string source_file, string target_file)
         {
-            try
-            {
-                using (Process p = new Process())
-                {
-                    string cmd = "dotnet run --project D:/git/CryptoSoftMini/CryptoSoftMini " + source_file + " " + target_file;
-                    p.StartInfo = new ProcessStartInfo("cmd.exe")
-                    {
-                        RedirectStandardOutput = false,
-                        RedirectStandardInput = true,
-                        UseShellExecute = false,
-                    };
-                   
-                    
+            string ret;
 
-                    p.Start();
-                    p.StandardInput.Write(cmd + p.StandardInput.NewLine);
-                    p.WaitForExit(1500);
-                    Console.WriteLine();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.FileName = "D:/git/CryptoSoftMini/CryptoSoftMini/bin/Debug/netcoreapp2.1/win10-x64/CryptoSoftMini.exe";
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            startInfo.Arguments = source_file + " " + target_file;
+
+
+            try 
+            {
+                using (Process exeProcess = Process.Start(startInfo))
+                {
+                   ret = exeProcess.StandardOutput.ReadToEnd() + " ms";
+                    exeProcess.WaitForExit();
+
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(e.Message);
+                ret = null;
             }
-            return 0;
+            return ret;
         }
 
-        private static void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        private static string[] getCryptList(string path_to_crypt_list)
         {
-            Console.WriteLine("ui");
+            using (StreamReader r = new StreamReader(path_to_crypt_list))
+            {
+                CryptListFormat[] item_cryptlist;
+                string[] cryptlist_extensions_array;
+                string json = r.ReadToEnd();
+                List<CryptListFormat> items = JsonConvert.DeserializeObject<List<CryptListFormat>>(json);
+                item_cryptlist = items.ToArray();
+                cryptlist_extensions_array = item_cryptlist[0].extension_to_crypt.Split(',');
+
+                return cryptlist_extensions_array;
+            }
+        }
+
+        public static bool IsToCrypt(string extension)
+        {
+                foreach (string crypt_ext in getCryptList("../../Model/crypt_extension.json"))
+                {
+                    if(crypt_ext == extension)
+                    {
+                    return true;
+                    }
+                }
+                return false;
         }
 
         public static string[] getBlacklist(string path_to_blacklist)
