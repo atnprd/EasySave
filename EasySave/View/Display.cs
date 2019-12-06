@@ -51,6 +51,13 @@ namespace EasySave.View
                     Console.WriteLine("please enter <id> or <all>");
                     Console.ResetColor();
                     break;
+                case "-businesswarerunning":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("business software running, check the blacklist file for more infos");
+                    Console.ResetColor();
+                    break;
+
+
             }
         }
         //method that contains the different Success message

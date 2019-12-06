@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace EasySave.Model
 {
@@ -41,6 +43,32 @@ namespace EasySave.Model
         private static void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             Console.WriteLine("ui");
+        }
+
+        public static string[] getBlacklist(string path_to_blacklist)
+        {
+            using (StreamReader r = new StreamReader(path_to_blacklist))
+            {
+                BlacklistFormat[] item_blacklist;
+                string[] blacklisted_apps_array;
+                string json = r.ReadToEnd();
+                List<BlacklistFormat> items = JsonConvert.DeserializeObject<List<BlacklistFormat>>(json);
+                item_blacklist = items.ToArray();
+                blacklisted_apps_array = item_blacklist[0].blacklisted_items.Split(',');
+
+                return blacklisted_apps_array;
+            }
+        }
+        public static bool checkBusinessSoft(string[] blacklisted_apps)
+        {
+            foreach (string process in blacklisted_apps)
+            {
+                if (Process.GetProcessesByName(process).Length > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
