@@ -133,8 +133,20 @@ namespace EasySave.Model
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
+                
+                //Copy the current file in a temp folder and crypt it if necessary
+                if (Utils.IsToCrypt(fi.Extension))
+                {
+                    Utils.Crypt(fi.FullName, fi.Name);
+                }
+                else
+                {
+                    fi.CopyTo(fi.Name);
+                }
+                FileInfo fiTemp = new FileInfo(fi.Name);
+
                 //check if it is a new file or if the file was modified based on the full save
-                if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
+                if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
                 {
                     m_daily_log = DailyLog.Instance;
                     m_daily_log.SetPaths(fi.FullName);
@@ -143,19 +155,12 @@ namespace EasySave.Model
                     m_realTimeMonitoring.GenerateLog(current_file);
                     current_file++;
                     string temp_path = target_path + '/' + fi.Name;
-                    if (Utils.IsToCrypt(fi.Extension))
-                    {
-                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
-                    }
-                    else
-                    {
-                        fi.CopyTo(temp_path, true);
-                        m_daily_log.Crypt_time = "0";
-                    }
+                    fiTemp.CopyTo(temp_path, true);
 
                     m_daily_log.millisecondFinal();
                     m_daily_log.generateDailylog(target_folder, source_folder);
                 }
+                fiTemp.Delete();
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
@@ -202,7 +207,7 @@ namespace EasySave.Model
             {
                 if (fiBase.Name == fi.Name)
                 {
-                    if (fiBase.LastWriteTime != fi.LastWriteTime)
+                    if (fiBase.Length != fi.Length)
                     {
                         update_file = true;
                     }
