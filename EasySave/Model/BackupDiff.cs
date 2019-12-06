@@ -102,12 +102,12 @@ namespace EasySave.Model
                 string temp_path = target_path + '/' + fi.Name;
                 if (Utils.IsToCrypt(fi.Extension))
                 {
-                    m_daily_log.SetCryptTime(Utils.Crypt(fi.FullName, temp_path));
+                    m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
                 }
                 else
                 {
                     fi.CopyTo(temp_path, true);
-                    m_daily_log.SetCryptTime("0");
+                    m_daily_log.Crypt_time = "0";
                 }
 
                 m_daily_log.millisecondFinal();
@@ -145,12 +145,12 @@ namespace EasySave.Model
                     string temp_path = target_path + '/' + fi.Name;
                     if (Utils.IsToCrypt(fi.Extension))
                     {
-                        m_daily_log.SetCryptTime(Utils.Crypt(fi.FullName, temp_path));
+                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
                     }
                     else
                     {
                         fi.CopyTo(temp_path, true);
-                        m_daily_log.SetCryptTime("0");
+                        m_daily_log.Crypt_time = "0";
                     }
 
                     m_daily_log.millisecondFinal();

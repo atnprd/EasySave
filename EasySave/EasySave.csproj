@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\CryptlistFormat.cs" />
     <Compile Include="Model\BlacklistFormat.cs" />
     <Compile Include="Model\FormatDailylog.cs" />
     <Compile Include="Model\Utils.cs" />
