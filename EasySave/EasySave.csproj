@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\BlacklistFormat.cs" />
     <Compile Include="Model\FormatDailylog.cs" />
     <Compile Include="Model\Utils.cs" />
     <Compile Include="Program.cs" />
@@ -64,6 +65,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Model\software_blacklist.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
