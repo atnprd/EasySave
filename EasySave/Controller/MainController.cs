@@ -251,9 +251,54 @@ namespace EasySave.Controller
             backup.Clear();
             return "success_deleteall";
         }
-        public string Save_alltasks()
+        public void Save_alltasks()
         {
-            return null;
+            int count = 0;
+
+            foreach (IBackup file in backup)
+            {
+                if (file.GetType() == typeof(BackupDiff))
+                {
+                    count++;
+                }
+            }
+            IBackup[] backupdiff = new IBackup[count];
+            bool[] backupdifffull = new bool[count];
+            int y = 0;
+            for (int i = 0; i < backup.Count; i++)
+            {
+                if (backup[i].GetType() == typeof(BackupDiff))
+                {
+                    backupdiff[y] = backup[i];
+                    View.View view = new View.View();
+                    MessageBoxResult response = view.Messbx(backup[i].name);
+                   
+                    if (response == MessageBoxResult.No)
+                    {
+                        backupdifffull[y] = false;
+                    }
+                    else if(response == MessageBoxResult.Yes)
+                    {
+                        backupdifffull[y] = true;
+                    }
+                    y++;
+                }
+            }
+            foreach (IBackup file in backup)
+            {
+                if (file.GetType() == typeof(BackupDiff))
+                {
+                    for (int i = 0; i < count; i++)
+                        if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
+                        {
+                            file.LaunchSave(backupdifffull[i]);
+                        }
+                }
+                else
+                {
+                    file.LaunchSave();
+                }
+            }
         }
         public string Save_task(int indextask)
         {

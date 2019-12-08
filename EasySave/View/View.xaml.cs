@@ -171,5 +171,15 @@ namespace EasySave.View
                     break;
             }
         }
+        public MessageBoxResult Messbx(string name)
+        {
+            MessageBoxResult result = MessageBox.Show("Do you want to do a full save for"+" "+ name + " ?", "Differential Backup", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            return result;
+        }
+
+        private void Saves_items(object sender, RoutedEventArgs e)
+        {
+            controller.Save_alltasks();
+        }
     }
 }
