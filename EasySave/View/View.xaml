@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="EasySave.View.View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EasySave.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="99*"/>
+        </Grid.RowDefinitions>
+
+        <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="473,148,0,0" Grid.Row="1">
+            <Button Content ="..." Height="23"  x:Name="button1" Width="16" Click="Add_sourcefolder" />
+        </WrapPanel>
+        <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="473,189,0,0" Grid.Row="1">
+            <Button Content ="..." Height="23"  x:Name="button2" Width="16" Click="Add_targetfolder" />
+        </WrapPanel>
+
+        <Label Content="Path source folder:" Height="28" HorizontalAlignment="Left" Margin="70,146,0,0" Name="label1" VerticalAlignment="Top" Width="108" Grid.Row="1" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="178,148,0,0" Name="sourcefolder" VerticalAlignment="Top" Width="295" Grid.Row="1" />
+
+        <Label x:Name="EASY_SAVE" Content="EASY SAVE" HorizontalAlignment="Left" Height="84" Margin="178,23,0,0" VerticalAlignment="Top" Width="272" FontFamily="Segoe UI Black" FontSize="48" Grid.Row="1"/>
+
+        <Label Content="Path target folder:" Height="28" HorizontalAlignment="Left" Margin="70,187,0,0" x:Name="label2" VerticalAlignment="Top" Width="108" Grid.Row="1" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="178,189,0,0" x:Name="targetfolder" VerticalAlignment="Top" Width="295" Grid.Row="1" />
+
+        <Button Content="Add Save" HorizontalAlignment="Left" Height="32" Margin="412,247,0,0" VerticalAlignment="Top" Width="77" Click="Add_save" Grid.Row="1"/>
+        <RadioButton Content="Mirror Backup" HorizontalAlignment="Left" Name="Mirror_button" Margin="178,247,0,0" VerticalAlignment="Top" Height="15" Grid.Row="1" />
+        <RadioButton Content="Differential Backup" HorizontalAlignment="Left" Name="Diff_button" Margin="178,267,0,0" VerticalAlignment="Top" Height="15" Grid.Row="1"/>
+        <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="473,107,0,0" Grid.Row="1"/>
+        <Label Content="Name:" Height="28" HorizontalAlignment="Left" Margin="70,105,0,0" x:Name="label1_Copy" VerticalAlignment="Top" Width="108" Grid.Row="1" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="178,107,0,0" x:Name="Name" VerticalAlignment="Top" Width="119" Grid.Row="1" />
+        <ListBox Name ="Save_task"  HorizontalAlignment="Left" Height="136" Margin="70,330,0,0" VerticalAlignment="Top" Width="149" Grid.Row="1" />
+
+        <Button Content="Delete" HorizontalAlignment="Left" Height="23" Margin="224,388,0,0" VerticalAlignment="Top" Width="73" Click="Delete_item" Grid.Row="1"/>
+        <Button Content="Delete All" HorizontalAlignment="Left" Height="23" Margin="224,416,0,0" VerticalAlignment="Top" Width="73" Click="Delete_allitems" Grid.Row="1"/>
+        <Button Content="Save" HorizontalAlignment="Left" Height="23" Margin="224,332,0,0" VerticalAlignment="Top" Width="73" Click="Save_item" Grid.Row="1"/>
+        <Button Content="Save All" HorizontalAlignment="Left" Height="23" Margin="224,360,0,0" VerticalAlignment="Top" Width="73" Grid.Row="1"/>
+
+        <Label Name="Message" Content="" HorizontalAlignment="Left" Height="46" Margin="70,494,0,0" VerticalAlignment="Top" Width="486" FontSize="20" Visibility="Hidden" Grid.Row="1"/>
+
+    </Grid>
+</UserControl>

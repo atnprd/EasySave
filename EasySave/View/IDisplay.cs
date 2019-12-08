@@ -14,5 +14,6 @@ namespace EasySave.View
         void Success(string success, string name);
         void AskSave(string ask, string name);
         void Writeline(string write);
+
     }
 }

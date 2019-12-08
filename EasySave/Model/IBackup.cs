@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EasySave.Model
 {
-    interface IBackup
+    public interface IBackup
     {
         string name { get; set; }
         string source_folder { get; set; }

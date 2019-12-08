@@ -6,27 +6,44 @@ using System.Threading.Tasks;
 
 using EasySave.View;
 using EasySave.Model;
+using System.Threading;
+using System.Windows;
 
 namespace EasySave.Controller
 {
-    public class MainController
+    public class MainController : IMainController
     { 
 
         List<IBackup> backup = new List<IBackup>();
         IDisplay display = new Display();
+       
+        public delegate void DELEG();
 
         public MainController()
         {
-            while (true) {
+            
+            /*while (true) {
                 string _capture = display.Readline();
                 string[] _capture_split = _capture.Split(' ');
-               
 
-                Process(_capture_split);
-            }
+
+                Process_console(_capture_split);
+            }*/
+        }
+        public void Run()
+        {
+            DELEG dele1 = StartWindow;
+            Thread frameThread = new Thread(dele1.Invoke);
+            frameThread.SetApartmentState(ApartmentState.STA);
+            frameThread.Start();
+        }
+        public void StartWindow()
+        {
+            Frame app = new Frame();
+            app.InitFrame();
         }
         //method that process data
-        private void Process(string[]  _capture)
+        private void Process_console(string[]  _capture)
         {
             switch (_capture[0])
             {
@@ -187,6 +204,93 @@ namespace EasySave.Controller
                 case "-exit":
                     break;
             }
+        }
+        public string Add_save(string name,string source_folder, string target_folder, string backuptype)
+        {
+            if (source_folder == "")
+            {
+                return "error_source";
+            } else if (target_folder == "")
+            {
+                return "error_target";
+            }
+            else if (backuptype == "")
+            {
+                return "error_backuptype";
+            }
+            else if (backuptype == "diff")
+            {
+                backup.Add(new BackupDiff(name, source_folder, target_folder) { name = name, source_folder = source_folder, target_folder = target_folder });
+                
+                return "success_backupdiff";
+            }
+            else if (backuptype == "mirr")
+            {
+                backup.Add(new BackupMirror(name, source_folder, target_folder) { name = name, source_folder = source_folder, target_folder = target_folder });
+                return "success_backupmirr";
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+        public string Remove_task(int indextask)
+        {
+            for (int i = 0; i < backup.Count; i++)
+            {
+                if (backup.IndexOf(backup[i]) == indextask)
+                {
+                    backup.Remove(backup[i]);
+                }
+            }
+            return "success_delete";
+        }
+        public string Remove_alltasks()
+        {
+            backup.Clear();
+            return "success_deleteall";
+        }
+        public string Save_alltasks()
+        {
+            return null;
+        }
+        public string Save_task(int indextask)
+        {
+            foreach (IBackup task in backup)
+            {
+                if (backup.IndexOf(task) == indextask)
+                {
+                    if (task.GetType() == typeof(BackupDiff))
+                    {
+                        return "backupdiff";
+                    }
+                    else if(task.GetType() == typeof(BackupMirror))
+                    {
+                        task.LaunchSave();
+                        return "success_mirr";
+                    }
+
+                }
+            }
+            return null;
+            
+        }
+        public string Save_diff(bool fulldiff, int indextask)
+        {
+            foreach (IBackup task in backup)
+            {
+                if (backup.IndexOf(task) == indextask)
+                {
+                    task.LaunchSave(fulldiff);
+                    return "success_diff";
+                }
+            }
+            return null;
+        }
+        public IBackup Last_backup()
+        {
+            return backup.Last();
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EasySave.Model;
 
 using EasySave.Controller;
+using EasySave.View;
 
 namespace EasySave
 {
@@ -13,7 +14,9 @@ namespace EasySave
     {
         static void Main(string[] args)
         {
+
             MainController controller = new MainController();
+            controller.Run();
             Console.Read();
         }
     }
