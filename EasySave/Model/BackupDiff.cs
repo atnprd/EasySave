@@ -133,11 +133,10 @@ namespace EasySave.Model
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
-                
                 //Copy the current file in a temp folder and crypt it if necessary
                 if (Utils.IsToCrypt(fi.Extension))
                 {
-                    Utils.Crypt(fi.FullName, fi.Name);
+                    m_daily_log.Crypt_time =  Utils.Crypt(fi.FullName, fi.Name);
                 }
                 else
                 {
