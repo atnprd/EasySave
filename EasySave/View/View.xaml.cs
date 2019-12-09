@@ -19,11 +19,6 @@ namespace EasySave.View
         IMainController controller = new MainController();
         public View()
         {
-            /*JObject jsonVal = JObject.Parse("..\\..\\Model\\software_blacklist.json") as JObject;
-
-            string val = (string)jsonVal[0]["blacklisted_items"];
-            Blacklist_name.Text = val;*/
-
             InitializeComponent();
         }
 
@@ -217,12 +212,21 @@ namespace EasySave.View
 
         private void Open_blacklist(object sender, RoutedEventArgs e)
         {
-            //System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\software_blacklist.json");
-            string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
+            System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\software_blacklist.json");
+            /*string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
             dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
             jsonObj[0]["blacklisted_items"] = Blacklist_name.Text;
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-            File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);
+            File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);*/
+        }
+        private void Open_cryptextension(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\crypt_extension.json");
+            /*string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
+            dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+            jsonObj[0]["blacklisted_items"] = Blacklist_name.Text;
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);*/
         }
     }
 }

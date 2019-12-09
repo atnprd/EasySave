@@ -27,29 +27,31 @@
         <Label Content="Path target folder:" Height="28" HorizontalAlignment="Left" Margin="70,187,0,0" x:Name="label2" VerticalAlignment="Top" Width="108" Grid.Row="1" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="178,189,0,0" x:Name="targetfolder" VerticalAlignment="Top" Width="295" Grid.Row="1" />
 
-        <Button Content="Add Save" HorizontalAlignment="Left" Height="32" Margin="412,247,0,0" VerticalAlignment="Top" Width="77" Click="Add_save" Grid.Row="1"/>
-        <RadioButton Content="Mirror Backup" HorizontalAlignment="Left" Name="Mirror_button" Margin="178,247,0,0" VerticalAlignment="Top" Height="15" Grid.Row="1" />
-        <RadioButton Content="Differential Backup" HorizontalAlignment="Left" Name="Diff_button" Margin="178,267,0,0" VerticalAlignment="Top" Height="15" Grid.Row="1"/>
+        <Button Content="Add Save" HorizontalAlignment="Left" Height="32" Margin="328,235,0,0" VerticalAlignment="Top" Width="77" Click="Add_save" Grid.Row="1"/>
+        <RadioButton Content="Mirror Backup" HorizontalAlignment="Left" Name="Mirror_button" Margin="178,232,0,0" VerticalAlignment="Top" Height="15" Grid.Row="1" />
+        <RadioButton Content="Differential Backup" HorizontalAlignment="Left" Name="Diff_button" Margin="178,252,0,0" VerticalAlignment="Top" Height="15" Grid.Row="1"/>
         <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="473,107,0,0" Grid.Row="1"/>
         <Label Content="Name:" Height="28" HorizontalAlignment="Left" Margin="70,105,0,0" x:Name="label1_Copy" VerticalAlignment="Top" Width="108" Grid.Row="1" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="178,107,0,0" x:Name="Name" VerticalAlignment="Top" Width="119" Grid.Row="1" />
-        <ListBox Name ="Save_task"  HorizontalAlignment="Left" Height="136" Margin="45,346,0,0" VerticalAlignment="Top" Width="149" Grid.Row="1" MouseDoubleClick="Save_task_MouseDoubleClick" />
+        <ListBox Name ="Save_task"  HorizontalAlignment="Left" Height="136" Margin="34,381,0,0" VerticalAlignment="Top" Width="149" Grid.Row="1" MouseDoubleClick="Save_task_MouseDoubleClick" />
 
-        <Button Content="Delete" HorizontalAlignment="Left" Height="23" Margin="199,404,0,0" VerticalAlignment="Top" Width="73" Click="Delete_item" Grid.Row="1"/>
-        <Button Content="Delete All" HorizontalAlignment="Left" Height="23" Margin="199,432,0,0" VerticalAlignment="Top" Width="73" Click="Delete_allitems" Grid.Row="1"/>
-        <Button Content="Save" HorizontalAlignment="Left" Height="23" Margin="199,348,0,0" VerticalAlignment="Top" Width="73" Click="Save_item" Grid.Row="1"/>
-        <Button Content="Save All" HorizontalAlignment="Left" Height="23" Margin="199,376,0,0" VerticalAlignment="Top" Width="73" Grid.Row="1" Click="Saves_items"/>
+        <Button Content="Delete" HorizontalAlignment="Left" Height="23" Margin="188,439,0,0" VerticalAlignment="Top" Width="73" Click="Delete_item" Grid.Row="1"/>
+        <Button Content="Delete All" HorizontalAlignment="Left" Height="23" Margin="188,467,0,0" VerticalAlignment="Top" Width="73" Click="Delete_allitems" Grid.Row="1"/>
+        <Button Content="Save" HorizontalAlignment="Left" Height="23" Margin="188,383,0,0" VerticalAlignment="Top" Width="73" Click="Save_item" Grid.Row="1"/>
+        <Button Content="Save All" HorizontalAlignment="Left" Height="23" Margin="188,411,0,0" VerticalAlignment="Top" Width="73" Grid.Row="1" Click="Saves_items"/>
 
         <Label Name="Message" Content="" HorizontalAlignment="Left" Height="46" Margin="70,494,0,0" VerticalAlignment="Top" Width="486" FontSize="20" Visibility="Hidden" Grid.Row="1"/>
-        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="381,365,0,0" x:Name="name_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
-        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="381,398,0,0" x:Name="source_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
-        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="381,431,0,0" x:Name="target_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
-        <Label Content="Target path :" Height="28" HorizontalAlignment="Left" Margin="298,431,0,0" x:Name="taget" VerticalAlignment="Top" Width="79" Grid.Row="1" />
-        <Label Content="Source path :" Height="28" HorizontalAlignment="Left" Margin="298,398,0,0" x:Name="source" VerticalAlignment="Top" Width="79" Grid.Row="1" />
-        <Label Content="Name :" Height="28" HorizontalAlignment="Left" Margin="298,365,0,0" x:Name="name" VerticalAlignment="Top" Width="79" Grid.Row="1" />
-        <Label Content="Task informations :" Height="28" HorizontalAlignment="Left" Margin="384,327,0,0" x:Name="taskinformations" VerticalAlignment="Top" Width="116" Grid.Row="1" RenderTransformOrigin="0.5,0.5" />
-        <Button Content="Blacklist Software" HorizontalAlignment="Left" Height="32" Margin="412,284,0,0" VerticalAlignment="Top" Width="104"  Grid.Row="1" Click="Open_blacklist"/>
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="285,290,0,0" x:Name="Blacklist_name" VerticalAlignment="Top" Width="114" Grid.Row="1" />
+        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="370,400,0,0" x:Name="name_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
+        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="370,433,0,0" x:Name="source_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
+        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="370,466,0,0" x:Name="target_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
+        <Label Content="Target path :" Height="28" HorizontalAlignment="Left" Margin="287,466,0,0" x:Name="taget" VerticalAlignment="Top" Width="79" Grid.Row="1" />
+        <Label Content="Source path :" Height="28" HorizontalAlignment="Left" Margin="287,433,0,0" x:Name="source" VerticalAlignment="Top" Width="79" Grid.Row="1" />
+        <Label Content="Name :" Height="28" HorizontalAlignment="Left" Margin="287,400,0,0" x:Name="name" VerticalAlignment="Top" Width="79" Grid.Row="1" />
+        <Label Content="Task informations :" Height="28" HorizontalAlignment="Left" Margin="373,362,0,0" x:Name="taskinformations" VerticalAlignment="Top" Width="116" Grid.Row="1" RenderTransformOrigin="0.5,0.5" />
+        <Button Content="Blacklist Software" HorizontalAlignment="Left" Height="32" Margin="435,291,0,0" VerticalAlignment="Top" Width="104"  Grid.Row="1" Click="Open_blacklist"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="308,297,0,0" x:Name="Blacklist_name" VerticalAlignment="Top" Width="114" Grid.Row="1"  />
+        <Button Content="Modify Crypt format" HorizontalAlignment="Left" Height="32" Margin="435,328,0,0" VerticalAlignment="Top" Width="127"  Grid.Row="1" Click="Open_cryptextension"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="308,334,0,0" x:Name="Cryptlist_name" VerticalAlignment="Top" Width="114" Grid.Row="1"  />
 
     </Grid>
 </UserControl>
