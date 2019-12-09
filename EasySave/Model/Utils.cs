@@ -19,7 +19,7 @@ namespace EasySave.Model
             string ret;
            
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.CreateNoWindow = false;
+            startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
             startInfo.FileName = "../../../CryptoSoftMini/CryptoSoftMini.exe";
