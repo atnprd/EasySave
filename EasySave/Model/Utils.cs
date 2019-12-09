@@ -19,7 +19,7 @@ namespace EasySave.Model
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "D:/git/CryptoSoftMini/CryptoSoftMini/bin/Debug/netcoreapp2.1/win10-x64/CryptoSoftMini.exe";
+            startInfo.FileName = "../../../CryptoSoftMini/CryptoSoftMini.exe";
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
             startInfo.Arguments = source_file + " " + target_file;
 

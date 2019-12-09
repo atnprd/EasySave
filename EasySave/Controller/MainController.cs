@@ -17,6 +17,7 @@ namespace EasySave.Controller
         List<IBackup> backup = new List<IBackup>();
         IDisplay display = new Display();
 
+
         public delegate void DELEG();
 
         string[] blacklisted_apps = Utils.getBlacklist("..\\..\\Model\\software_blacklist.json");
