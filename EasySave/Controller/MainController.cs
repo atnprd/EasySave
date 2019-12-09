@@ -20,7 +20,7 @@ namespace EasySave.Controller
 
         public delegate void DELEG();
 
-        string[] blacklisted_apps = Utils.getBlacklist("..\\..\\Model\\software_blacklist.json");
+        string[] blacklisted_apps = Utils.getBlacklist();
 
         public MainController()
         {

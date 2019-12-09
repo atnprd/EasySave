@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace EasySave.View
 {
@@ -213,7 +214,7 @@ namespace EasySave.View
 
         private void Open_blacklist(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\software_blacklist.json");
+            System.Diagnostics.Process.Start("notepad.exe", ConfigurationSettings.AppSettings["softwareBlacklist"]);
             /*string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
             dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
             jsonObj[0]["blacklisted_items"] = Blacklist_name.Text;
@@ -222,7 +223,7 @@ namespace EasySave.View
         }
         private void Open_cryptextension(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\crypt_extension.json");
+            System.Diagnostics.Process.Start("notepad.exe", ConfigurationSettings.AppSettings["ExtensionList"]);
             /*string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
             dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
             jsonObj[0]["blacklisted_items"] = Blacklist_name.Text;

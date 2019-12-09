@@ -78,8 +78,8 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Model\software_blacklist.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

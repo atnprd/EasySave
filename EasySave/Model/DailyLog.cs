@@ -8,8 +8,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
-
-
+using System.Configuration;
 
 namespace EasySave.Model
 {
@@ -98,10 +97,6 @@ namespace EasySave.Model
 
         }
 
-
-
-
-
         public void write(string path, string source_folder)
         // Method that writes a Json file containing all the attributes
         {
@@ -118,7 +113,7 @@ namespace EasySave.Model
             });
           
 
-            TextWriter tsw = new StreamWriter(path + "\\"+todayString + ".json", true);
+            TextWriter tsw = new StreamWriter(ConfigurationSettings.AppSettings["DailyLog"] + "\\"+todayString + ".json", true);
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
             tsw.WriteLine(json);
             tsw.Close();
