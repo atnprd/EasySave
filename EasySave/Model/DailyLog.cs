@@ -19,14 +19,14 @@ namespace EasySave.Model
         private static readonly Lazy<DailyLog> lazy =
       new Lazy<DailyLog>(() => new DailyLog());
 
-        public static DailyLog Instance { get { return lazy.Value; } }
-
+        public static DailyLog Instance { get { return lazy.Value; } }    
 
         private FileInfo file;
         private string file_size;
         private string file_name;
         private string file_date;
         private double transfer_time;
+        private string crypt_time;
 
         Stopwatch stopwatch = new Stopwatch();
 
@@ -48,7 +48,7 @@ namespace EasySave.Model
             this.file = new FileInfo(_path);
         }
 
-
+        public string Crypt_time { set => crypt_time = value; }
 
         public void millisecondEarly()
             //method begining a stopwatch
@@ -113,8 +113,8 @@ namespace EasySave.Model
                 last_date_file = file_date,
                 time_transfer = transfer_time,
                 folder_source = source_folder,
-                folder_target = path
-
+                folder_target = path,
+                time_crypt = crypt_time
             });
           
 

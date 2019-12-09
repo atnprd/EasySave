@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -99,7 +100,15 @@ namespace EasySave.Model
                 m_realTimeMonitoring.GenerateLog(current_file);
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
-                fi.CopyTo(temp_path, true);
+                if (Utils.IsToCrypt(fi.Extension))
+                {
+                    m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                }
+                else
+                {
+                    fi.CopyTo(temp_path, true);
+                    m_daily_log.Crypt_time = "0";
+                }
 
                 m_daily_log.millisecondFinal();
                 m_daily_log.generateDailylog(target_folder, source_folder);
@@ -124,8 +133,20 @@ namespace EasySave.Model
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
+                
+                //Copy the current file in a temp folder and crypt it if necessary
+                if (Utils.IsToCrypt(fi.Extension))
+                {
+                    Utils.Crypt(fi.FullName, fi.Name);
+                }
+                else
+                {
+                    fi.CopyTo(fi.Name);
+                }
+                FileInfo fiTemp = new FileInfo(fi.Name);
+
                 //check if it is a new file or if the file was modified based on the full save
-                if (CheckNewFile(fi, dirComplete) || CheckModification(fi, dirComplete))
+                if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
                 {
                     m_daily_log = DailyLog.Instance;
                     m_daily_log.SetPaths(fi.FullName);
@@ -134,11 +155,12 @@ namespace EasySave.Model
                     m_realTimeMonitoring.GenerateLog(current_file);
                     current_file++;
                     string temp_path = target_path + '/' + fi.Name;
-                    fi.CopyTo(temp_path, true);
+                    fiTemp.CopyTo(temp_path, true);
 
                     m_daily_log.millisecondFinal();
                     m_daily_log.generateDailylog(target_folder, source_folder);
                 }
+                fiTemp.Delete();
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)

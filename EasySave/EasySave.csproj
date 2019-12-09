@@ -54,7 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\IMainController.cs" />
+    <Compile Include="Model\CryptlistFormat.cs" />
+    <Compile Include="Model\BlacklistFormat.cs" />
     <Compile Include="Model\FormatDailylog.cs" />
+    <Compile Include="Model\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controller\MainController.cs" />
@@ -76,6 +79,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Model\software_blacklist.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

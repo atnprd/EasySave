@@ -16,8 +16,12 @@ namespace EasySave.Controller
 
         List<IBackup> backup = new List<IBackup>();
         IDisplay display = new Display();
+<<<<<<< HEAD
        
         public delegate void DELEG();
+=======
+        string[] blacklisted_apps = Utils.getBlacklist("..\\..\\Model\\software_blacklist.json");
+>>>>>>> 8ea5a45fee0f9ed9bf49e57d5f9570ca0526ebc8
 
         public MainController()
         {
@@ -51,6 +55,10 @@ namespace EasySave.Controller
                     if (_capture.Length < 2)
                     {
                         display.Error("-save");
+                    }
+                    else if (Utils.checkBusinessSoft(blacklisted_apps))
+                    {
+                        display.Error("-businesswarerunning");
                     }
                     else if (_capture[1] == "all")
                     {
@@ -86,13 +94,17 @@ namespace EasySave.Controller
                         }
                         foreach (IBackup file in backup)
                         {
-                            if (file.GetType() == typeof(BackupDiff))
+                            if (Utils.checkBusinessSoft(blacklisted_apps))
+                            {
+                                display.Error("-businesswarerunning");
+                                break;
+                            }
+                            else if (file.GetType() == typeof(BackupDiff))
                             {
                                 for(int i=0; i<count;i++)
                                 if(backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                                 {
                                     file.LaunchSave(backupdifffull[i]);
-                                    
                                 }
                             }
                             else
@@ -138,7 +150,8 @@ namespace EasySave.Controller
                                         file.LaunchSave(false);
                                     }                                 
                                 }
-                                else { 
+                                else 
+                                {
                                     file.LaunchSave();
                                 }
                                 display.Success("-save",file.name);

@@ -15,5 +15,6 @@ namespace EasySave
         public double time_transfer { get; set; }
         public string folder_source { get; set; }
         public string folder_target { get; set; }
+        public string time_crypt { get; set; }
     }
 }
