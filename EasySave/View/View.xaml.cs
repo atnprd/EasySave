@@ -7,6 +7,7 @@ using EasySave.Controller;
 using System.Collections.Generic;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using Newtonsoft.Json.Linq;
 
 namespace EasySave.View
 {
@@ -18,6 +19,11 @@ namespace EasySave.View
         IMainController controller = new MainController();
         public View()
         {
+            /*JObject jsonVal = JObject.Parse("..\\..\\Model\\software_blacklist.json") as JObject;
+
+            string val = (string)jsonVal[0]["blacklisted_items"];
+            Blacklist_name.Text = val;*/
+
             InitializeComponent();
         }
 
@@ -47,12 +53,11 @@ namespace EasySave.View
             if (mirr_check)
             {
                 string response = controller.Add_save(Name.Text, sourcefolder.Text, targetfolder.Text, "mirr");
-                if(response == "error_source" | response == "error_target" | response == "error_backuptype")
+                if (response == "error_name" | response == "error_source" | response == "error_target" | response == "error_backuptype")
                 {
-                    
-                }
-                else
-                { 
+
+                } else
+                {
                     Save_task.Items.Add(controller.Last_backup().name);
                 }
                 Display_error_success(response);
@@ -60,7 +65,7 @@ namespace EasySave.View
             else if (diff_check)
             {
                 string response = controller.Add_save(Name.Text, sourcefolder.Text, targetfolder.Text, "diff");
-                if (response == "error_source" | response == "error_target" | response == "error_backuptype")
+                if (response == "error_name" | response == "error_source" | response == "error_target" | response == "error_backuptype")
                 {
 
                 }
@@ -122,6 +127,11 @@ namespace EasySave.View
         {
             switch (mess)
             {
+                case "error_name":
+                    Message.Foreground = Brushes.Red;
+                    Message.Content = "Please add a Name !";
+                    Message.Visibility = Visibility;
+                    break;
                 case "success_mirr":
                     Message.Foreground = Brushes.Green;
                     Message.Content = "Mirror Save Successfully Saved !";
@@ -207,7 +217,12 @@ namespace EasySave.View
 
         private void Open_blacklist(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\software_blacklist.json");
+            //System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\software_blacklist.json");
+            string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
+            dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+            jsonObj[0]["blacklisted_items"] = Blacklist_name.Text;
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);
         }
     }
 }

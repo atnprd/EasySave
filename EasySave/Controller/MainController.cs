@@ -218,8 +218,11 @@ namespace EasySave.Controller
             }
         }
         public string Add_save(string name,string source_folder, string target_folder, string backuptype)
-        {
-            if (source_folder == "")
+        {   
+            if(name == "")
+            {
+                return "error_name";
+            }else if (source_folder == "")
             {
                 return "error_source";
             } else if (target_folder == "")
@@ -260,8 +263,11 @@ namespace EasySave.Controller
         }
         public string Remove_alltasks()
         {
-            backup.Clear();
-            return "success_deleteall";
+            if(backup.Count != 0) { 
+                backup.Clear();
+                return "success_deleteall";
+            }
+            return null;
         }
         public string Save_alltasks()
         {

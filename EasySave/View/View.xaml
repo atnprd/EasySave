@@ -49,6 +49,7 @@
         <Label Content="Name :" Height="28" HorizontalAlignment="Left" Margin="298,365,0,0" x:Name="name" VerticalAlignment="Top" Width="79" Grid.Row="1" />
         <Label Content="Task informations :" Height="28" HorizontalAlignment="Left" Margin="384,327,0,0" x:Name="taskinformations" VerticalAlignment="Top" Width="116" Grid.Row="1" RenderTransformOrigin="0.5,0.5" />
         <Button Content="Blacklist Software" HorizontalAlignment="Left" Height="32" Margin="412,284,0,0" VerticalAlignment="Top" Width="104"  Grid.Row="1" Click="Open_blacklist"/>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="285,290,0,0" x:Name="Blacklist_name" VerticalAlignment="Top" Width="114" Grid.Row="1" />
 
     </Grid>
 </UserControl>
