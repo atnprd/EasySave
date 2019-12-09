@@ -40,7 +40,7 @@
         <Button Content="Save" HorizontalAlignment="Left" Height="23" Margin="188,383,0,0" VerticalAlignment="Top" Width="73" Click="Save_item" Grid.Row="1"/>
         <Button Content="Save All" HorizontalAlignment="Left" Height="23" Margin="188,411,0,0" VerticalAlignment="Top" Width="73" Grid.Row="1" Click="Saves_items"/>
 
-        <Label Name="Message" Content="" HorizontalAlignment="Left" Height="46" Margin="70,494,0,0" VerticalAlignment="Top" Width="486" FontSize="20" Visibility="Hidden" Grid.Row="1"/>
+        <Label Name="Message" Content="" HorizontalAlignment="Left" Height="46" Margin="70,538,0,0" VerticalAlignment="Top" Width="486" FontSize="20" Grid.Row="1" Visibility="Hidden"/>
         <Label Content="" Height="28" HorizontalAlignment="Left" Margin="370,400,0,0" x:Name="name_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
         <Label Content="" Height="28" HorizontalAlignment="Left" Margin="370,433,0,0" x:Name="source_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
         <Label Content="" Height="28" HorizontalAlignment="Left" Margin="370,466,0,0" x:Name="target_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />

@@ -51,7 +51,8 @@ namespace EasySave.View
                 if (response == "error_name" | response == "error_source" | response == "error_target" | response == "error_backuptype")
                 {
 
-                } else
+                }
+                else
                 {
                     Save_task.Items.Add(controller.Last_backup().name);
                 }
