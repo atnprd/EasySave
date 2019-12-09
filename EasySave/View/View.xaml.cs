@@ -172,6 +172,11 @@ namespace EasySave.View
                     Message.Content = "Saves Successfully Removed !";
                     Message.Visibility = Visibility;
                     break;
+                case "businesswarerunning":
+                    Message.Foreground = Brushes.Red;
+                    Message.Content = " business software running, check the blacklist file for more infos !";
+                    Message.Visibility = Visibility;
+                    break;
                 default:
                     break;
             }
@@ -198,6 +203,11 @@ namespace EasySave.View
                 source_item.Content = item[1];
                 target_item.Content = item[2];
             }
+        }
+
+        private void Open_blacklist(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("notepad.exe", "..\\..\\Model\\software_blacklist.json");
         }
     }
 }

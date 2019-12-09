@@ -16,12 +16,10 @@ namespace EasySave.Controller
 
         List<IBackup> backup = new List<IBackup>();
         IDisplay display = new Display();
-<<<<<<< HEAD
-       
+
         public delegate void DELEG();
-=======
+
         string[] blacklisted_apps = Utils.getBlacklist("..\\..\\Model\\software_blacklist.json");
->>>>>>> 8ea5a45fee0f9ed9bf49e57d5f9570ca0526ebc8
 
         public MainController()
         {
@@ -302,17 +300,27 @@ namespace EasySave.Controller
                 if (file.GetType() == typeof(BackupDiff))
                 {
                     for (int i = 0; i < count; i++)
-                        if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
+                    { 
+                        if(Utils.checkBusinessSoft(blacklisted_apps))
+                        {
+                            return "businesswarerunning";
+                            break;
+                        }
+                        else if(backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                         {
                             file.LaunchSave(backupdifffull[i]);
+                            return "success_addedall";
                         }
+                    }
                 }
                 else
                 {
                     file.LaunchSave();
+                    return "success_addedall";
                 }
+               
             }
-            return "success_addedall";
+            return null;
         }
         public string Save_task(int indextask)
         {
@@ -320,7 +328,12 @@ namespace EasySave.Controller
             {
                 if (backup.IndexOf(task) == indextask)
                 {
-                    if (task.GetType() == typeof(BackupDiff))
+                    if (Utils.checkBusinessSoft(blacklisted_apps))
+                    {
+                        return "businesswarerunning";
+                        break;
+                    }
+                    else if (task.GetType() == typeof(BackupDiff))
                     {
                         return "backupdiff";
                     }
