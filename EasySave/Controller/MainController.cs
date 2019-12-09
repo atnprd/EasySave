@@ -45,7 +45,7 @@ namespace EasySave.Controller
             Frame app = new Frame();
             app.InitFrame();
         }
-        //method that process data
+        //method that process data in consoleMode
         private void Process_console(string[]  _capture)
         {
             switch (_capture[0])
