@@ -11,10 +11,13 @@ namespace EasySave.Model
 {
     static class Utils
     {
+        //method to use CryptoSoft
+        //CryptoSoft take two arguments, source file and target file and return crypt time in ms or -1 if an error happend
+        //CryproSoft take the source file, crypt it and then copy it in the the taget file
         public static string Crypt(string source_file, string target_file)
         {
             string ret;
-
+           
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
@@ -41,6 +44,7 @@ namespace EasySave.Model
             return ret;
         }
 
+        //read the json file that list all extension to crypt and return an array of string with the extension to crypt
         private static string[] getCryptList(string path_to_crypt_list)
         {
             using (StreamReader r = new StreamReader(path_to_crypt_list))
@@ -56,6 +60,7 @@ namespace EasySave.Model
             }
         }
 
+        //check if a given extension is the list to crypt
         public static bool IsToCrypt(string extension)
         {
                 foreach (string crypt_ext in getCryptList("../../Model/crypt_extension.json"))
@@ -68,6 +73,7 @@ namespace EasySave.Model
                 return false;
         }
 
+        //read the json file of blacklisted apps and return the array list of blacklisted apps
         public static string[] getBlacklist(string path_to_blacklist)
         {
             using (StreamReader r = new StreamReader(path_to_blacklist))
@@ -82,6 +88,8 @@ namespace EasySave.Model
                 return blacklisted_apps_array;
             }
         }
+
+        //check if process in blacklist apps are currently running
         public static bool checkBusinessSoft(string[] blacklisted_apps)
         {
             foreach (string process in blacklisted_apps)
