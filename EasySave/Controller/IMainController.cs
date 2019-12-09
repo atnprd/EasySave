@@ -13,8 +13,9 @@ namespace EasySave.Controller
         IBackup Last_backup();
         string Remove_task(int indextask);
         string Remove_alltasks();
-        void Save_alltasks();
+        string Save_alltasks();
         string Save_task(int indextask);
         string Save_diff(bool fulldiff, int indextask);
+        string Informations_items(int index);
     }
 }

@@ -33,14 +33,30 @@
         <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="473,107,0,0" Grid.Row="1"/>
         <Label Content="Name:" Height="28" HorizontalAlignment="Left" Margin="70,105,0,0" x:Name="label1_Copy" VerticalAlignment="Top" Width="108" Grid.Row="1" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="178,107,0,0" x:Name="Name" VerticalAlignment="Top" Width="119" Grid.Row="1" />
-        <ListBox Name ="Save_task"  HorizontalAlignment="Left" Height="136" Margin="70,330,0,0" VerticalAlignment="Top" Width="149" Grid.Row="1" />
+        <ListBox Name ="Save_task"  HorizontalAlignment="Left" Height="136" Margin="45,335,0,0" VerticalAlignment="Top" Width="149" Grid.Row="1" MouseDoubleClick="Save_task_MouseDoubleClick" />
 
-        <Button Content="Delete" HorizontalAlignment="Left" Height="23" Margin="224,388,0,0" VerticalAlignment="Top" Width="73" Click="Delete_item" Grid.Row="1"/>
-        <Button Content="Delete All" HorizontalAlignment="Left" Height="23" Margin="224,416,0,0" VerticalAlignment="Top" Width="73" Click="Delete_allitems" Grid.Row="1"/>
-        <Button Content="Save" HorizontalAlignment="Left" Height="23" Margin="224,332,0,0" VerticalAlignment="Top" Width="73" Click="Save_item" Grid.Row="1"/>
-        <Button Content="Save All" HorizontalAlignment="Left" Height="23" Margin="224,360,0,0" VerticalAlignment="Top" Width="73" Grid.Row="1" Click="Saves_items"/>
+        <Button Content="Delete" HorizontalAlignment="Left" Height="23" Margin="199,393,0,0" VerticalAlignment="Top" Width="73" Click="Delete_item" Grid.Row="1"/>
+        <Button Content="Delete All" HorizontalAlignment="Left" Height="23" Margin="199,421,0,0" VerticalAlignment="Top" Width="73" Click="Delete_allitems" Grid.Row="1"/>
+        <Button Content="Save" HorizontalAlignment="Left" Height="23" Margin="199,337,0,0" VerticalAlignment="Top" Width="73" Click="Save_item" Grid.Row="1"/>
+        <Button Content="Save All" HorizontalAlignment="Left" Height="23" Margin="199,365,0,0" VerticalAlignment="Top" Width="73" Grid.Row="1" Click="Saves_items"/>
 
         <Label Name="Message" Content="" HorizontalAlignment="Left" Height="46" Margin="70,494,0,0" VerticalAlignment="Top" Width="486" FontSize="20" Visibility="Hidden" Grid.Row="1"/>
+        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="381,365,0,0" x:Name="name_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
+        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="381,398,0,0" x:Name="source_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
+        <Label Content="" Height="28" HorizontalAlignment="Left" Margin="381,431,0,0" x:Name="target_item" VerticalAlignment="Top" Width="194" Grid.Row="1" />
+        <Label Content="Target path :" Height="28" HorizontalAlignment="Left" Margin="298,431,0,0" x:Name="taget" VerticalAlignment="Top" Width="79" Grid.Row="1" />
+        <Label Content="Source path :" Height="28" HorizontalAlignment="Left" Margin="298,398,0,0" x:Name="source" VerticalAlignment="Top" Width="79" Grid.Row="1" />
+        <Label Content="Name :" Height="28" HorizontalAlignment="Left" Margin="298,365,0,0" x:Name="name" VerticalAlignment="Top" Width="79" Grid.Row="1" />
+        <Label Content="Task informations :" Height="28" HorizontalAlignment="Left" Margin="384,327,0,0" x:Name="taskinformations" VerticalAlignment="Top" Width="116" Grid.Row="1" RenderTransformOrigin="0.5,0.5" >
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="-0.42"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-0.326"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
 
     </Grid>
 </UserControl>

@@ -251,7 +251,7 @@ namespace EasySave.Controller
             backup.Clear();
             return "success_deleteall";
         }
-        public void Save_alltasks()
+        public string Save_alltasks()
         {
             int count = 0;
 
@@ -299,6 +299,7 @@ namespace EasySave.Controller
                     file.LaunchSave();
                 }
             }
+            return "success_addedall";
         }
         public string Save_task(int indextask)
         {
@@ -336,6 +337,17 @@ namespace EasySave.Controller
         public IBackup Last_backup()
         {
             return backup.Last();
+        }
+        public string Informations_items(int index)
+        {
+            foreach (IBackup item in backup)
+            {
+                if (backup.IndexOf(item) == index)
+                {
+                    return item.name +"*"+ item.source_folder + "*" + item.target_folder;
+                }
+            }
+            return null;
         }
     }
 }

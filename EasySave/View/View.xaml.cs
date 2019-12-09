@@ -157,6 +157,11 @@ namespace EasySave.View
                     Message.Content = "Mirror Save Successfully Added !";
                     Message.Visibility = Visibility;
                     break;
+                case "success_addedall":
+                    Message.Foreground = Brushes.Green;
+                    Message.Content = "All Saves Successfully Added !";
+                    Message.Visibility = Visibility;
+                    break;
                 case "success_delete":
                     Message.Foreground = Brushes.Green;
                     Message.Content = "Save Successfully Removed !";
@@ -180,6 +185,19 @@ namespace EasySave.View
         private void Saves_items(object sender, RoutedEventArgs e)
         {
             controller.Save_alltasks();
+
+        }
+
+        private void Save_task_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if(Save_task.SelectedIndex != -1)
+            { 
+                string response = controller.Informations_items(Save_task.SelectedIndex);
+                string [] item = response.Split('*');
+                name_item.Content = item[0];
+                source_item.Content = item[1];
+                target_item.Content = item[2];
+            }
         }
     }
 }
