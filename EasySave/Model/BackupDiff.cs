@@ -159,6 +159,7 @@ namespace EasySave.Model
                     m_daily_log.millisecondFinal();
                     m_daily_log.generateDailylog(target_folder, source_folder);
                 }
+                //delete the temporary file
                 fiTemp.Delete();
             }
             DirectoryInfo[] dirs = di.GetDirectories();

@@ -70,6 +70,7 @@ namespace EasySave.Model
                 m_realTimeMonitoring.GenerateLog(current_file);
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
+                //check if the extension is the list to encrypt
                 if (Utils.IsToCrypt(fi.Extension))
                 {
                     m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
