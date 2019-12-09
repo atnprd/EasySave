@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace EasySave.Model
@@ -17,12 +15,13 @@ namespace EasySave.Model
         public static string Crypt(string source_file, string target_file)
         {
             string ret;
-           
+
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
-            startInfo.FileName = "../../../CryptoSoftMini/CryptoSoftMini.exe";
+            startInfo.FileName = ConfigurationSettings.AppSettings["CryptoSoftPath"];
+
             startInfo.WindowStyle = ProcessWindowStyle.Normal;
             startInfo.Arguments = source_file + " " + target_file;
 
@@ -45,9 +44,9 @@ namespace EasySave.Model
         }
 
         //read the json file that list all extension to crypt and return an array of string with the extension to crypt
-        private static string[] getCryptList(string path_to_crypt_list)
+        private static string[] getCryptList()
         {
-            using (StreamReader r = new StreamReader(path_to_crypt_list))
+            using (StreamReader r = new StreamReader(ConfigurationSettings.AppSettings["ExtensionList"]))
             {
                 CryptListFormat[] item_cryptlist;
                 string[] cryptlist_extensions_array;
@@ -63,7 +62,7 @@ namespace EasySave.Model
         //check if a given extension is the list to crypt
         public static bool IsToCrypt(string extension)
         {
-                foreach (string crypt_ext in getCryptList("../../Model/crypt_extension.json"))
+                foreach (string crypt_ext in getCryptList())
                 {
                     if(crypt_ext == extension)
                     {
@@ -74,9 +73,9 @@ namespace EasySave.Model
         }
 
         //read the json file of blacklisted apps and return the array list of blacklisted apps
-        public static string[] getBlacklist(string path_to_blacklist)
+        public static string[] getBlacklist()
         {
-            using (StreamReader r = new StreamReader(path_to_blacklist))
+            using (StreamReader r = new StreamReader(ConfigurationSettings.AppSettings["softwareBlacklist"]))
             {
                 BlacklistFormat[] item_blacklist;
                 string[] blacklisted_apps_array;
