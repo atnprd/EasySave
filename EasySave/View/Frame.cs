@@ -17,7 +17,7 @@ namespace EasySave.View
         public void InitFrame()
         {
             window.Width = 600;
-            window.Height = 700;
+            window.Height = 750;
             window.Title = "EasySave";
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             RootGrid = new Grid();

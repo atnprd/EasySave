@@ -30,9 +30,11 @@ namespace EasySave.Controller
                 string _capture = display.Readline();
                 string[] _capture_split = _capture.Split(' ');
 
-
+                
                 Process_console(_capture_split);
-            }*/
+                
+            }
+            */
         }
         public void Run()
         {
@@ -378,6 +380,11 @@ namespace EasySave.Controller
         public IBackup Last_backup()
         {
             return backup.Last();
+        }
+
+        public Dictionary<string, Dictionary<string,string>> getLanguageDict()
+        {
+            return Utils.loadLanguage();
         }
         public string Informations_items(int index)
         {
