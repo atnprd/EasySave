@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasySave.Controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,14 +13,14 @@ namespace EasySave.View
     public class GridFrame
     {
         static Grid Grid = new Grid();
-        public static void CreateWorkList()
+        public static void CreateWorkList(IMainController c)
         {
             Grid.Width = 600;
             Grid.Height = 700;
             Grid.HorizontalAlignment = HorizontalAlignment.Left;
             Grid.VerticalAlignment = VerticalAlignment.Center;
             Grid.Background = Brushes.Transparent;
-            View userControl = new View();
+            View userControl = new View(c);
             Frame.RootGrid.Children.Add(Grid);
             Grid.Children.Add(userControl);
         }

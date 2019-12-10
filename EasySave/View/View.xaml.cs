@@ -17,9 +17,10 @@ namespace EasySave.View
     /// </summary>
     public partial class View : UserControl
     {
-        IMainController controller = new MainController();
-        public View()
+        IMainController controller;
+        public View(IMainController c)
         {
+            controller = c;
             InitializeComponent();
         }
 
