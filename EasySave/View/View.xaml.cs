@@ -230,5 +230,9 @@ namespace EasySave.View
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
             File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);*/
         }
+        void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            controller.Close();
+        }
     }
 }

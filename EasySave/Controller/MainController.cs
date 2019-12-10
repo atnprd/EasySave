@@ -16,11 +16,12 @@ namespace EasySave.Controller
 
         List<IBackup> backup = new List<IBackup>();
         IDisplay display = new Display();
-
+        Thread frameThread;
 
         public delegate void DELEG();
 
         string[] blacklisted_apps = Utils.getBlacklist();
+        
 
         public MainController()
         {
@@ -36,15 +37,22 @@ namespace EasySave.Controller
         public void Run()
         {
             DELEG dele1 = StartWindow;
-            Thread frameThread = new Thread(dele1.Invoke);
+            frameThread = new Thread(dele1.Invoke);
             frameThread.SetApartmentState(ApartmentState.STA);
             frameThread.Start();
+            
         }
         public void StartWindow()
         {
             Frame app = new Frame();
             app.InitFrame();
         }
+
+        public void Close()
+        {
+            frameThread.Abort();
+        }
+        
         //method that process data in consoleMode
         private void Process_console(string[]  _capture)
         {

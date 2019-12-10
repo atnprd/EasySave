@@ -17,5 +17,6 @@ namespace EasySave.Controller
         string Save_task(int indextask);
         string Save_diff(bool fulldiff, int indextask);
         string Informations_items(int index);
+        void Close();
     }
 }
