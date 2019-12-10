@@ -14,7 +14,10 @@ namespace EasySave.Model
         string target_folder { get; set; }
         
         void LaunchSave();
-
         void LaunchSave(bool full_save);
+
+        void Stop();
+        void Pause();
+        void Play();
     }
 }

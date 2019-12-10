@@ -36,6 +36,8 @@ namespace EasySave.Model
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
+        private bool ispaused = false;
+        private bool isstop = false;
 
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
@@ -63,6 +65,14 @@ namespace EasySave.Model
             //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
+                while (ispaused)
+                {
+
+                }
+                if (isstop == true)
+                {
+                    break;
+                }
                 m_daily_log = DailyLog.Instance;
                 m_daily_log.SetPaths(fi.FullName);
                 m_daily_log.millisecondEarly();
@@ -97,6 +107,18 @@ namespace EasySave.Model
         public void LaunchSave(bool state)
         {
             LaunchSave();
+        }
+        public void Pause()
+        {
+            ispaused = true;
+        }
+        public void Play()
+        {
+            ispaused = false;
+        }
+        public void Stop()
+        {
+            isstop = true;
         }
     }
 }
