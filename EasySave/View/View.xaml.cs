@@ -22,6 +22,7 @@ namespace EasySave.View
         {
             controller = c;
             InitializeComponent();
+            controller.View = this;
         }
 
         private void Add_sourcefolder(object sender, RoutedEventArgs e)
