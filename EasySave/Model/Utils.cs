@@ -100,6 +100,26 @@ namespace EasySave.Model
             }
             return false;
         }
+
+        public static string JsonReader(string path, string propertie)
+        {
+            path = path.Replace(@"\\", @"/");
+
+            string text = File.ReadAllText(path);
+            text = text.Replace("]", "");
+            string[] Objects = text.Split('[');
+            string obj = Objects[1];
+            string[] lines = obj.Split(',');
+            foreach (string line in lines)
+            {
+                if (line.Contains(propertie))
+                {
+                    return line.Split(':')[1].Replace("\"", "");
+                }
+            }
+            return "error";
+        }
+
     }
 }
 
