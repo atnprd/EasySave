@@ -318,7 +318,7 @@ namespace EasySave.Controller
                         }
                         y++;
                     }
-               
+  
 
             }
             foreach (IBackup file in backup)
@@ -336,13 +336,13 @@ namespace EasySave.Controller
                             {
                                 if (Utils.checkBusinessSoft(blacklisted_apps))
                                 {
-                                    this.View.Messbx("businesswarerunning");
+                                    this.View.Errbx("business software running");
                                     break;
                                 }
                                 else if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                                 {
                                     file.LaunchSave(backupdifffull[i]);
-                                    this.View.Messbx("success_addedall");
+                                    this.View.Errbx("Succes add all");
                                     break;
                                 }
                             }
@@ -352,7 +352,7 @@ namespace EasySave.Controller
                         else
                         {
                             file.LaunchSave();
-                            this.View.Messbx("success_addedall");
+                            this.View.Errbx("success add all");
                         }
                     }
                     catch (System.IO.IOException e)

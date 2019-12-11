@@ -196,6 +196,12 @@ namespace EasySave.View
             return result;
         }
 
+        public MessageBoxResult Errbx(string err)
+        {
+            MessageBoxResult result = MessageBox.Show(err, "Alert", MessageBoxButton.OK, MessageBoxImage.Exclamation, MessageBoxResult.No);
+            return result;
+        }
+
         private void Saves_items(object sender, RoutedEventArgs e)
         {
             controller.Save_alltasks();
