@@ -23,6 +23,7 @@ namespace EasySave.Controller
         string[] blacklisted_apps = Utils.getBlacklist();
 
         public List<IBackup> backup { get => m_backup; set => m_backup = value; }
+        public View.View View { get; set; }
 
         public MainController()
         {
@@ -295,50 +296,75 @@ namespace EasySave.Controller
             }
             IBackup[] backupdiff = new IBackup[count];
             bool[] backupdifffull = new bool[count];
+
+            List<Thread> taskThreads = new List<Thread>();
+
             int y = 0;
             for (int i = 0; i < backup.Count; i++)
             {
-                if (backup[i].GetType() == typeof(BackupDiff))
-                {
-                    backupdiff[y] = backup[i];
-                    View.View view = new View.View(this);
-                    MessageBoxResult response = view.Messbx(backup[i].name);
+                    if (backup[i].GetType() == typeof(BackupDiff))
+                    {
+                        backupdiff[y] = backup[i];
+                        View.View view = new View.View(this);
+                        MessageBoxResult response = view.Messbx(backup[i].name);
                    
-                    if (response == MessageBoxResult.No)
-                    {
-                        backupdifffull[y] = false;
+                        if (response == MessageBoxResult.No)
+                        {
+                            backupdifffull[y] = false;
+                        }
+                        else if(response == MessageBoxResult.Yes)
+                        {
+                            backupdifffull[y] = true;
+                        }
+                        y++;
                     }
-                    else if(response == MessageBoxResult.Yes)
-                    {
-                        backupdifffull[y] = true;
-                    }
-                    y++;
-                }
+               
+
             }
             foreach (IBackup file in backup)
             {
-                if (file.GetType() == typeof(BackupDiff))
-                {
-                    for (int i = 0; i < count; i++)
-                    { 
-                        if(Utils.checkBusinessSoft(blacklisted_apps))
+
+                Thread th = new Thread(() =>
+                {restartThread:
+                    try
+                    {
+
+
+                        if (file.GetType() == typeof(BackupDiff))
                         {
-                            return "businesswarerunning";
-                            break;
+                            for (int i = 0; i < count; i++)
+                            {
+                                if (Utils.checkBusinessSoft(blacklisted_apps))
+                                {
+                                    this.View.Messbx("businesswarerunning");
+                                    break;
+                                }
+                                else if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
+                                {
+                                    file.LaunchSave(backupdifffull[i]);
+                                    this.View.Messbx("success_addedall");
+                                    break;
+                                }
+                            }
                         }
-                        else if(backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
+
+
+                        else
                         {
-                            file.LaunchSave(backupdifffull[i]);
-                            return "success_addedall";
+                            file.LaunchSave();
+                            this.View.Messbx("success_addedall");
                         }
                     }
-                }
-                else
-                {
-                    file.LaunchSave();
-                    return "success_addedall";
-                }
-               
+                    catch (System.IO.IOException e)
+                    {
+                        goto restartThread;
+                    }
+                });
+                taskThreads.Add(th);
+            }
+            foreach(Thread t in taskThreads)
+            {
+                t.Start();
             }
             return null;
         }
