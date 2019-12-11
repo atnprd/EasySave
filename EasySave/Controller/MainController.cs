@@ -377,7 +377,6 @@ namespace EasySave.Controller
                     if (Utils.checkBusinessSoft(blacklisted_apps))
                     {
                         return "businesswarerunning";
-                        break;
                     }
                     else if (task.GetType() == typeof(BackupDiff))
                     {
