@@ -23,7 +23,7 @@ namespace EasySave.Controller
         string[] blacklisted_apps = Utils.getBlacklist();
 
         public List<IBackup> backup { get => m_backup; set => m_backup = value; }
-        public View.View view { get; set; }
+        public View.View View { get; set; }
 
         public MainController()
         {
@@ -355,12 +355,12 @@ namespace EasySave.Controller
                     {
                         return "backupdiff";
                     }
-                    else if(task.GetType() == typeof(BackupMirror))
+                    else if (task.GetType() == typeof(BackupMirror))
                     {
-                        Thread thread = new Thread(() =>
-                        Application.Current.Dispatcher.BeginInvoke(new Action(() => { this.view.Progress_bar(); }))
-                        );
-                        thread.Start();
+
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() => { this.View.Progress_bar(); }));
+                       
+                      
                         task.LaunchSave();
                        
                         return "success_mirr";

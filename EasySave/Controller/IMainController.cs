@@ -10,7 +10,7 @@ namespace EasySave.Controller
 {
     public interface IMainController
     {
-        View.View view { get; set; }
+        View.View View { get; set; }
         List<IBackup> backup { get; set; }
 
         string Add_save(string name, string source_folder, string target_folder, string backuptype);

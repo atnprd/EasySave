@@ -23,7 +23,7 @@ namespace EasySave.View
         {
             
             controller = c;
-            controller.view = this;
+            controller.View = this;
             InitializeComponent();
         }
 
