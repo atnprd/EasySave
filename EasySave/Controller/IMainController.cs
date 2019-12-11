@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace EasySave.Controller
 {
-    interface IMainController
+    public interface IMainController
     {
-        View.View View { get; set; }
+        View.View view { get; set; }
         List<IBackup> backup { get; set; }
 
         string Add_save(string name, string source_folder, string target_folder, string backuptype);
@@ -22,6 +22,6 @@ namespace EasySave.Controller
         string Save_diff(bool fulldiff, int indextask);
         string Informations_items(int index);
         string Read_datajson(string path, string obj_json);
-        void Close();
+     
     }
 }

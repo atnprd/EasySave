@@ -9,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
+using EasySave.Model;
 
 namespace EasySave.View
 {
@@ -20,7 +21,9 @@ namespace EasySave.View
         IMainController controller;
         public View(IMainController c)
         {
+            
             controller = c;
+            controller.view = this;
             InitializeComponent();
         }
 
@@ -121,7 +124,7 @@ namespace EasySave.View
                 }
             }
         }
-        private void Display_error_success(string mess)
+        public void Display_error_success(string mess)
         {
             switch (mess)
             {
@@ -231,21 +234,17 @@ namespace EasySave.View
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
             File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);*/
         }
-        void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            controller.Close();
-        }
-
+       
         public void Progress_bar()
-        {
-            Manage_taskpopup.IsOpen = true;
+        { 
+            //Manage_taskpopup.IsOpen = true;
             string responseinfo = controller.Informations_items(Save_task.SelectedIndex);
             string[] item = responseinfo.Split('*');
 
             string response = controller.Read_datajson(item[2] + "realtime_log.json", "backup_progress");
             int responsetoint = Int32.Parse(response);
 
-            for (int i = 0; i <= 100; i++)
+            while(responsetoint <= 100)
             {
                 progressbartask.Value = responsetoint;
                 response = controller.Read_datajson(item[2] + "realtime_log.json", "backup_progress");

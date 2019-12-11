@@ -23,6 +23,7 @@ namespace EasySave.Controller
         string[] blacklisted_apps = Utils.getBlacklist();
 
         public List<IBackup> backup { get => m_backup; set => m_backup = value; }
+        public View.View view { get; set; }
 
         public MainController()
         {
@@ -53,10 +54,7 @@ namespace EasySave.Controller
             app.InitFrame(this);
         }
 
-        public void Close()
-        {
-            frameThread.Abort();
-        }
+        
         
         //method that process data in consoleMode
         private void Process_console(string[]  _capture)
@@ -359,7 +357,12 @@ namespace EasySave.Controller
                     }
                     else if(task.GetType() == typeof(BackupMirror))
                     {
+                        Thread thread = new Thread(() =>
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() => { this.view.Progress_bar(); }))
+                        );
+                        thread.Start();
                         task.LaunchSave();
+                       
                         return "success_mirr";
                     }
 
@@ -368,6 +371,7 @@ namespace EasySave.Controller
             return null;
             
         }
+
         public string Save_diff(bool fulldiff, int indextask)
         {
             foreach (IBackup task in backup)
@@ -394,6 +398,11 @@ namespace EasySave.Controller
                 }
             }
             return null;
+        }
+        public string Read_datajson(string path, string obj_json)
+        {
+            string response = UseJson.ReadJson(path, obj_json);
+            return response;
         }
     }
 }
