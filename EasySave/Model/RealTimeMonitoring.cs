@@ -54,6 +54,15 @@ namespace EasySave.Model
             writeJSON();
         }
 
+        public void GenerateFinalLog()
+        {
+            progress = 100;
+            size_files_left = 0;
+            nbr_files_left = 0;
+            backing_up_file = "N/A";
+            writeJSON();
+        }
+
         private void updateInfos(int current_file_number)
         // Method that updates all attributes
         {
