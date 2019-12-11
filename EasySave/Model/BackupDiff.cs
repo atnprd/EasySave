@@ -121,6 +121,7 @@ namespace EasySave.Model
                 target_path += '/' + subdir.Name;
                 FullSave(subdir, target_path);
             }
+            m_realTimeMonitoring.GenerateFinalLog();
         }
 
         //IncrementalSave
@@ -171,6 +172,7 @@ namespace EasySave.Model
                 complete_path += '/' + subdir.Name;
                 IncrementSave(subdir, target_path,complete_path);
             }
+            m_realTimeMonitoring.GenerateFinalLog();
             DeleteEmptyFolder(diTarget);
         }
 

@@ -10,7 +10,8 @@ namespace EasySave
         {
             MainController controller = new MainController();
             controller.Run();
-            Console.Read();
+            
+            // Console.Read();
         }
     }
 }

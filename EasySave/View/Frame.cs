@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasySave.Controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace EasySave.View
         public Window window = new Window();
         public static Grid RootGrid;
 
-        public void InitFrame()
+        public void InitFrame(IMainController c)
         {
             window.Width = 600;
             window.Height = 700;
@@ -24,7 +25,7 @@ namespace EasySave.View
             RootGrid.Height = window.Width;
             RootGrid.Width = window.Height;
             RootGrid.Background = Brushes.White;
-            GridFrame.CreateWorkList();
+            GridFrame.CreateWorkList(c);
             window.Content = RootGrid;
             window.Show();
             System.Windows.Threading.Dispatcher.Run();

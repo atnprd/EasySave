@@ -17,11 +17,11 @@ namespace EasySave.View
     /// </summary>
     public partial class View : UserControl
     {
-        IMainController controller = new MainController();
-        public View()
+        IMainController controller;
+        public View(IMainController c)
         {
+            controller = c;
             InitializeComponent();
-            controller.View = this;
         }
 
         private void Add_sourcefolder(object sender, RoutedEventArgs e)
@@ -121,7 +121,7 @@ namespace EasySave.View
                 }
             }
         }
-        public void Display_error_success(string mess)
+        private void Display_error_success(string mess)
         {
             switch (mess)
             {
@@ -231,22 +231,9 @@ namespace EasySave.View
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
             File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);*/
         }
-        public void Progress_bar()
+        void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Manage_taskpopup.IsOpen = true;
-            string responseinfo = controller.Informations_items(Save_task.SelectedIndex);
-            string[] item = responseinfo.Split('*');
-          
-            string response = controller.Read_datajson(item[2]+ "realtime_log.json", "backup_progress");
-            int responsetoint = Int32.Parse(response);
-            
-            for(int i = 0; i <= 100; i++)
-            {
-                progressbartask.Value = responsetoint;
-                response = controller.Read_datajson(item[2] + "realtime_log.json", "backup_progress");
-                responsetoint = Int32.Parse(response);
-            }     
+            controller.Close();
         }
-
     }
 }

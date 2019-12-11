@@ -102,6 +102,7 @@ namespace EasySave.Model
                 string temp_path = target_path +'/'+ subdir.Name;
                 FullSave(subdir, temp_path);
             }
+            m_realTimeMonitoring.GenerateFinalLog();
         }
 
         public void LaunchSave(bool state)

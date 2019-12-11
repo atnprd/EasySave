@@ -8,22 +8,21 @@ using EasySave.View;
 using EasySave.Model;
 using System.Threading;
 using System.Windows;
-using Newtonsoft.Json.Linq;
-using System.IO;
 
 namespace EasySave.Controller
 {
     public class MainController : IMainController
     { 
 
-        List<IBackup> backup = new List<IBackup>();
+        List<IBackup> m_backup = new List<IBackup>();
         IDisplay display = new Display();
+        Thread frameThread;
 
-        public View.View View { get; set; }
         public delegate void DELEG();
-     
 
         string[] blacklisted_apps = Utils.getBlacklist();
+
+        public List<IBackup> backup { get => m_backup; set => m_backup = value; }
 
         public MainController()
         {
@@ -38,16 +37,27 @@ namespace EasySave.Controller
         }
         public void Run()
         {
+            DistantConsoleServer server = new DistantConsoleServer(this);
+            Thread ServerThread = new Thread(server.RunServer);
+            ServerThread.Start();
+
             DELEG dele1 = StartWindow;
-            Thread frameThread = new Thread(dele1.Invoke);
+            frameThread = new Thread(dele1.Invoke);
             frameThread.SetApartmentState(ApartmentState.STA);
             frameThread.Start();
+            
         }
         public void StartWindow()
         {
             Frame app = new Frame();
-            app.InitFrame();
+            app.InitFrame(this);
         }
+
+        public void Close()
+        {
+            frameThread.Abort();
+        }
+        
         //method that process data in consoleMode
         private void Process_console(string[]  _capture)
         {
@@ -291,7 +301,7 @@ namespace EasySave.Controller
                 if (backup[i].GetType() == typeof(BackupDiff))
                 {
                     backupdiff[y] = backup[i];
-                    View.View view = new View.View();
+                    View.View view = new View.View(this);
                     MessageBoxResult response = view.Messbx(backup[i].name);
                    
                     if (response == MessageBoxResult.No)
@@ -318,7 +328,6 @@ namespace EasySave.Controller
                         }
                         else if(backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                         {
-                            
                             file.LaunchSave(backupdifffull[i]);
                             return "success_addedall";
                         }
@@ -350,14 +359,7 @@ namespace EasySave.Controller
                     }
                     else if(task.GetType() == typeof(BackupMirror))
                     {
-                        
-                        Thread oui = new Thread(View.Progress_bar);
-                       
-                        oui.Start();
-                        Application.Current.Dispatcher.Invoke(new Action(() => this.View.Display_error_success("error_name")));
                         task.LaunchSave();
-                        
-                        this.View.Progress_bar();
                         return "success_mirr";
                     }
 
@@ -392,12 +394,6 @@ namespace EasySave.Controller
                 }
             }
             return null;
-        }
-       
-        public string Read_datajson(string path,string obj_json)
-        {
-            string response = UseJson.ReadJson(path,obj_json);
-            return response;
         }
     }
 }
