@@ -8,6 +8,8 @@ using EasySave.View;
 using EasySave.Model;
 using System.Threading;
 using System.Windows;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace EasySave.Controller
 {
@@ -17,8 +19,9 @@ namespace EasySave.Controller
         List<IBackup> backup = new List<IBackup>();
         IDisplay display = new Display();
 
-
+        public View.View View { get; set; }
         public delegate void DELEG();
+     
 
         string[] blacklisted_apps = Utils.getBlacklist();
 
@@ -315,6 +318,7 @@ namespace EasySave.Controller
                         }
                         else if(backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                         {
+                            
                             file.LaunchSave(backupdifffull[i]);
                             return "success_addedall";
                         }
@@ -346,7 +350,14 @@ namespace EasySave.Controller
                     }
                     else if(task.GetType() == typeof(BackupMirror))
                     {
+                        
+                        Thread oui = new Thread(View.Progress_bar);
+                       
+                        oui.Start();
+                        Application.Current.Dispatcher.Invoke(new Action(() => this.View.Display_error_success("error_name")));
                         task.LaunchSave();
+                        
+                        this.View.Progress_bar();
                         return "success_mirr";
                     }
 
@@ -381,6 +392,12 @@ namespace EasySave.Controller
                 }
             }
             return null;
+        }
+       
+        public string Read_datajson(string path,string obj_json)
+        {
+            string response = UseJson.ReadJson(path,obj_json);
+            return response;
         }
     }
 }

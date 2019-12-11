@@ -38,7 +38,9 @@ namespace EasySave.Model
         private string m_source_folder;
         private string m_target_folder;
         private bool m_first_save;
-       
+        private bool ispaused = false;
+        private bool isstop = false;
+
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
@@ -214,6 +216,19 @@ namespace EasySave.Model
                 }
             }
             return update_file;
+        }
+        
+        public void Pause()
+        {
+            ispaused = true;
+        }
+        public void Play()
+        {
+            ispaused = false;
+        }
+        public void Stop()
+        {
+            isstop = true;
         }
     }
 }
