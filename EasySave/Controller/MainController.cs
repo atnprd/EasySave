@@ -14,14 +14,15 @@ namespace EasySave.Controller
     public class MainController : IMainController
     { 
 
-        List<IBackup> backup = new List<IBackup>();
+        List<IBackup> m_backup = new List<IBackup>();
         IDisplay display = new Display();
         Thread frameThread;
 
         public delegate void DELEG();
 
         string[] blacklisted_apps = Utils.getBlacklist();
-        
+
+        public List<IBackup> backup { get => m_backup; set => m_backup = value; }
 
         public MainController()
         {
@@ -36,6 +37,10 @@ namespace EasySave.Controller
         }
         public void Run()
         {
+            DistantConsoleServer server = new DistantConsoleServer(this);
+            Thread ServerThread = new Thread(server.RunServer);
+            ServerThread.Start();
+
             DELEG dele1 = StartWindow;
             frameThread = new Thread(dele1.Invoke);
             frameThread.SetApartmentState(ApartmentState.STA);
@@ -45,7 +50,7 @@ namespace EasySave.Controller
         public void StartWindow()
         {
             Frame app = new Frame();
-            app.InitFrame();
+            app.InitFrame(this);
         }
 
         public void Close()
@@ -296,7 +301,7 @@ namespace EasySave.Controller
                 if (backup[i].GetType() == typeof(BackupDiff))
                 {
                     backupdiff[y] = backup[i];
-                    View.View view = new View.View();
+                    View.View view = new View.View(this);
                     MessageBoxResult response = view.Messbx(backup[i].name);
                    
                     if (response == MessageBoxResult.No)

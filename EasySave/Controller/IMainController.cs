@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace EasySave.Controller
 {
-    interface IMainController
+    public interface IMainController
     {
+        List<IBackup> backup { get; set; }
+
         string Add_save(string name, string source_folder, string target_folder, string backuptype);
         IBackup Last_backup();
         string Remove_task(int indextask);
