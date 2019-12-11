@@ -235,5 +235,22 @@ namespace EasySave.View
         {
             controller.Close();
         }
+
+        public void Progress_bar()
+        {
+            Manage_taskpopup.IsOpen = true;
+            string responseinfo = controller.Informations_items(Save_task.SelectedIndex);
+            string[] item = responseinfo.Split('*');
+
+            string response = controller.Read_datajson(item[2] + "realtime_log.json", "backup_progress");
+            int responsetoint = Int32.Parse(response);
+
+            for (int i = 0; i <= 100; i++)
+            {
+                progressbartask.Value = responsetoint;
+                response = controller.Read_datajson(item[2] + "realtime_log.json", "backup_progress");
+                responsetoint = Int32.Parse(response);
+            }
+        }
     }
 }
