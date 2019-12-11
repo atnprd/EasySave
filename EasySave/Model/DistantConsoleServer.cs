@@ -115,7 +115,7 @@ namespace EasySave.Model
             foreach(IBackup backup in controller.backup)
             {
                 if (name.Contains(backup.name)){
-                    string progressBar = Utils.JsonReader(backup.target_folder + "/realtime_log.json", "backup_progress");
+                    string progressBar = Utils.JsonReader(backup.target_folder + "/realtime_log_"+backup.name+".json", "backup_progress");
 
                     ret = backup.name + "," + backup.source_folder + "," + backup.target_folder + "," + progressBar;
                 }

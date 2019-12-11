@@ -26,7 +26,7 @@ namespace EasySave.Model
             source_folder = _source_folder;
             target_folder = _target_folder;
             first_save = true;
-            m_realTimeMonitoring = RealTimeMonitoring.Instance;
+            m_realTimeMonitoring = new RealTimeMonitoring(name);
             m_realTimeMonitoring.SetPaths(source_folder, target_folder);
         }
 
@@ -178,7 +178,7 @@ namespace EasySave.Model
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
-                if (Utils.IsPriority(fi.Extension))
+                if (!Utils.IsPriority(fi.Extension))
                 {
                     //Copy the current file in a temp folder and crypt it if necessary
                     if (Utils.IsToCrypt(fi.Extension))

@@ -25,7 +25,7 @@ namespace EasySave.Model
             name = _name;
             source_folder = _source_folder;
             target_folder = _target_folder;
-            m_realTimeMonitoring = RealTimeMonitoring.Instance;
+            m_realTimeMonitoring = new RealTimeMonitoring(name);
             m_realTimeMonitoring.SetPaths(source_folder, target_folder);
         }
 
