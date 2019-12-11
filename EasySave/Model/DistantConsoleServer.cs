@@ -26,7 +26,7 @@ namespace EasySave.Model
 
             var host = Dns.GetHostEntry(Dns.GetHostName());
 
-            //listening TCP connexions
+            //listening TCP connexionsd
             ServerSocket = new TcpListener(IPAddress.Any, inPortNumber);
             ServerSocket.Start();
         }
