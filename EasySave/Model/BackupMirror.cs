@@ -36,10 +36,12 @@ namespace EasySave.Model
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
+        private bool m_priority_work_in_progress = false;
 
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
+        public bool priority_work_in_progress { get => m_priority_work_in_progress; set => m_priority_work_in_progress = value; }
 
 
         //Launching save, setting directory to copy and create save path
@@ -48,7 +50,7 @@ namespace EasySave.Model
             current_file = 0;
             DirectoryInfo di = new DirectoryInfo(m_source_folder);
             string path = target_folder + '/' + name;
-            FullSave(di, path);
+            FullSavePrio(di, path);
         }
 
         //Mirror save
@@ -63,27 +65,31 @@ namespace EasySave.Model
             //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
-                m_daily_log = DailyLog.Instance;
-                m_daily_log.SetPaths(fi.FullName);
-                m_daily_log.millisecondEarly();
+                if (!Utils.IsPriority(fi.Extension))
+                {
+                    m_daily_log = DailyLog.Instance;
+                    m_daily_log.SetPaths(fi.FullName);
+                    m_daily_log.millisecondEarly();
 
-                m_realTimeMonitoring.GenerateLog(current_file);
-                current_file++;
-                string temp_path = target_path + '/' + fi.Name;
-                //check if the extension is the list to encrypt
-                if (Utils.IsToCrypt(fi.Extension))
-                {
-                    m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
-                }
-                else
-                {
-                    fi.CopyTo(temp_path, true);
-                    m_daily_log.Crypt_time = "0";
+                    m_realTimeMonitoring.GenerateLog(current_file);
+                    current_file++;
+                    string temp_path = target_path + '/' + fi.Name;
+                    //check if the extension is the list to encrypt
+                    if (Utils.IsToCrypt(fi.Extension))
+                    {
+                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    }
+                    else
+                    {
+                        fi.CopyTo(temp_path, true);
+                        m_daily_log.Crypt_time = "0";
+                    }
+
+
+                    m_daily_log.millisecondFinal();
+                    m_daily_log.generateDailylog(target_folder, source_folder);
                 }
                 
-
-                m_daily_log.millisecondFinal();
-                m_daily_log.generateDailylog(target_folder, source_folder);
             }
             //get all sub-directory and foreach call the save function(recursive)
             DirectoryInfo[] dirs = di.GetDirectories();
@@ -94,6 +100,57 @@ namespace EasySave.Model
             }
             m_realTimeMonitoring.GenerateFinalLog();
         }
+
+        private void FullSavePrio(DirectoryInfo di, string target_path)
+        {
+            //check if target directory exist, in case he doesn't create the directory
+            DirectoryInfo diTarget = new DirectoryInfo(target_path);
+            if (!diTarget.Exists)
+            {
+                diTarget.Create();
+            }
+            //foreach file in source directory, copy it in target directory
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                if (Utils.IsPriority(fi.Extension))
+                {
+                    priority_work_in_progress = true;
+
+                    m_daily_log = DailyLog.Instance;
+                    m_daily_log.SetPaths(fi.FullName);
+                    m_daily_log.millisecondEarly();
+
+                    m_realTimeMonitoring.GenerateLog(current_file);
+                    current_file++;
+                    string temp_path = target_path + '/' + fi.Name;
+                    //check if the extension is the list to encrypt
+                    if (Utils.IsToCrypt(fi.Extension))
+                    {
+                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    }
+                    else
+                    {
+                        fi.CopyTo(temp_path, true);
+                        m_daily_log.Crypt_time = "0";
+                    }
+
+
+                    m_daily_log.millisecondFinal();
+                    m_daily_log.generateDailylog(target_folder, source_folder);
+
+                    priority_work_in_progress = false;
+                }
+            }
+            //get all sub-directory and foreach call the save function(recursive)
+            DirectoryInfo[] dirs = di.GetDirectories();
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                string temp_path = target_path + '/' + subdir.Name;
+                FullSavePrio(subdir, temp_path);
+            }
+            FullSave(di, target_path);
+        }
+
 
         public void LaunchSave(bool state)
         {
