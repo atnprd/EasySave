@@ -183,12 +183,12 @@ namespace EasySave.Controller
                     else {
                         if (_capture[2] == "diff")
                         {
-                            backup.Add(new BackupDiff(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
+                            backup.Add(new BackupDiff(_capture[1], _capture[3], _capture[4],this) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
                             display.Success("-add", _capture[1]);
                         }
                         else if (_capture[2] == "mir")
                         {
-                            backup.Add(new BackupMirror(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
+                            backup.Add(new BackupMirror(_capture[1], _capture[3], _capture[4],this) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
                             display.Success("-add", _capture[1]);
                         }
                         
@@ -249,13 +249,13 @@ namespace EasySave.Controller
             }
             else if (backuptype == "diff")
             {
-                backup.Add(new BackupDiff(name, source_folder, target_folder) { name = name, source_folder = source_folder, target_folder = target_folder });
+                backup.Add(new BackupDiff(name, source_folder, target_folder,this) { name = name, source_folder = source_folder, target_folder = target_folder });
                 
                 return "success_backupdiff";
             }
             else if (backuptype == "mirr")
             {
-                backup.Add(new BackupMirror(name, source_folder, target_folder) { name = name, source_folder = source_folder, target_folder = target_folder });
+                backup.Add(new BackupMirror(name, source_folder, target_folder,this) { name = name, source_folder = source_folder, target_folder = target_folder });
                 return "success_backupmirr";
             }
             else
@@ -342,7 +342,6 @@ namespace EasySave.Controller
                                 else if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                                 {
                                     file.LaunchSave(backupdifffull[i]);
-                                    this.View.Errbx("Succes add all");
                                     break;
                                 }
                             }
@@ -352,7 +351,6 @@ namespace EasySave.Controller
                         else
                         {
                             file.LaunchSave();
-                            this.View.Errbx("success add all");
                         }
                     }
                     catch (System.IO.IOException e)
@@ -420,5 +418,18 @@ namespace EasySave.Controller
             }
             return null;
         }
+        public bool IsAPriorityTaskRunning()
+        {
+            bool ret = false;
+            foreach (IBackup backup in backup)
+            {
+                if (backup.priority_work_in_progress)
+                {
+                    ret = true;
+                }
+            }
+            return ret;
+        }
+
     }
 }

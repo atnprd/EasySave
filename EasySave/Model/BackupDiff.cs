@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using EasySave.Controller;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EasySave.Model
 {
     class BackupDiff : IBackup
 
     {
-        public BackupDiff(string _name, string _source_folder, string _target_folder)
+        public BackupDiff(string _name, string _source_folder, string _target_folder, IMainController c)
         {
             //check if source directory exist if it is not an extern storage
             if (_source_folder[0] != '\\'){
@@ -28,21 +24,27 @@ namespace EasySave.Model
             first_save = true;
             m_realTimeMonitoring = new RealTimeMonitoring(name);
             m_realTimeMonitoring.SetPaths(source_folder, target_folder);
+            controller = c;
         }
 
         private RealTimeMonitoring m_realTimeMonitoring;
         private DailyLog m_daily_log;
+        private IMainController controller;
 
         private int current_file;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
         private bool m_first_save;
-       
+        private bool m_priority_work_in_progress = false;
+        private bool m_is_on_break = false;
+
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
         public bool first_save { get => m_first_save; set => m_first_save = value; }
+        public bool is_on_break { get => m_is_on_break; set => m_is_on_break = value; }
+        public bool priority_work_in_progress { get => m_priority_work_in_progress; set => m_priority_work_in_progress = value; }
 
 
         //launch save, check if it is the first save, if it is do a full save, else do an incremental save
@@ -86,6 +88,7 @@ namespace EasySave.Model
         //Mirror save
         public void FullSave(DirectoryInfo di, string target_path)
         {
+            priority_work_in_progress = false;
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
             if (!diTarget.Exists)
             {
@@ -93,6 +96,7 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
+                while (controller.IsAPriorityTaskRunning()) { }
                 if (!Utils.IsPriority(fi.Extension))
                 {
                     m_daily_log = DailyLog.Instance;
@@ -127,6 +131,7 @@ namespace EasySave.Model
 
         public void FullSavePrio(DirectoryInfo di, string target_path)
         {
+            priority_work_in_progress = true;
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
             if (!diTarget.Exists)
             {
@@ -169,6 +174,7 @@ namespace EasySave.Model
         //IncrementalSave
         public void IncrementSave(DirectoryInfo di, string target_path, string complete_path)
         {
+            priority_work_in_progress = false;
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
             if (!diTarget.Exists)
             {
@@ -178,6 +184,7 @@ namespace EasySave.Model
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
+                while (controller.IsAPriorityTaskRunning()) { }
                 if (!Utils.IsPriority(fi.Extension))
                 {
                     //Copy the current file in a temp folder and crypt it if necessary
@@ -223,6 +230,7 @@ namespace EasySave.Model
 
         public void IncrementSavePrio(DirectoryInfo di, string target_path, string complete_path)
         {
+            priority_work_in_progress = true;
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
             if (!diTarget.Exists)
             {
