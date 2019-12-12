@@ -130,7 +130,7 @@ namespace EasySave.Controller
                                 for (int i = 0; i < count; i++)
                                     if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                                     {
-                                        file.LaunchSave(backupdifffull[i]);
+                                        file.LaunchSaveInc(backupdifffull[i]);
                                     }
                             }
                             else
@@ -169,11 +169,11 @@ namespace EasySave.Controller
                                     string response = display.Readline();
                                     if (response == "y")
                                     {
-                                        file.LaunchSave(true);
+                                        file.LaunchSaveInc(true);
                                     }
                                     else
                                     {
-                                        file.LaunchSave(false);
+                                        file.LaunchSaveInc(false);
                                     }
                                 }
                                 else
@@ -354,7 +354,7 @@ namespace EasySave.Controller
                                 }
                                 else if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
                                 {
-                                    file.LaunchSave(backupdifffull[i]);
+                                    file.LaunchSaveInc(backupdifffull[i]);
                                     break;
                                 }
                             }
@@ -408,7 +408,7 @@ namespace EasySave.Controller
             {
                 if (backup.IndexOf(task) == indextask)
                 {
-                    Thread threadsave = new Thread(task.LaunchSave);
+                    Thread threadsave = new Thread(new ParameterizedThreadStart(task.LaunchSaveInc));
                     threadsave.Start(fulldiff);
                     return "success_diff";
                 }
@@ -442,13 +442,18 @@ namespace EasySave.Controller
             }
             return ret;
         }
-        public void Update_progressbar(int progress)
+        public void Update_progressbar()
         {
-            View.progressbartask.Value = progress;
-            //this.View.Manage_taskpopup.IsOpen = true;
-            View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = progress; }));
-            //Application.Current.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = progress; })); 
-            View.Refresh();
+            if (View.current_name == null && View.current_targetpath == null)
+            {
+                
+            }
+            else
+            {
+                View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(Utils.JsonReader(View.current_targetpath + "realtime_log_" + View.current_name + ".json", "backup_progress")); }));
+                View.Refresh();
+            }
         }
+       
     }
 }

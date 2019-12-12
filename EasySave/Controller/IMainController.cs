@@ -24,6 +24,6 @@ namespace EasySave.Controller
         string Informations_items(int index);
         void Close();
         bool IsAPriorityTaskRunning();
-        void Update_progressbar(int progress);
+        void Update_progressbar();
     }
 }

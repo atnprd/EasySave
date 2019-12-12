@@ -15,6 +15,6 @@ namespace EasySave.Model
         bool priority_work_in_progress { get; set; }
         bool is_on_break { get; set; }
         void LaunchSave();
-        void LaunchSave(bool full_save);
+        void LaunchSaveInc(object full_save);
     }
 }

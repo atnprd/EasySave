@@ -19,6 +19,8 @@ namespace EasySave.View
     /// </summary>
     public partial class View : UserControl
     {
+        public string current_name;
+        public string current_targetpath;
         IMainController controller;
         public View(IMainController c)
         {
@@ -33,19 +35,25 @@ namespace EasySave.View
 
         private void Add_sourcefolder(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
+            using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
             {
-                sourcefolder.Text = openFileDialog.FileName;
+                System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    sourcefolder.Text = fbd.SelectedPath;
+                }
             }
         }
 
         private void Add_targetfolder(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
+            using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
             {
-                targetfolder.Text = openFileDialog.FileName;
+                System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    targetfolder.Text = fbd.SelectedPath;
+                }
             }
         }
 
@@ -216,16 +224,21 @@ namespace EasySave.View
 
         private void Save_task_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if(Save_task.SelectedIndex != -1)
-            { 
+            if (Save_task.SelectedIndex != -1)
+            {
                 string response = controller.Informations_items(Save_task.SelectedIndex);
-                string [] item = response.Split('*');
+                string[] item = response.Split('*');
                 name_item.Content = item[0];
                 source_item.Content = item[1];
                 target_item.Content = item[2];
+                
+                current_name = item[0];
+                current_targetpath = item[2];
+                progressbartask.Visibility = Visibility.Visible;
+                
             }
         }
-
+        
         private void Open_blacklist(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("notepad.exe", ConfigurationSettings.AppSettings["softwareBlacklist"]);
@@ -247,9 +260,9 @@ namespace EasySave.View
 
         public void Refresh()
         {
-
             this.progressbartask.Refresh();
         }
-       
+
+     
     }
 }

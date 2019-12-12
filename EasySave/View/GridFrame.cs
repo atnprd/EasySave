@@ -15,8 +15,8 @@ namespace EasySave.View
         static Grid Grid = new Grid();
         public static void CreateWorkList(IMainController c)
         {
-            Grid.Width = 600;
-            Grid.Height = 700;
+            Grid.Width = 700;
+            Grid.Height = 800;
             Grid.HorizontalAlignment = HorizontalAlignment.Left;
             Grid.VerticalAlignment = VerticalAlignment.Center;
             Grid.Background = Brushes.Transparent;

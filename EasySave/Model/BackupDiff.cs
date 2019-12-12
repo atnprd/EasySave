@@ -58,6 +58,7 @@ namespace EasySave.Model
                 string target_path = target_folder + '/' + name + "/completeBackup/";
                 first_save = false;
                 FullSavePrio(di, target_path);
+                FullSave(di, target_path);
             }
             else
             {
@@ -65,25 +66,32 @@ namespace EasySave.Model
                 string target_path = target_folder + '/' + name + "/tempBackup/";
 
                 IncrementSavePrio(di, target_path, complete_path);
+                IncrementSave(di, target_path, complete_path);
             }
+            m_realTimeMonitoring.GenerateFinalLog();
+            controller.Update_progressbar();
         }
         //launch save, user choose if it is a full or incremental save, if it is the first save he can't force incremental save
-        public void LaunchSave(bool full_save)
+        public void LaunchSaveInc(object full_save)
         {
             current_file = 0;
             DirectoryInfo di = new DirectoryInfo(m_source_folder);
-            if (!full_save && !first_save)
+            if (!(bool)full_save && !first_save)
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 string target_path = target_folder + '/' + name + "/tempBackup/";
                 IncrementSavePrio(di, target_path, complete_path);
+                IncrementSave(di, target_path, complete_path);
             }
             else
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 first_save = false;
                 FullSavePrio(di, complete_path);
+                FullSave(di, complete_path);
             }
+            m_realTimeMonitoring.GenerateFinalLog();
+            controller.Update_progressbar();
         }
 
         //Mirror save
@@ -117,8 +125,7 @@ namespace EasySave.Model
             {
                 target_path += '/' + subdir.Name;
                 FullSave(subdir, target_path);
-            }
-            m_realTimeMonitoring.GenerateFinalLog();
+            } 
         }
 
         public void FullSavePrio(DirectoryInfo di, string target_path)
@@ -151,7 +158,6 @@ namespace EasySave.Model
                 target_path += '/' + subdir.Name;
                 FullSavePrio(subdir, target_path);
             }
-            FullSave(di, target_path);
         }
 
         //IncrementalSave
@@ -189,8 +195,6 @@ namespace EasySave.Model
                 complete_path += '/' + subdir.Name;
                 IncrementSave(subdir, target_path,complete_path);
             }
-            m_realTimeMonitoring.GenerateFinalLog();
-            this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
             DeleteEmptyFolder(diTarget);
         }
 
@@ -227,7 +231,6 @@ namespace EasySave.Model
                 complete_path += '/' + subdir.Name;
                 IncrementSavePrio(subdir, target_path, complete_path);
             }
-            IncrementSave(di, target_path, complete_path);
         }
 
         //recursive method that delete all empty folder
@@ -250,7 +253,7 @@ namespace EasySave.Model
             bool new_file = true;
             foreach (FileInfo fi in dirTarget.GetFiles())
             {
-                if (fi.Name == fiBase.Name)
+                if ("temp"+fi.Name == fiBase.Name)
                 {
                     new_file = false;
                 }
@@ -263,7 +266,7 @@ namespace EasySave.Model
             bool update_file = false;
             foreach (FileInfo fi in dirTarget.GetFiles())
             {
-                if (fiBase.Name == fi.Name)
+                if ("temp" + fiBase.Name == fi.Name)
                 {
                     if (fiBase.Length != fi.Length)
                     {
@@ -279,13 +282,13 @@ namespace EasySave.Model
             //Copy the current file in a temp folder and crypt it if necessary
             if (Utils.IsToCrypt(fi.Extension))
             {
-                m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, fi.Name);
+                m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, "temp"+fi.Name);
             }
             else
             {
-                fi.CopyTo(fi.Name);
+                fi.CopyTo("temp"+fi.Name);
             }
-            FileInfo fiTemp = new FileInfo(fi.Name);
+            FileInfo fiTemp = new FileInfo("temp"+fi.Name);
 
             //check if it is a new file or if the file was modified based on the full save
             if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
@@ -295,7 +298,7 @@ namespace EasySave.Model
                 m_daily_log.millisecondEarly();
 
                 m_realTimeMonitoring.GenerateLog(current_file);
-                this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
+                this.controller.Update_progressbar();
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
                 fiTemp.CopyTo(temp_path, true);
@@ -317,7 +320,7 @@ namespace EasySave.Model
             m_daily_log.millisecondEarly();
 
             m_realTimeMonitoring.GenerateLog(current_file);
-            this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
+            controller.Update_progressbar();
             current_file++;
             string temp_path = target_path + '/' + fi.Name;
             //check if the extension is the list to encrypt
