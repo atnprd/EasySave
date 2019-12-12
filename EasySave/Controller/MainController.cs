@@ -49,11 +49,11 @@ namespace EasySave.Controller
             {
                 Application.Current.Shutdown();
             }
-
+            /*
             DistantConsoleServer server = new DistantConsoleServer(this);
             Thread ServerThread = new Thread(server.RunServer);
             ServerThread.Start();
-
+            */
             DELEG dele1 = StartWindow;
             frameThread = new Thread(dele1.Invoke);
             frameThread.SetApartmentState(ApartmentState.STA);
@@ -317,8 +317,7 @@ namespace EasySave.Controller
                 if (backup[i].GetType() == typeof(BackupDiff))
                 {
                     backupdiff[y] = backup[i];
-                    View.View view = new View.View(this);
-                    MessageBoxResult response = view.Messbx(backup[i].name);
+                    MessageBoxResult response = new View.View(this).Messbx(backup[i].name);
 
                     if (response == MessageBoxResult.No)
                     {
@@ -331,48 +330,21 @@ namespace EasySave.Controller
                     y++;
                 }
 
-
+                y = 0;
             }
             foreach (IBackup file in backup)
             {
-
-                Thread th = new Thread(() =>
-                { restartThread:
-                    try
-                    {
-
-
-                        if (file.GetType() == typeof(BackupDiff))
-                        {
-                            for (int i = 0; i < count; i++)
-                            {
-                                if (Utils.checkBusinessSoft(blacklisted_apps))
-                                {
-                                    this.View.Errbx("business software running");
-                                    break;
-                                }
-                                else if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
-                                {
-                                    file.LaunchSaveInc(backupdifffull[i]);
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            file.LaunchSave();
-                        }
-                    }
-                    catch (System.IO.IOException e)
-                    {
-                        goto restartThread;
-                    }
-                });
-                taskThreads.Add(th);
-            }
-            foreach (Thread t in taskThreads)
-            {
-                t.Start();
+                if (file.GetType() == typeof(BackupDiff))
+                {
+                    Thread th = new Thread(new ParameterizedThreadStart(file.LaunchSaveInc));
+                    th.Start(backupdifffull[y]);
+                    y++;
+                }
+                else
+                {
+                    Thread th = new Thread(file.LaunchSave);
+                    th.Start();
+                }
             }
             return null;
         }
@@ -445,11 +417,14 @@ namespace EasySave.Controller
         {
             if (View.current_name == null && View.current_targetpath == null)
             {
-                
             }
             else
             {
-                View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(Utils.JsonReader(View.current_targetpath + "/realtime_log_" + View.current_name + ".json", "backup_progress")); }));
+                string val =Utils.JsonReader(View.current_targetpath + "/realtime_log_" + View.current_name + ".json", "backup_progress");
+                if (val != "")
+                {
+                    View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(val); }));
+                }
                 View.Refresh();
             }
         }
