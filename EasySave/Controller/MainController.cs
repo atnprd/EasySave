@@ -36,8 +36,20 @@ namespace EasySave.Controller
                 Process_console(_capture_split);
             }*/
         }
+
+        private static Mutex _mutex = null;
         public void Run()
         {
+             
+            const string appName = "EasySave";
+            bool createdNew;
+            _mutex = new Mutex(true, appName, out createdNew);
+
+            if (!createdNew)
+            {
+                Application.Current.Shutdown();
+            }
+
             DistantConsoleServer server = new DistantConsoleServer(this);
             Thread ServerThread = new Thread(server.RunServer);
             ServerThread.Start();
