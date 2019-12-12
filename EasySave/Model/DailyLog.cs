@@ -23,7 +23,7 @@ namespace EasySave.Model
         private FileInfo file;
         private string file_size;
         private string file_name;
-        private string file_date;
+        private string timestamp;
         private double transfer_time;
         private string crypt_time;
 
@@ -72,7 +72,7 @@ namespace EasySave.Model
             //method getting the file's date
         {
             var culture = new CultureInfo("fr-FR");
-            file_date = file.LastWriteTime.ToString();
+            timestamp =  DateTime.Now.ToString("dd MM yyyy : HH:mm:ss:ffff");
         }
 
         private void fileName()
@@ -105,7 +105,7 @@ namespace EasySave.Model
             {
                 size_file = file_size,
                 name_file = file_name,
-                last_date_file = file_date,
+                timestamp = timestamp,
                 time_transfer = transfer_time,
                 folder_source = source_folder,
                 folder_target = path,

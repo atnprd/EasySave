@@ -1,5 +1,6 @@
 ﻿using EasySave.Controller;
 using System;
+using System.Configuration;
 using System.IO;
 
 namespace EasySave.Model
@@ -63,7 +64,7 @@ namespace EasySave.Model
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 string target_path = target_folder + '/' + name + "/tempBackup/";
 
-                IncrementSave(di, target_path, complete_path);
+                IncrementSavePrio(di, target_path, complete_path);
             }
         }
         //launch save, user choose if it is a full or incremental save, if it is the first save he can't force incremental save
@@ -75,7 +76,7 @@ namespace EasySave.Model
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 string target_path = target_folder + '/' + name + "/tempBackup/";
-                IncrementSave(di, target_path, complete_path);
+                IncrementSavePrio(di, target_path, complete_path);
             }
             else
             {
@@ -99,25 +100,16 @@ namespace EasySave.Model
                 while (controller.IsAPriorityTaskRunning()) { }
                 if (!Utils.IsPriority(fi.Extension))
                 {
-                    m_daily_log = DailyLog.Instance;
-                    m_daily_log.SetPaths(fi.FullName);
-                    m_daily_log.millisecondEarly();
-
-                    m_realTimeMonitoring.GenerateLog(current_file);
-                    current_file++;
-                    string temp_path = target_path + '/' + fi.Name;
-                    if (Utils.IsToCrypt(fi.Extension))
-                    {
-                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
+                        lock (controller)
+                        {
+                            Save(fi, target_path);
+                        }
                     }
                     else
                     {
-                        fi.CopyTo(temp_path, true);
-                        m_daily_log.Crypt_time = "0";
+                        Save(fi, target_path);
                     }
-
-                    m_daily_log.millisecondFinal();
-                    m_daily_log.generateDailylog(target_folder, source_folder);
                 } 
             }
             DirectoryInfo[] dirs = di.GetDirectories();
@@ -141,25 +133,16 @@ namespace EasySave.Model
             {
                 if (Utils.IsPriority(fi.Extension))
                 {
-                    m_daily_log = DailyLog.Instance;
-                    m_daily_log.SetPaths(fi.FullName);
-                    m_daily_log.millisecondEarly();
-
-                    m_realTimeMonitoring.GenerateLog(current_file);
-                    current_file++;
-                    string temp_path = target_path + '/' + fi.Name;
-                    if (Utils.IsToCrypt(fi.Extension))
-                    {
-                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
+                        lock (controller)
+                        {
+                            Save(fi, target_path);
+                        }
                     }
                     else
                     {
-                        fi.CopyTo(temp_path, true);
-                        m_daily_log.Crypt_time = "0";
+                        Save(fi, target_path);
                     }
-
-                    m_daily_log.millisecondFinal();
-                    m_daily_log.generateDailylog(target_folder, source_folder);
                 } 
             }
             DirectoryInfo[] dirs = di.GetDirectories();
@@ -187,34 +170,16 @@ namespace EasySave.Model
                 while (controller.IsAPriorityTaskRunning()) { }
                 if (!Utils.IsPriority(fi.Extension))
                 {
-                    //Copy the current file in a temp folder and crypt it if necessary
-                    if (Utils.IsToCrypt(fi.Extension))
-                    {
-                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, fi.Name);
+                    if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
+                        lock (controller)
+                        {
+                            SaveInc(fi, target_path,dirComplete);
+                        }
                     }
                     else
                     {
-                        fi.CopyTo(fi.Name);
+                        SaveInc(fi, target_path, dirComplete);
                     }
-                    FileInfo fiTemp = new FileInfo(fi.Name);
-
-                    //check if it is a new file or if the file was modified based on the full save
-                    if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
-                    {
-                        m_daily_log = DailyLog.Instance;
-                        m_daily_log.SetPaths(fi.FullName);
-                        m_daily_log.millisecondEarly();
-
-                        m_realTimeMonitoring.GenerateLog(current_file);
-                        current_file++;
-                        string temp_path = target_path + '/' + fi.Name;
-                        fiTemp.CopyTo(temp_path, true);
-
-                        m_daily_log.millisecondFinal();
-                        m_daily_log.generateDailylog(target_folder, source_folder);
-                    }
-                    //delete the temporary file
-                    fiTemp.Delete();
                 }
             }
             DirectoryInfo[] dirs = di.GetDirectories();
@@ -242,34 +207,16 @@ namespace EasySave.Model
             {
                 if (Utils.IsPriority(fi.Extension))
                 {
-                    //Copy the current file in a temp folder and crypt it if necessary
-                    if (Utils.IsToCrypt(fi.Extension))
-                    {
-                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, fi.Name);
+                    if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
+                        lock (controller)
+                        {
+                            SaveInc(fi, target_path, dirComplete);
+                        }
                     }
                     else
                     {
-                        fi.CopyTo(fi.Name);
+                        SaveInc(fi, target_path, dirComplete);
                     }
-                    FileInfo fiTemp = new FileInfo(fi.Name);
-
-                    //check if it is a new file or if the file was modified based on the full save
-                    if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
-                    {
-                        m_daily_log = DailyLog.Instance;
-                        m_daily_log.SetPaths(fi.FullName);
-                        m_daily_log.millisecondEarly();
-
-                        m_realTimeMonitoring.GenerateLog(current_file);
-                        current_file++;
-                        string temp_path = target_path + '/' + fi.Name;
-                        fiTemp.CopyTo(temp_path, true);
-
-                        m_daily_log.millisecondFinal();
-                        m_daily_log.generateDailylog(target_folder, source_folder);
-                    }
-                    //delete the temporary file
-                    fiTemp.Delete();
                 }
             }
             DirectoryInfo[] dirs = di.GetDirectories();
@@ -324,6 +271,69 @@ namespace EasySave.Model
                 }
             }
             return update_file;
+        }
+
+        public void SaveInc(FileInfo fi, string target_path, DirectoryInfo dirComplete)
+        {
+            //Copy the current file in a temp folder and crypt it if necessary
+            if (Utils.IsToCrypt(fi.Extension))
+            {
+                m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, fi.Name);
+            }
+            else
+            {
+                fi.CopyTo(fi.Name);
+            }
+            FileInfo fiTemp = new FileInfo(fi.Name);
+
+            //check if it is a new file or if the file was modified based on the full save
+            if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
+            {
+                m_daily_log = DailyLog.Instance;
+                m_daily_log.SetPaths(fi.FullName);
+                m_daily_log.millisecondEarly();
+
+                m_realTimeMonitoring.GenerateLog(current_file);
+                current_file++;
+                string temp_path = target_path + '/' + fi.Name;
+                fiTemp.CopyTo(temp_path, true);
+
+                m_daily_log.millisecondFinal();
+                lock (m_daily_log)
+                {
+                    m_daily_log.generateDailylog(target_folder, source_folder);
+                }
+            }
+            //delete the temporary file
+            fiTemp.Delete();
+        }
+
+        private void Save(FileInfo fi, string target_path)
+        {
+            m_daily_log = DailyLog.Instance;
+            m_daily_log.SetPaths(fi.FullName);
+            m_daily_log.millisecondEarly();
+
+            m_realTimeMonitoring.GenerateLog(current_file);
+            current_file++;
+            string temp_path = target_path + '/' + fi.Name;
+            //check if the extension is the list to encrypt
+            if (Utils.IsToCrypt(fi.Extension))
+            {
+                m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+            }
+            else
+            {
+                fi.CopyTo(temp_path, true);
+                m_daily_log.Crypt_time = "0";
+            }
+
+
+            m_daily_log.millisecondFinal();
+            lock (m_daily_log)
+            {
+                m_daily_log.generateDailylog(target_folder, source_folder);
+            }
         }
     }
 }

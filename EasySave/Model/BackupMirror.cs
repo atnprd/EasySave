@@ -1,6 +1,7 @@
 ﻿using EasySave.Controller;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -75,29 +76,17 @@ namespace EasySave.Model
                 while (controller.IsAPriorityTaskRunning()){}
                 if (!Utils.IsPriority(fi.Extension))
                 {
-                    m_daily_log = DailyLog.Instance;
-                    m_daily_log.SetPaths(fi.FullName);
-                    m_daily_log.millisecondEarly();
-
-                    m_realTimeMonitoring.GenerateLog(current_file);
-                    current_file++;
-                    string temp_path = target_path + '/' + fi.Name;
-                    //check if the extension is the list to encrypt
-                    if (Utils.IsToCrypt(fi.Extension))
-                    {
-                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    if(fi.Length> Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
+                        lock (controller)
+                        {
+                            Save(fi, target_path);
+                        }
                     }
                     else
                     {
-                        fi.CopyTo(temp_path, true);
-                        m_daily_log.Crypt_time = "0";
+                        Save(fi, target_path);
                     }
-
-
-                    m_daily_log.millisecondFinal();
-                    m_daily_log.generateDailylog(target_folder, source_folder);
                 }
-                
             }
             //get all sub-directory and foreach call the save function(recursive)
             DirectoryInfo[] dirs = di.GetDirectories();
@@ -123,27 +112,16 @@ namespace EasySave.Model
             {
                 if (Utils.IsPriority(fi.Extension))
                 {
-                    m_daily_log = DailyLog.Instance;
-                    m_daily_log.SetPaths(fi.FullName);
-                    m_daily_log.millisecondEarly();
-
-                    m_realTimeMonitoring.GenerateLog(current_file);
-                    current_file++;
-                    string temp_path = target_path + '/' + fi.Name;
-                    //check if the extension is the list to encrypt
-                    if (Utils.IsToCrypt(fi.Extension))
-                    {
-                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
+                        lock (controller)
+                        {
+                            Save(fi, target_path);
+                        }
                     }
                     else
                     {
-                        fi.CopyTo(temp_path, true);
-                        m_daily_log.Crypt_time = "0";
+                        Save(fi, target_path);
                     }
-
-
-                    m_daily_log.millisecondFinal();
-                    m_daily_log.generateDailylog(target_folder, source_folder);
                 }
             }
             //get all sub-directory and foreach call the save function(recursive)
@@ -155,7 +133,34 @@ namespace EasySave.Model
             }
         }
 
+        private void Save(FileInfo fi, string target_path)
+        {
+            m_daily_log = DailyLog.Instance;
+            m_daily_log.SetPaths(fi.FullName);
+            m_daily_log.millisecondEarly();
 
+            m_realTimeMonitoring.GenerateLog(current_file);
+            current_file++;
+            string temp_path = target_path + '/' + fi.Name;
+            //check if the extension is the list to encrypt
+            if (Utils.IsToCrypt(fi.Extension))
+            {
+                m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+            }
+            else
+            {
+                fi.CopyTo(temp_path, true);
+                m_daily_log.Crypt_time = "0";
+            }
+
+
+            m_daily_log.millisecondFinal();
+            lock (m_daily_log)
+            {
+                m_daily_log.generateDailylog(target_folder, source_folder);
+            }
+            
+        }
         public void LaunchSave(bool state)
         {
             LaunchSave();
