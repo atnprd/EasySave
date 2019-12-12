@@ -134,21 +134,27 @@ namespace EasySave.Model
         //read Json file and return the value of the propretie put in the argument.
         public static string JsonReader(string path, string propertie)
         {
-            path = path.Replace(@"\\", @"/");
+            try{
+                path = path.Replace(@"\\", @"/");
 
-            string text = File.ReadAllText(path);
-            text = text.Replace("]", "");
-            string[] Objects = text.Split('[');
-            string obj = Objects[1];
-            string[] lines = obj.Split(',');
-            foreach (string line in lines)
-            {
-                if (line.Contains(propertie))
+                string text = File.ReadAllText(path);
+                text = text.Replace("]", "");
+                string[] Objects = text.Split('[');
+                string obj = Objects[1];
+                string[] lines = obj.Split(',');
+                foreach (string line in lines)
                 {
-                    return line.Split(':')[1].Replace("\"", "");
+                    if (line.Contains(propertie))
+                    {
+                        return line.Split(':')[1].Replace("\"", "");
+                    }
                 }
             }
-            return "error";
+            catch
+            {
+                return "";
+            }
+            return "";
         }
     }
 }

@@ -253,7 +253,7 @@ namespace EasySave.Model
             bool new_file = true;
             foreach (FileInfo fi in dirTarget.GetFiles())
             {
-                if ("temp"+fi.Name == fiBase.Name)
+                if (fi.Name == fiBase.Name)
                 {
                     new_file = false;
                 }
@@ -266,7 +266,7 @@ namespace EasySave.Model
             bool update_file = false;
             foreach (FileInfo fi in dirTarget.GetFiles())
             {
-                if ("temp" + fiBase.Name == fi.Name)
+                if (fiBase.Name == fi.Name)
                 {
                     if (fiBase.Length != fi.Length)
                     {
@@ -282,13 +282,13 @@ namespace EasySave.Model
             //Copy the current file in a temp folder and crypt it if necessary
             if (Utils.IsToCrypt(fi.Extension))
             {
-                m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, "temp"+fi.Name);
+                m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, fi.Name);
             }
             else
             {
-                fi.CopyTo("temp"+fi.Name);
+                fi.CopyTo(fi.Name);
             }
-            FileInfo fiTemp = new FileInfo("temp"+fi.Name);
+            FileInfo fiTemp = new FileInfo(fi.Name);
 
             //check if it is a new file or if the file was modified based on the full save
             if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))

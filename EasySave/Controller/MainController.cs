@@ -13,7 +13,6 @@ namespace EasySave.Controller
 {
     public class MainController : IMainController
     {
-
         List<IBackup> m_backup = new List<IBackup>();
         IDisplay display = new Display();
         Thread frameThread;
@@ -450,7 +449,7 @@ namespace EasySave.Controller
             }
             else
             {
-                View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(Utils.JsonReader(View.current_targetpath + "realtime_log_" + View.current_name + ".json", "backup_progress")); }));
+                View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(Utils.JsonReader(View.current_targetpath + "/realtime_log_" + View.current_name + ".json", "backup_progress")); }));
                 View.Refresh();
             }
         }
