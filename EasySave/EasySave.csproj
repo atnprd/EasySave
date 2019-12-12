@@ -69,6 +69,7 @@
     <Compile Include="Model\BackupMirror.cs" />
     <Compile Include="Model\IBackup.cs" />
     <Compile Include="Model\RealTimeMonitoring.cs" />
+    <Compile Include="View\ExtensionMethods.cs" />
     <Compile Include="View\Frame.cs" />
     <Compile Include="View\GridFrame.cs" />
     <Compile Include="View\IDisplay.cs" />

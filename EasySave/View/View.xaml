@@ -7,12 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="99*"/>
-        </Grid.RowDefinitions>
-
-
         <Label Content="Path source folder:" Height="28" HorizontalAlignment="Left" Margin="70,146,0,0" Name="label1" VerticalAlignment="Top" Width="108" Grid.Row="1" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="178,148,0,0" Name="sourcefolder" VerticalAlignment="Top" Width="295" Grid.Row="1" />
 
@@ -46,11 +40,11 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="308,297,0,0" x:Name="Blacklist_name" VerticalAlignment="Top" Width="114" Grid.Row="1"  />
         <Button Content="Modify Crypt format" HorizontalAlignment="Left" Height="32" Margin="435,328,0,0" VerticalAlignment="Top" Width="127"  Grid.Row="1" Click="Open_cryptextension"/>
         <TextBox Height="23" HorizontalAlignment="Left" Margin="308,334,0,0" x:Name="Cryptlist_name" VerticalAlignment="Top" Width="114" Grid.Row="1"  />
-        <ProgressBar Name="progressbartask" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="238" Margin="34,538,0,0" Grid.Row="1"/>
-
-        <!--<Popup Name="Manage_taskpopup" Placement="Mouse" IsOpen="False"  Width="194" Height="200">
-            <ProgressBar Minimum="0" Maximum="100" Name="progressbartask" Margin="408,-281,-391,456" />
-        </Popup> -->
+        <Popup Name="Manage_taskpopup" Placement="Mouse" IsOpen="False"  Width="194" Height="200">
+            <Border Background="White" >
+                <ProgressBar Minimum="0" Maximum="100" Name="progressbartask" Margin="10,50,6,124" />
+            </Border>
+        </Popup>
 
     </Grid>
 </UserControl>

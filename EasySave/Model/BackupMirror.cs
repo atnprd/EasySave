@@ -80,6 +80,7 @@ namespace EasySave.Model
                     m_daily_log.millisecondEarly();
 
                     m_realTimeMonitoring.GenerateLog(current_file);
+                    this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
                     current_file++;
                     string temp_path = target_path + '/' + fi.Name;
                     //check if the extension is the list to encrypt
@@ -107,6 +108,7 @@ namespace EasySave.Model
                 FullSave(subdir, temp_path);
             }
             m_realTimeMonitoring.GenerateFinalLog();
+            this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
         }
 
         private void FullSavePrio(DirectoryInfo di, string target_path)
@@ -128,6 +130,7 @@ namespace EasySave.Model
                     m_daily_log.millisecondEarly();
 
                     m_realTimeMonitoring.GenerateLog(current_file);
+                    this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
                     current_file++;
                     string temp_path = target_path + '/' + fi.Name;
                     //check if the extension is the list to encrypt
@@ -159,6 +162,18 @@ namespace EasySave.Model
         public void LaunchSave(bool state)
         {
             LaunchSave();
+        }
+        public void Stop()
+        {
+
+        }
+        public void Pause()
+        {
+
+        }
+        public void Play()
+        {
+
         }
     }
 }

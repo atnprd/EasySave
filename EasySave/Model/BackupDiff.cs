@@ -325,5 +325,18 @@ namespace EasySave.Model
             }
             return update_file;
         }
+        public void Stop()
+        {
+
+        }
+        public void Pause()
+        {
+
+        }
+        public void Play()
+        {
+
+        }
     }
+
 }

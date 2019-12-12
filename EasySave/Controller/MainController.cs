@@ -430,6 +430,11 @@ namespace EasySave.Controller
             }
             return ret;
         }
-
+        public void Update_progressbar(int progress)
+        {
+            this.View.Manage_taskpopup.IsOpen = true;
+            this.View.progressbartask.Value = progress;
+            this.View.Refresh();
+        }
     }
 }
