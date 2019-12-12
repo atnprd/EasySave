@@ -359,8 +359,6 @@ namespace EasySave.Controller
                                 }
                             }
                         }
-
-
                         else
                         {
                             file.LaunchSave();
@@ -395,10 +393,10 @@ namespace EasySave.Controller
                     }
                     else if (task.GetType() == typeof(BackupMirror))
                     {
-                        task.LaunchSave();
+                        Thread threadsave = new Thread(task.LaunchSave);
+                        threadsave.Start();
                         return "success_mirr";
                     }
-
                 }
             }
             return null;
@@ -410,7 +408,8 @@ namespace EasySave.Controller
             {
                 if (backup.IndexOf(task) == indextask)
                 {
-                    task.LaunchSave(fulldiff);
+                    Thread threadsave = new Thread(task.LaunchSave);
+                    threadsave.Start(fulldiff);
                     return "success_diff";
                 }
             }
@@ -445,9 +444,11 @@ namespace EasySave.Controller
         }
         public void Update_progressbar(int progress)
         {
-            this.View.Manage_taskpopup.IsOpen = true;
-            this.View.progressbartask.Value = progress;
-            this.View.Refresh();
+            View.progressbartask.Value = progress;
+            //this.View.Manage_taskpopup.IsOpen = true;
+            View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = progress; }));
+            //Application.Current.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = progress; })); 
+            View.Refresh();
         }
     }
 }

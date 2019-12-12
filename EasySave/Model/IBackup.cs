@@ -16,9 +16,5 @@ namespace EasySave.Model
         bool is_on_break { get; set; }
         void LaunchSave();
         void LaunchSave(bool full_save);
-
-        void Stop();
-        void Pause();
-        void Play();
     }
 }

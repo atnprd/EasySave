@@ -190,6 +190,7 @@ namespace EasySave.Model
                 IncrementSave(subdir, target_path,complete_path);
             }
             m_realTimeMonitoring.GenerateFinalLog();
+            this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
             DeleteEmptyFolder(diTarget);
         }
 
@@ -294,6 +295,7 @@ namespace EasySave.Model
                 m_daily_log.millisecondEarly();
 
                 m_realTimeMonitoring.GenerateLog(current_file);
+                this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
                 current_file++;
                 string temp_path = target_path + '/' + fi.Name;
                 fiTemp.CopyTo(temp_path, true);
@@ -315,6 +317,7 @@ namespace EasySave.Model
             m_daily_log.millisecondEarly();
 
             m_realTimeMonitoring.GenerateLog(current_file);
+            this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
             current_file++;
             string temp_path = target_path + '/' + fi.Name;
             //check if the extension is the list to encrypt
@@ -334,6 +337,7 @@ namespace EasySave.Model
             {
                 m_daily_log.generateDailylog(target_folder, source_folder);
             }
+            
         }
     }
 }

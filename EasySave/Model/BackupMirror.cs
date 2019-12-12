@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 
 namespace EasySave.Model
@@ -140,6 +141,7 @@ namespace EasySave.Model
                 string temp_path = target_path + '/' + subdir.Name;
                 FullSavePrio(subdir, temp_path);
             }
+            this.controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
         }
 
         private void Save(FileInfo fi, string target_path)
@@ -149,6 +151,7 @@ namespace EasySave.Model
             m_daily_log.millisecondEarly();
 
             m_realTimeMonitoring.GenerateLog(current_file);
+            controller.Update_progressbar(m_realTimeMonitoring.updateProgress());
             current_file++;
             string temp_path = target_path + '/' + fi.Name;
             //check if the extension is the list to encrypt
@@ -174,5 +177,6 @@ namespace EasySave.Model
         {
             LaunchSave();
         }
+        
     }
 }
