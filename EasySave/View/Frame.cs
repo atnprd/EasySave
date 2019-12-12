@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +12,9 @@ using System.Windows.Media;
 namespace EasySave.View
 {
     public class Frame : Window
+
     {
+
         public Window window = new Window();
         public static Grid RootGrid;
 
