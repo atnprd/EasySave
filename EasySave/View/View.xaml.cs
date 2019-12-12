@@ -25,6 +25,7 @@ namespace EasySave.View
             controller = c;
             controller.View = this;
             InitializeComponent();
+            controller.View = this;
         }
 
         private void Add_sourcefolder(object sender, RoutedEventArgs e)
@@ -195,6 +196,12 @@ namespace EasySave.View
         public MessageBoxResult Messbx(string name)
         {
             MessageBoxResult result = MessageBox.Show("Do you want to do a full save for"+" "+ name + " ?", "Differential Backup", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            return result;
+        }
+
+        public MessageBoxResult Errbx(string err)
+        {
+            MessageBoxResult result = MessageBox.Show(err, "Alert", MessageBoxButton.OK, MessageBoxImage.Exclamation, MessageBoxResult.No);
             return result;
         }
 

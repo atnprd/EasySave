@@ -54,7 +54,10 @@ namespace EasySave.Controller
             app.InitFrame(this);
         }
 
-        
+        public void Close()
+        {
+            frameThread.Abort();
+        }
         
         //method that process data in consoleMode
         private void Process_console(string[]  _capture)
@@ -180,12 +183,12 @@ namespace EasySave.Controller
                     else {
                         if (_capture[2] == "diff")
                         {
-                            backup.Add(new BackupDiff(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
+                            backup.Add(new BackupDiff(_capture[1], _capture[3], _capture[4],this) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
                             display.Success("-add", _capture[1]);
                         }
                         else if (_capture[2] == "mir")
                         {
-                            backup.Add(new BackupMirror(_capture[1], _capture[3], _capture[4]) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
+                            backup.Add(new BackupMirror(_capture[1], _capture[3], _capture[4],this) { name = _capture[1], source_folder = _capture[3], target_folder = _capture[4] });
                             display.Success("-add", _capture[1]);
                         }
                         
@@ -246,13 +249,13 @@ namespace EasySave.Controller
             }
             else if (backuptype == "diff")
             {
-                backup.Add(new BackupDiff(name, source_folder, target_folder) { name = name, source_folder = source_folder, target_folder = target_folder });
+                backup.Add(new BackupDiff(name, source_folder, target_folder,this) { name = name, source_folder = source_folder, target_folder = target_folder });
                 
                 return "success_backupdiff";
             }
             else if (backuptype == "mirr")
             {
-                backup.Add(new BackupMirror(name, source_folder, target_folder) { name = name, source_folder = source_folder, target_folder = target_folder });
+                backup.Add(new BackupMirror(name, source_folder, target_folder,this) { name = name, source_folder = source_folder, target_folder = target_folder });
                 return "success_backupmirr";
             }
             else
@@ -293,50 +296,73 @@ namespace EasySave.Controller
             }
             IBackup[] backupdiff = new IBackup[count];
             bool[] backupdifffull = new bool[count];
+
+            List<Thread> taskThreads = new List<Thread>();
+
             int y = 0;
             for (int i = 0; i < backup.Count; i++)
             {
-                if (backup[i].GetType() == typeof(BackupDiff))
-                {
-                    backupdiff[y] = backup[i];
-                    View.View view = new View.View(this);
-                    MessageBoxResult response = view.Messbx(backup[i].name);
+                    if (backup[i].GetType() == typeof(BackupDiff))
+                    {
+                        backupdiff[y] = backup[i];
+                        View.View view = new View.View(this);
+                        MessageBoxResult response = view.Messbx(backup[i].name);
                    
-                    if (response == MessageBoxResult.No)
-                    {
-                        backupdifffull[y] = false;
+                        if (response == MessageBoxResult.No)
+                        {
+                            backupdifffull[y] = false;
+                        }
+                        else if(response == MessageBoxResult.Yes)
+                        {
+                            backupdifffull[y] = true;
+                        }
+                        y++;
                     }
-                    else if(response == MessageBoxResult.Yes)
-                    {
-                        backupdifffull[y] = true;
-                    }
-                    y++;
-                }
+  
+
             }
             foreach (IBackup file in backup)
             {
-                if (file.GetType() == typeof(BackupDiff))
-                {
-                    for (int i = 0; i < count; i++)
-                    { 
-                        if(Utils.checkBusinessSoft(blacklisted_apps))
+
+                Thread th = new Thread(() =>
+                {restartThread:
+                    try
+                    {
+
+
+                        if (file.GetType() == typeof(BackupDiff))
                         {
-                            return "businesswarerunning";
-                            break;
+                            for (int i = 0; i < count; i++)
+                            {
+                                if (Utils.checkBusinessSoft(blacklisted_apps))
+                                {
+                                    this.View.Errbx("business software running");
+                                    break;
+                                }
+                                else if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
+                                {
+                                    file.LaunchSave(backupdifffull[i]);
+                                    break;
+                                }
+                            }
                         }
-                        else if(backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
+
+
+                        else
                         {
-                            file.LaunchSave(backupdifffull[i]);
-                            return "success_addedall";
+                            file.LaunchSave();
                         }
                     }
-                }
-                else
-                {
-                    file.LaunchSave();
-                    return "success_addedall";
-                }
-               
+                    catch (System.IO.IOException e)
+                    {
+                        goto restartThread;
+                    }
+                });
+                taskThreads.Add(th);
+            }
+            foreach(Thread t in taskThreads)
+            {
+                t.Start();
             }
             return null;
         }
@@ -349,20 +375,14 @@ namespace EasySave.Controller
                     if (Utils.checkBusinessSoft(blacklisted_apps))
                     {
                         return "businesswarerunning";
-                        break;
                     }
                     else if (task.GetType() == typeof(BackupDiff))
                     {
                         return "backupdiff";
                     }
-                    else if (task.GetType() == typeof(BackupMirror))
+                    else if(task.GetType() == typeof(BackupMirror))
                     {
-
-                        Application.Current.Dispatcher.BeginInvoke(new Action(() => { this.View.Progress_bar(); }));
-                       
-                      
                         task.LaunchSave();
-                       
                         return "success_mirr";
                     }
 
@@ -371,7 +391,6 @@ namespace EasySave.Controller
             return null;
             
         }
-
         public string Save_diff(bool fulldiff, int indextask)
         {
             foreach (IBackup task in backup)
@@ -399,10 +418,18 @@ namespace EasySave.Controller
             }
             return null;
         }
-        public string Read_datajson(string path, string obj_json)
+        public bool IsAPriorityTaskRunning()
         {
-            string response = UseJson.ReadJson(path, obj_json);
-            return response;
+            bool ret = false;
+            foreach (IBackup backup in backup)
+            {
+                if (backup.priority_work_in_progress)
+                {
+                    ret = true;
+                }
+            }
+            return ret;
         }
+
     }
 }

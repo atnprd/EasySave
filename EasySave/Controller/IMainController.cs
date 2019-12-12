@@ -10,8 +10,8 @@ namespace EasySave.Controller
 {
     public interface IMainController
     {
-        View.View View { get; set; }
         List<IBackup> backup { get; set; }
+        View.View View { get; set; }
 
         string Add_save(string name, string source_folder, string target_folder, string backuptype);
         IBackup Last_backup();
@@ -21,7 +21,7 @@ namespace EasySave.Controller
         string Save_task(int indextask);
         string Save_diff(bool fulldiff, int indextask);
         string Informations_items(int index);
-        string Read_datajson(string path, string obj_json);
-     
+        void Close();
+        bool IsAPriorityTaskRunning();
     }
 }

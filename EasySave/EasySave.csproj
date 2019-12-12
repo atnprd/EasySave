@@ -58,7 +58,7 @@
     <Compile Include="Model\BlacklistFormat.cs" />
     <Compile Include="Model\DistantConsoleServer.cs" />
     <Compile Include="Model\FormatDailylog.cs" />
-    <Compile Include="Model\UseJson.cs" />
+    <Compile Include="Model\PrioListFormat.cs" />
     <Compile Include="Model\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,8 +85,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Resources\crypt_extension.json" />
-    <None Include="Resources\software_blacklist.json" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\View.xaml">

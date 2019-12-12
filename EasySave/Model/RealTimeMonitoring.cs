@@ -10,18 +10,14 @@ using Newtonsoft.Json;
 namespace EasySave.Model
 
 {
-    public sealed class RealTimeMonitoring
+    public class RealTimeMonitoring
     // Class that provides two main methods to generate a real-time Json file containing infos on the directory
     {
-        private static readonly Lazy<RealTimeMonitoring> lazy =
-       new Lazy<RealTimeMonitoring>(() => new RealTimeMonitoring());
 
-        public static RealTimeMonitoring Instance { get { return lazy.Value; } }
-
-        private RealTimeMonitoring()
+        public RealTimeMonitoring(string _name)
         // Constructor of the RealTimeMonitoring class
         {
-            
+            name = _name;
             timestamp_information_writing = "N/A";
             progress = 0;
             nbr_files_left = 0;
@@ -47,6 +43,7 @@ namespace EasySave.Model
         private long size_files_left;
         private string backing_up_file;
         private string write_path;
+        private string name;
 
         public void GenerateLog(int current_file_number)
         {
@@ -87,7 +84,7 @@ namespace EasySave.Model
                 left_files_size = adaptFileSize(size_files_left),
                 current_backup_file = backing_up_file
             }) ;
-            using (StreamWriter file = File.CreateText(write_path + "\\realtime_log.json"))
+            using (StreamWriter file = File.CreateText(write_path + "\\realtime_log_"+name+".json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, _data);

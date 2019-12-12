@@ -101,6 +101,37 @@ namespace EasySave.Model
             return false;
         }
 
+        //read the json file that list all extension to crypt and return an array of string with the extension to crypt
+        private static string[] getPriorityList()
+        {
+            using (StreamReader r = new StreamReader(ConfigurationSettings.AppSettings["PriorityList"]))
+            {
+                PrioListFormat[] item_Priolist;
+                string[] cryptlist_extensions_array;
+                string json = r.ReadToEnd();
+                List<PrioListFormat> items = JsonConvert.DeserializeObject<List<PrioListFormat>>(json);
+                item_Priolist = items.ToArray();
+                cryptlist_extensions_array = item_Priolist[0].priority_extension.Split(',');
+
+                return cryptlist_extensions_array;
+            }
+        }
+
+        //check if a given extension is the list to crypt
+        public static bool IsPriority(string extension)
+        {
+            foreach (string priority_ext in getPriorityList())
+            {
+                if (priority_ext == extension)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        //read Json file and return the value of the propretie put in the argument.
         public static string JsonReader(string path, string propertie)
         {
             path = path.Replace(@"\\", @"/");
@@ -119,7 +150,6 @@ namespace EasySave.Model
             }
             return "error";
         }
-
     }
 }
 

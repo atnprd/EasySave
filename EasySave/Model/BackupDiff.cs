@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using EasySave.Controller;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EasySave.Model
 {
     class BackupDiff : IBackup
 
     {
-        public BackupDiff(string _name, string _source_folder, string _target_folder)
+        public BackupDiff(string _name, string _source_folder, string _target_folder, IMainController c)
         {
             //check if source directory exist if it is not an extern storage
             if (_source_folder[0] != '\\'){
@@ -26,25 +22,29 @@ namespace EasySave.Model
             source_folder = _source_folder;
             target_folder = _target_folder;
             first_save = true;
-            m_realTimeMonitoring = RealTimeMonitoring.Instance;
+            m_realTimeMonitoring = new RealTimeMonitoring(name);
             m_realTimeMonitoring.SetPaths(source_folder, target_folder);
+            controller = c;
         }
 
         private RealTimeMonitoring m_realTimeMonitoring;
         private DailyLog m_daily_log;
+        private IMainController controller;
 
         private int current_file;
         private string m_name;
         private string m_source_folder;
         private string m_target_folder;
         private bool m_first_save;
-        private bool ispaused = false;
-        private bool isstop = false;
+        private bool m_priority_work_in_progress = false;
+        private bool m_is_on_break = false;
 
         public string name { get => m_name; set => m_name = value; }
         public string source_folder { get => m_source_folder; set => m_source_folder = value; }
         public string target_folder { get => m_target_folder; set => m_target_folder = value; }
         public bool first_save { get => m_first_save; set => m_first_save = value; }
+        public bool is_on_break { get => m_is_on_break; set => m_is_on_break = value; }
+        public bool priority_work_in_progress { get => m_priority_work_in_progress; set => m_priority_work_in_progress = value; }
 
 
         //launch save, check if it is the first save, if it is do a full save, else do an incremental save
@@ -56,7 +56,7 @@ namespace EasySave.Model
             {
                 string target_path = target_folder + '/' + name + "/completeBackup/";
                 first_save = false;
-                FullSave(di, target_path);
+                FullSavePrio(di, target_path);
             }
             else
             {
@@ -81,13 +81,14 @@ namespace EasySave.Model
             {
                 string complete_path = target_folder + '/' + name + "/completeBackup/";
                 first_save = false;
-                FullSave(di, complete_path);
+                FullSavePrio(di, complete_path);
             }
         }
 
         //Mirror save
         public void FullSave(DirectoryInfo di, string target_path)
         {
+            priority_work_in_progress = false;
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
             if (!diTarget.Exists)
             {
@@ -95,25 +96,29 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
-                m_daily_log = DailyLog.Instance;
-                m_daily_log.SetPaths(fi.FullName);
-                m_daily_log.millisecondEarly();
-
-                m_realTimeMonitoring.GenerateLog(current_file);
-                current_file++;
-                string temp_path = target_path + '/' + fi.Name;
-                if (Utils.IsToCrypt(fi.Extension))
+                while (controller.IsAPriorityTaskRunning()) { }
+                if (!Utils.IsPriority(fi.Extension))
                 {
-                    m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
-                }
-                else
-                {
-                    fi.CopyTo(temp_path, true);
-                    m_daily_log.Crypt_time = "0";
-                }
+                    m_daily_log = DailyLog.Instance;
+                    m_daily_log.SetPaths(fi.FullName);
+                    m_daily_log.millisecondEarly();
 
-                m_daily_log.millisecondFinal();
-                m_daily_log.generateDailylog(target_folder, source_folder);
+                    m_realTimeMonitoring.GenerateLog(current_file);
+                    current_file++;
+                    string temp_path = target_path + '/' + fi.Name;
+                    if (Utils.IsToCrypt(fi.Extension))
+                    {
+                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    }
+                    else
+                    {
+                        fi.CopyTo(temp_path, true);
+                        m_daily_log.Crypt_time = "0";
+                    }
+
+                    m_daily_log.millisecondFinal();
+                    m_daily_log.generateDailylog(target_folder, source_folder);
+                } 
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
@@ -124,9 +129,52 @@ namespace EasySave.Model
             m_realTimeMonitoring.GenerateFinalLog();
         }
 
+        public void FullSavePrio(DirectoryInfo di, string target_path)
+        {
+            priority_work_in_progress = true;
+            DirectoryInfo diTarget = new DirectoryInfo(target_path);
+            if (!diTarget.Exists)
+            {
+                diTarget.Create();
+            }
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                if (Utils.IsPriority(fi.Extension))
+                {
+                    m_daily_log = DailyLog.Instance;
+                    m_daily_log.SetPaths(fi.FullName);
+                    m_daily_log.millisecondEarly();
+
+                    m_realTimeMonitoring.GenerateLog(current_file);
+                    current_file++;
+                    string temp_path = target_path + '/' + fi.Name;
+                    if (Utils.IsToCrypt(fi.Extension))
+                    {
+                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, temp_path);
+                    }
+                    else
+                    {
+                        fi.CopyTo(temp_path, true);
+                        m_daily_log.Crypt_time = "0";
+                    }
+
+                    m_daily_log.millisecondFinal();
+                    m_daily_log.generateDailylog(target_folder, source_folder);
+                } 
+            }
+            DirectoryInfo[] dirs = di.GetDirectories();
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                target_path += '/' + subdir.Name;
+                FullSavePrio(subdir, target_path);
+            }
+            FullSave(di, target_path);
+        }
+
         //IncrementalSave
         public void IncrementSave(DirectoryInfo di, string target_path, string complete_path)
         {
+            priority_work_in_progress = false;
             DirectoryInfo diTarget = new DirectoryInfo(target_path);
             if (!diTarget.Exists)
             {
@@ -136,34 +184,38 @@ namespace EasySave.Model
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
-                //Copy the current file in a temp folder and crypt it if necessary
-                if (Utils.IsToCrypt(fi.Extension))
+                while (controller.IsAPriorityTaskRunning()) { }
+                if (!Utils.IsPriority(fi.Extension))
                 {
-                    m_daily_log.Crypt_time =  Utils.Crypt(fi.FullName, fi.Name);
-                }
-                else
-                {
-                    fi.CopyTo(fi.Name);
-                }
-                FileInfo fiTemp = new FileInfo(fi.Name);
+                    //Copy the current file in a temp folder and crypt it if necessary
+                    if (Utils.IsToCrypt(fi.Extension))
+                    {
+                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, fi.Name);
+                    }
+                    else
+                    {
+                        fi.CopyTo(fi.Name);
+                    }
+                    FileInfo fiTemp = new FileInfo(fi.Name);
 
-                //check if it is a new file or if the file was modified based on the full save
-                if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
-                {
-                    m_daily_log = DailyLog.Instance;
-                    m_daily_log.SetPaths(fi.FullName);
-                    m_daily_log.millisecondEarly();
+                    //check if it is a new file or if the file was modified based on the full save
+                    if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
+                    {
+                        m_daily_log = DailyLog.Instance;
+                        m_daily_log.SetPaths(fi.FullName);
+                        m_daily_log.millisecondEarly();
 
-                    m_realTimeMonitoring.GenerateLog(current_file);
-                    current_file++;
-                    string temp_path = target_path + '/' + fi.Name;
-                    fiTemp.CopyTo(temp_path, true);
+                        m_realTimeMonitoring.GenerateLog(current_file);
+                        current_file++;
+                        string temp_path = target_path + '/' + fi.Name;
+                        fiTemp.CopyTo(temp_path, true);
 
-                    m_daily_log.millisecondFinal();
-                    m_daily_log.generateDailylog(target_folder, source_folder);
+                        m_daily_log.millisecondFinal();
+                        m_daily_log.generateDailylog(target_folder, source_folder);
+                    }
+                    //delete the temporary file
+                    fiTemp.Delete();
                 }
-                //delete the temporary file
-                fiTemp.Delete();
             }
             DirectoryInfo[] dirs = di.GetDirectories();
             foreach (DirectoryInfo subdir in dirs)
@@ -174,6 +226,60 @@ namespace EasySave.Model
             }
             m_realTimeMonitoring.GenerateFinalLog();
             DeleteEmptyFolder(diTarget);
+        }
+
+        public void IncrementSavePrio(DirectoryInfo di, string target_path, string complete_path)
+        {
+            priority_work_in_progress = true;
+            DirectoryInfo diTarget = new DirectoryInfo(target_path);
+            if (!diTarget.Exists)
+            {
+                diTarget.Create();
+            }
+            // for each file in the directory, check if it was modified
+            DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
+            foreach (FileInfo fi in di.GetFiles())
+            {
+                if (Utils.IsPriority(fi.Extension))
+                {
+                    //Copy the current file in a temp folder and crypt it if necessary
+                    if (Utils.IsToCrypt(fi.Extension))
+                    {
+                        m_daily_log.Crypt_time = Utils.Crypt(fi.FullName, fi.Name);
+                    }
+                    else
+                    {
+                        fi.CopyTo(fi.Name);
+                    }
+                    FileInfo fiTemp = new FileInfo(fi.Name);
+
+                    //check if it is a new file or if the file was modified based on the full save
+                    if (CheckNewFile(fiTemp, dirComplete) || CheckModification(fiTemp, dirComplete))
+                    {
+                        m_daily_log = DailyLog.Instance;
+                        m_daily_log.SetPaths(fi.FullName);
+                        m_daily_log.millisecondEarly();
+
+                        m_realTimeMonitoring.GenerateLog(current_file);
+                        current_file++;
+                        string temp_path = target_path + '/' + fi.Name;
+                        fiTemp.CopyTo(temp_path, true);
+
+                        m_daily_log.millisecondFinal();
+                        m_daily_log.generateDailylog(target_folder, source_folder);
+                    }
+                    //delete the temporary file
+                    fiTemp.Delete();
+                }
+            }
+            DirectoryInfo[] dirs = di.GetDirectories();
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                target_path += '/' + subdir.Name;
+                complete_path += '/' + subdir.Name;
+                IncrementSavePrio(subdir, target_path, complete_path);
+            }
+            IncrementSave(di, target_path, complete_path);
         }
 
         //recursive method that delete all empty folder
@@ -218,19 +324,6 @@ namespace EasySave.Model
                 }
             }
             return update_file;
-        }
-        
-        public void Pause()
-        {
-            ispaused = true;
-        }
-        public void Play()
-        {
-            ispaused = false;
-        }
-        public void Stop()
-        {
-            isstop = true;
         }
     }
 }

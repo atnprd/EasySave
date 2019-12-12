@@ -26,7 +26,7 @@ namespace EasySave.Model
 
             var host = Dns.GetHostEntry(Dns.GetHostName());
 
-            //listening TCP connexions
+            //listening TCP connexionsd
             ServerSocket = new TcpListener(IPAddress.Any, inPortNumber);
             ServerSocket.Start();
         }
@@ -115,7 +115,7 @@ namespace EasySave.Model
             foreach(IBackup backup in controller.backup)
             {
                 if (name.Contains(backup.name)){
-                    string progressBar = Utils.JsonReader(backup.target_folder + "/realtime_log.json", "backup_progress");
+                    string progressBar = Utils.JsonReader(backup.target_folder + "/realtime_log_"+backup.name+".json", "backup_progress");
 
                     ret = backup.name + "," + backup.source_folder + "," + backup.target_folder + "," + progressBar;
                 }
