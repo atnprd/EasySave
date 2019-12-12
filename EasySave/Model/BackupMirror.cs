@@ -72,7 +72,16 @@ namespace EasySave.Model
             //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
-                while (controller.IsAPriorityTaskRunning()){}
+                if (Utils.checkBusinessSoft(controller.blacklisted_apps))
+                {
+                    is_on_break = true;
+                }
+                while (controller.IsAPriorityTaskRunning() || is_on_break){
+                    if (!Utils.checkBusinessSoft(controller.blacklisted_apps))
+                    {
+                        is_on_break = false;
+                    }
+                }
                 if (!Utils.IsPriority(fi.Extension))
                 {
                     m_daily_log = DailyLog.Instance;

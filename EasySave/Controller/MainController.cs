@@ -20,14 +20,15 @@ namespace EasySave.Controller
 
         public delegate void DELEG();
 
-        string[] blacklisted_apps = Utils.getBlacklist();
+        string[] m_blacklisted_apps = Utils.getBlacklist();
 
         public List<IBackup> backup { get => m_backup; set => m_backup = value; }
         public View.View View { get; set; }
+        public string[] blacklisted_apps { get => m_blacklisted_apps; set => m_blacklisted_apps = value; }
 
         public MainController()
         {
-            
+
             /*while (true) {
                 string _capture = display.Readline();
                 string[] _capture_split = _capture.Split(' ');
