@@ -113,7 +113,7 @@ namespace EasySave.View
 
                 if (response == "backupdiff")
                 {
-                    MessageBoxResult result = MessageBox.Show("Do you want to do a full save ?", "Differential Backup", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                    MessageBoxResult result = MessageBox.Show(dict["full_save_diff"], dict["diff_button"], MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
                     if(result == MessageBoxResult.No)
                     {
                         string response_diff = controller.Save_diff(false, Save_task.SelectedIndex);
@@ -197,7 +197,7 @@ namespace EasySave.View
         }
         public MessageBoxResult Messbx(string name)
         {
-            MessageBoxResult result = MessageBox.Show("Do you want to do a full save for"+" "+ name + " ?", "Differential Backup", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            MessageBoxResult result = MessageBox.Show(dict["full_save_diff_all"] + name + " ?", dict["full_save_diff"], MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             return result;
         }
 
