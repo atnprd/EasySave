@@ -87,6 +87,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Ressources\crypt_extension.json" />
+    <None Include="Ressources\priority_extension.json" />
+    <None Include="Ressources\software_blacklist.json" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\View.xaml">
@@ -94,5 +97,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -54,6 +54,7 @@ namespace EasySave.Model
         //Launching save, setting directory to copy and create save path
         public void LaunchSave()
         {
+           
             current_file = 0;
             DirectoryInfo di = new DirectoryInfo(m_source_folder);
             string path = target_folder + '/' + name;
@@ -62,6 +63,9 @@ namespace EasySave.Model
 
             m_realTimeMonitoring.GenerateFinalLog();
             controller.Update_progressbar();
+
+            controller.KillThread(name);
+            
         }
 
         //Mirror save
@@ -127,7 +131,7 @@ namespace EasySave.Model
                 {
                     is_on_break = true;
                 }
-                while (controller.IsAPriorityTaskRunning() || is_on_break)
+                while ( is_on_break)
                 {
                     if (!Utils.checkBusinessSoft(controller.blacklisted_apps))
                     {
@@ -160,6 +164,7 @@ namespace EasySave.Model
 
         private void Save(FileInfo fi, string target_path)
         {
+            
             m_daily_log = DailyLog.Instance;
             m_daily_log.SetPaths(fi.FullName);
             m_daily_log.millisecondEarly();

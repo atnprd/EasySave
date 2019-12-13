@@ -25,6 +25,7 @@ namespace EasySave.View
         string language;
         Dictionary<string, Dictionary<string, string>> language_dict;
         Dictionary<string, string> dict;
+
         public View(IMainController c)
         {
             controller = c;
@@ -240,6 +241,8 @@ namespace EasySave.View
                 current_name = item[0];
                 current_targetpath = item[2];
                 progressbartask.Visibility = Visibility.Visible;
+                pause.Visibility = Visibility.Visible;
+                stop.Visibility = Visibility.Visible;
                 
             }
         }
@@ -289,7 +292,7 @@ namespace EasySave.View
             sw_language.Content = dict["sw_language"];
 
         }
-        
+
         private Dictionary<string, string> Switch_dict()
         {
             Dictionary<string, string> dict;
@@ -305,6 +308,22 @@ namespace EasySave.View
                     return dict;
                 default:
                     return language_dict["english"];
+            }
+        }
+
+        private void PlayPause(object sender, RoutedEventArgs e)
+        {
+            if(current_name != null)
+            { 
+                controller.Play_Pause(current_name);
+            }
+        }
+        
+        private void Stop(object sender, RoutedEventArgs e)
+        {
+            if (current_name != null)
+            {
+                controller.Stop(current_name);
             }
         }
     }

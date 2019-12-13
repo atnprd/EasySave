@@ -40,10 +40,15 @@
         <TextBox Height="24" HorizontalAlignment="Left" Margin="336,256,0,0" x:Name="Blacklist_name" VerticalAlignment="Top" Width="114"  />
         <Button x:Name="encrypt_extension" Content="Add Encrypt extension" HorizontalAlignment="Left" Height="32" Margin="463,288,0,0" VerticalAlignment="Top" Width="127" Click="Open_cryptextension"/>
         <TextBox Height="22" HorizontalAlignment="Left" Margin="336,294,0,0" x:Name="Cryptlist_name" VerticalAlignment="Top" Width="114"  />
-        <ProgressBar Minimum="0" Maximum="100" Name="progressbartask" Margin="287,474,233,206" Height="20" Visibility="Hidden"/>
+        <ProgressBar Minimum="0" Maximum="100" Name="progressbartask" Margin="287,474,233,206" Height="20" Visibility="Hidden" />
         <Button Content="..." HorizontalAlignment="Left" Height="22" Margin="473,162,0,0" VerticalAlignment="Top" Width="16" Click="Add_sourcefolder"/>
         <Button Content="..." HorizontalAlignment="Left" Height="24" Margin="473,202,0,0" VerticalAlignment="Top" Width="16" Click="Add_targetfolder"/>
         <Button x:Name="sw_language" Content="Switch language" HorizontalAlignment="Left" Height="32" Margin="10,573,0,0" VerticalAlignment="Top" Width="149" Click="Switch_language" Grid.Row="1"/>
+
+        <Button Content="▶/||" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="21" Margin="367,558,0,0" Name="pause" Visibility="Hidden" Click="PlayPause">
+        </Button>
+        <Button Content="■" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="21" Margin="397,558,0,0" Name="stop" Visibility="Hidden" Click="Stop">
+        </Button>
 
     </Grid>
 </UserControl>

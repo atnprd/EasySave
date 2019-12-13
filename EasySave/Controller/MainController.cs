@@ -13,8 +13,8 @@ namespace EasySave.Controller
 {
     public class MainController : IMainController
     {
-
         List<IBackup> m_backup = new List<IBackup>();
+        List<Thread> m_threads_list = new List<Thread>();
         IDisplay display = new Display();
         Thread frameThread;
 
@@ -25,6 +25,7 @@ namespace EasySave.Controller
         public List<IBackup> backup { get => m_backup; set => m_backup = value; }
         public View.View View { get; set; }
         public string[] blacklisted_apps { get => m_blacklisted_apps; set => m_blacklisted_apps = value; }
+        private List<Thread> threads_list { get => m_threads_list; set => m_threads_list = value; }
 
         public MainController()
         {
@@ -52,11 +53,11 @@ namespace EasySave.Controller
             {
                 Application.Current.Shutdown();
             }
-
+            /*
             DistantConsoleServer server = new DistantConsoleServer(this);
             Thread ServerThread = new Thread(server.RunServer);
             ServerThread.Start();
-
+            */
             DELEG dele1 = StartWindow;
             frameThread = new Thread(dele1.Invoke);
             frameThread.SetApartmentState(ApartmentState.STA);
@@ -320,8 +321,7 @@ namespace EasySave.Controller
                 if (backup[i].GetType() == typeof(BackupDiff))
                 {
                     backupdiff[y] = backup[i];
-                    View.View view = new View.View(this);
-                    MessageBoxResult response = view.Messbx(backup[i].name);
+                    MessageBoxResult response = new View.View(this).Messbx(backup[i].name);
 
                     if (response == MessageBoxResult.No)
                     {
@@ -334,48 +334,25 @@ namespace EasySave.Controller
                     y++;
                 }
 
-
+                y = 0;
             }
             foreach (IBackup file in backup)
             {
-
-                Thread th = new Thread(() =>
-                { restartThread:
-                    try
-                    {
-
-
-                        if (file.GetType() == typeof(BackupDiff))
-                        {
-                            for (int i = 0; i < count; i++)
-                            {
-                                if (Utils.checkBusinessSoft(blacklisted_apps))
-                                {
-                                    this.View.Errbx("business software running");
-                                    break;
-                                }
-                                else if (backup.IndexOf(backupdiff[i]) == backup.IndexOf(file))
-                                {
-                                    file.LaunchSaveInc(backupdifffull[i]);
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            file.LaunchSave();
-                        }
-                    }
-                    catch (System.IO.IOException e)
-                    {
-                        goto restartThread;
-                    }
-                });
-                taskThreads.Add(th);
-            }
-            foreach (Thread t in taskThreads)
-            {
-                t.Start();
+                if (file.GetType() == typeof(BackupDiff))
+                {
+                    Thread th = new Thread(new ParameterizedThreadStart(file.LaunchSaveInc));
+                    th.Start(backupdifffull[y]);
+                    th.Name = file.name;
+                    threads_list.Add(th);
+                    y++;
+                }
+                else
+                {
+                    Thread th = new Thread(file.LaunchSave);
+                    th.Start();
+                    th.Name = file.name;
+                    threads_list.Add(th);
+                }
             }
             return null;
         }
@@ -397,6 +374,8 @@ namespace EasySave.Controller
                     {
                         Thread threadsave = new Thread(task.LaunchSave);
                         threadsave.Start();
+                        threadsave.Name = task.name;
+                        threads_list.Add(threadsave);
                         return "success_mirr";
                     }
                 }
@@ -412,6 +391,8 @@ namespace EasySave.Controller
                 {
                     Thread threadsave = new Thread(new ParameterizedThreadStart(task.LaunchSaveInc));
                     threadsave.Start(fulldiff);
+                    threadsave.Name = task.name;
+                    threads_list.Add(threadsave);
                     return "success_diff";
                 }
             }
@@ -453,12 +434,51 @@ namespace EasySave.Controller
         {
             if (View.current_name == null && View.current_targetpath == null)
             {
-                
             }
             else
             {
-                View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(Utils.JsonReader(View.current_targetpath + "realtime_log_" + View.current_name + ".json", "backup_progress")); }));
+                string val =Utils.JsonReader(View.current_targetpath + "/realtime_log_" + View.current_name + ".json", "backup_progress");
+                if (val != "")
+                {
+                    View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(val); }));
+                }
                 View.Refresh();
+            }
+        }
+        public void Play_Pause(string name)
+        {
+            foreach(IBackup backup in backup)
+            {
+                if(backup.name == name)
+                {
+                    backup.is_on_break = !backup.is_on_break;
+                }
+            }
+        }
+
+        public void Stop(string name)
+        {
+            foreach(Thread th in threads_list)
+            {
+                Console.WriteLine(th.Name);
+                if(th.Name == name)
+                {
+                    threads_list.Remove(th);
+                    th.Abort();
+                    View.progressbartask.Value = 0;
+                }
+            }
+        }
+
+        public void KillThread(string name)
+        {
+            foreach (Thread th in threads_list)
+            {
+                if (th.Name == name)
+                {
+                    threads_list.Remove(th);
+                    th.Abort();
+                }
             }
         }
        
