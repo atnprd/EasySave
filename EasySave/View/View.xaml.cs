@@ -26,6 +26,8 @@ namespace EasySave.View
         Dictionary<string, Dictionary<string, string>> language_dict;
         Dictionary<string, string> dict;
 
+        
+
         public View(IMainController c)
         {
             controller = c;
@@ -290,6 +292,8 @@ namespace EasySave.View
             task_source.Content = dict["task_source"];
             task_target.Content = dict["task_target"];
             sw_language.Content = dict["sw_language"];
+            parallele_size_file.Content = dict["parallele_size_file"];
+            priority.Content = dict["priority"];
 
         }
 
@@ -326,5 +330,15 @@ namespace EasySave.View
                 controller.Stop(current_name);
             }
         }
+        private void Update_sizefile(object sender, RoutedEventArgs e)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings.Remove("MaxSizeFile");
+            config.AppSettings.Settings.Add("MaxSizeFile", sizefile.Text);
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
+
     }
 }

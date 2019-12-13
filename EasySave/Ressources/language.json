@@ -30,7 +30,9 @@
     "success_deleteall": "Saves Successfully Removed !",
     "businesswarerunning": "Business software running !",
     "full_save_diff": "Do you want to make a full save ?",
-	"full_save_diff_all": "Full Save"
+    "full_save_diff_all": "Full Save",
+    "parallele_size_file": "Parallele size file",
+    "priority": "Modify priority list"
   },
   "french": {
     "save_name": "Nom :",
@@ -63,6 +65,8 @@
     "success_deleteall": "Toutes les sauvegardes ont été supprimées !",
     "businesswarerunning": "Logiciel métier en cours d'exécution !",
     "full_save_diff": "Voulez-vous faire une sauvegarde complète ?",
-	"full_save_diff_all": "Sauvegarde Complète"
+    "full_save_diff_all": "Sauvegarde Complète",
+    "parallele_size_file": "Taille max fichier en parallèle",
+    "priority": "Modifier list prioritaire"
   }
 }

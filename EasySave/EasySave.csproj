@@ -42,6 +42,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -90,6 +91,7 @@
     <None Include="Ressources\crypt_extension.json" />
     <None Include="Ressources\priority_extension.json" />
     <None Include="Ressources\software_blacklist.json" />
+    <None Include="Ressources\language.json" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\View.xaml">
