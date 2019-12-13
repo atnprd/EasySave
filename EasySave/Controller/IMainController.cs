@@ -22,6 +22,7 @@ namespace EasySave.Controller
         string Save_task(int indextask);
         string Save_diff(bool fulldiff, int indextask);
         string Informations_items(int index);
+        Dictionary<string, Dictionary<string, string>> getLanguageDict();
         void Close();
         bool IsAPriorityTaskRunning();
         void Update_progressbar();

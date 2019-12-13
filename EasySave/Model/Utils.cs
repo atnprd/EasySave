@@ -100,7 +100,6 @@ namespace EasySave.Model
             }
             return false;
         }
-
         //read the json file that list all extension to crypt and return an array of string with the extension to crypt
         private static string[] getPriorityList()
         {
@@ -149,6 +148,23 @@ namespace EasySave.Model
                 }
             }
             return "error";
+        }
+
+        public static Dictionary<string, Dictionary<string, string>> loadLanguage()
+        {
+            using (StreamReader r = new StreamReader(ConfigurationSettings.AppSettings["LanguageDict"]))
+            {
+                Dictionary<string, Dictionary<string, string>> language_dict = new Dictionary<string, Dictionary<string, string>>();
+                string json = r.ReadToEnd();
+
+                dynamic items = JsonConvert.DeserializeObject<dynamic>(json);
+                Dictionary<string, string> english_dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(items.english.ToString());
+                Dictionary<string, string> french_dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(items.french.ToString());
+                language_dict.Add("english", english_dict);
+                language_dict.Add("french", french_dict);
+
+                return language_dict;
+            }
         }
     }
 }

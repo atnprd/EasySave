@@ -22,15 +22,20 @@ namespace EasySave.View
         public string current_name;
         public string current_targetpath;
         IMainController controller;
+        string language;
+        Dictionary<string, Dictionary<string, string>> language_dict;
+        Dictionary<string, string> dict;
         public View(IMainController c)
         {
-            
             controller = c;
             controller.View = this;
             InitializeComponent();
             controller.View = this;
             DataContext = this;
             Refresh();
+            language_dict = controller.getLanguageDict();
+            dict = language_dict["english"];
+            language = "en";
         }
 
         private void Add_sourcefolder(object sender, RoutedEventArgs e)
@@ -59,8 +64,8 @@ namespace EasySave.View
 
         private void Add_save(object sender, RoutedEventArgs e)
         {
-            bool mirr_check = Mirror_button.IsChecked ?? false;
-            bool diff_check = Diff_button.IsChecked ?? false;
+            bool mirr_check = mirror_button.IsChecked ?? false;
+            bool diff_check = diff_button.IsChecked ?? false;
 
             if (mirr_check)
             {
@@ -122,7 +127,7 @@ namespace EasySave.View
 
                 if (response == "backupdiff")
                 {
-                    MessageBoxResult result = MessageBox.Show("Do you want to do a full save ?", "Differential Backup", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                    MessageBoxResult result = MessageBox.Show(dict["full_save_diff"], dict["diff_button"], MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
                     if(result == MessageBoxResult.No)
                     {
                         string response_diff = controller.Save_diff(false, Save_task.SelectedIndex);
@@ -142,62 +147,62 @@ namespace EasySave.View
             {
                 case "error_name":
                     Message.Foreground = Brushes.Red;
-                    Message.Content = "Please add a Name !";
+                    Message.Content = dict["error_name"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "success_mirr":
                     Message.Foreground = Brushes.Green;
-                    Message.Content = "Mirror Save Successfully Saved !";
+                    Message.Content = dict["success_mirr"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "success_diff":
                     Message.Foreground = Brushes.Green;
-                    Message.Content = "Differential Save Successfully Saved !";
+                    Message.Content = dict["success_diff"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "error_source":
                     Message.Foreground = Brushes.Red;
-                    Message.Content = "Please add a source path !";
+                    Message.Content = dict["error_source"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "error_target":
                     Message.Foreground = Brushes.Red;
-                    Message.Content = "Please add a target path !";
+                    Message.Content = dict["error_target"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "error_backuptype":
                     Message.Foreground = Brushes.Red;
-                    Message.Content = "Please select a backup type !";
+                    Message.Content = dict["error_backuptype"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "success_backupdiff":
                     Message.Foreground = Brushes.Green;
-                    Message.Content = "Differential Save Successfully Added !";
+                    Message.Content = dict["success_backupdiff"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "success_backupmirr":
                     Message.Foreground = Brushes.Green;
-                    Message.Content = "Mirror Save Successfully Added !";
+                    Message.Content = dict["success_backupmirr"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "success_addedall":
                     Message.Foreground = Brushes.Green;
-                    Message.Content = "All Saves Successfully Added !";
+                    Message.Content = dict["success_addedall"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "success_delete":
                     Message.Foreground = Brushes.Green;
-                    Message.Content = "Save Successfully Removed !";
+                    Message.Content = dict["success_delete"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "success_deleteall":
                     Message.Foreground = Brushes.Green;
-                    Message.Content = "Saves Successfully Removed !";
+                    Message.Content = dict["success_deleteall"]; ;
                     Message.Visibility = Visibility;
                     break;
                 case "businesswarerunning":
                     Message.Foreground = Brushes.Red;
-                    Message.Content = " business software running, check the blacklist file for more infos !";
+                    Message.Content = dict["businesswarerunning"]; ;
                     Message.Visibility = Visibility;
                     break;
                 default:
@@ -206,7 +211,7 @@ namespace EasySave.View
         }
         public MessageBoxResult Messbx(string name)
         {
-            MessageBoxResult result = MessageBox.Show("Do you want to do a full save for"+" "+ name + " ?", "Differential Backup", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            MessageBoxResult result = MessageBox.Show(dict["full_save_diff_all"] + name + " ?", dict["full_save_diff"], MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             return result;
         }
 
@@ -262,7 +267,45 @@ namespace EasySave.View
         {
             this.progressbartask.Refresh();
         }
+        private void Switch_language(object sender, RoutedEventArgs e)
+        {
+            dict = Switch_dict();
+            save_name.Content = dict["save_name"];
+            source_path.Content = dict["source_path"];
+            target_path.Content = dict["target_path"];
+            mirror_button.Content = dict["mirror_button"];
+            diff_button.Content = dict["diff_button"];
+            add_save.Content = dict["add_save"];
+            blacklist_software.Content = dict["blacklist_software"];
+            encrypt_extension.Content = dict["encrypt_extension"];
+            save.Content = dict["save"];
+            save_all.Content = dict["save_all"];
+            delete.Content = dict["delete"];
+            delete_all.Content = dict["delete_all"];
+            task_infos.Content = dict["task_infos"];
+            task_name.Content = dict["task_name"];
+            task_source.Content = dict["task_source"];
+            task_target.Content = dict["task_target"];
+            sw_language.Content = dict["sw_language"];
 
-     
+        }
+        
+        private Dictionary<string, string> Switch_dict()
+        {
+            Dictionary<string, string> dict;
+            switch (language)
+            {
+                case "fr":
+                    dict = language_dict["english"];
+                    language = "en";
+                    return dict;
+                case "en":
+                    dict = language_dict["french"];
+                    language = "fr";
+                    return dict;
+                default:
+                    return language_dict["english"];
+            }
+        }
     }
 }
