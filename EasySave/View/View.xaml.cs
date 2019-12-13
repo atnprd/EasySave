@@ -22,6 +22,7 @@ namespace EasySave.View
         public string current_name;
         public string current_targetpath;
         IMainController controller;
+
         public View(IMainController c)
         {
             
@@ -235,6 +236,9 @@ namespace EasySave.View
                 current_name = item[0];
                 current_targetpath = item[2];
                 progressbartask.Visibility = Visibility.Visible;
+                pause.Visibility = Visibility.Visible;
+                play.Visibility = Visibility.Visible;
+                stop.Visibility = Visibility.Visible;
                 
             }
         }
