@@ -451,33 +451,52 @@ namespace EasySave.Controller
             {
                 if(backup.name == name)
                 {
-                    backup.is_on_break = !backup.is_on_break;
+                    if (backup.is_on_break)
+                    {
+                        backup.is_on_break = false;
+                    }
+                    else
+                    {
+                        backup.is_on_break = true;
+                    }       
                 }
             }
         }
 
         public void Stop(string name)
         {
-            foreach(Thread th in threads_list)
+            for (int i = 0; i < threads_list.Count; i++)
             {
-                Console.WriteLine(th.Name);
-                if(th.Name == name)
+                try
                 {
-                    threads_list.Remove(th);
-                    th.Abort();
-                    View.progressbartask.Value = 0;
+                    if (threads_list[i].Name == name)
+                    {
+                        threads_list[i].Abort();
+                        threads_list.Remove(threads_list[i]);
+                        View.progressbartask.Value = 0;
+                    }
                 }
+                catch
+                {
+                } 
             }
         }
 
         public void KillThread(string name)
         {
-            foreach (Thread th in threads_list)
+            for (int i = 0; i < threads_list.Count; i++)
             {
-                if (th.Name == name)
+                try
                 {
-                    threads_list.Remove(th);
-                    th.Abort();
+                    if (threads_list[i].Name == name)
+                    {
+                        threads_list[i].Abort();
+                        threads_list.Remove(threads_list[i]);
+                        
+                    }
+                }
+                catch
+                {
                 }
             }
         }
