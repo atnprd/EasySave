@@ -53,11 +53,11 @@ namespace EasySave.Controller
             {
                 Application.Current.Shutdown();
             }
-            /*
+            
             DistantConsoleServer server = new DistantConsoleServer(this);
             Thread ServerThread = new Thread(server.RunServer);
             ServerThread.Start();
-            */
+            
             DELEG dele1 = StartWindow;
             frameThread = new Thread(dele1.Invoke);
             frameThread.SetApartmentState(ApartmentState.STA);

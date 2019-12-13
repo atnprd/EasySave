@@ -63,7 +63,6 @@ namespace EasySave.Model
                 }
 
                 string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
-                Console.WriteLine(data);
                 if (data.Contains("UpdateSaveList"))
                 {
                     SendTo(SaveNameList(), client);
@@ -72,9 +71,6 @@ namespace EasySave.Model
                 {
                     SendTo(GetValue(data), client);
                 }
-
-
-
             }
 
             lock (_lock) list_clients.Remove(id);
