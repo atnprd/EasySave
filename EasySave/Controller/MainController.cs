@@ -14,6 +14,7 @@ namespace EasySave.Controller
     public class MainController : IMainController
     {
         List<IBackup> m_backup = new List<IBackup>();
+        List<Thread> m_threads_list = new List<Thread>();
         IDisplay display = new Display();
         Thread frameThread;
 
@@ -24,6 +25,7 @@ namespace EasySave.Controller
         public List<IBackup> backup { get => m_backup; set => m_backup = value; }
         public View.View View { get; set; }
         public string[] blacklisted_apps { get => m_blacklisted_apps; set => m_blacklisted_apps = value; }
+        private List<Thread> threads_list { get => m_threads_list; set => m_threads_list = value; }
 
         public MainController()
         {
@@ -338,12 +340,16 @@ namespace EasySave.Controller
                 {
                     Thread th = new Thread(new ParameterizedThreadStart(file.LaunchSaveInc));
                     th.Start(backupdifffull[y]);
+                    th.Name = file.name;
+                    threads_list.Add(th);
                     y++;
                 }
                 else
                 {
                     Thread th = new Thread(file.LaunchSave);
                     th.Start();
+                    th.Name = file.name;
+                    threads_list.Add(th);
                 }
             }
             return null;
@@ -366,6 +372,8 @@ namespace EasySave.Controller
                     {
                         Thread threadsave = new Thread(task.LaunchSave);
                         threadsave.Start();
+                        threadsave.Name = task.name;
+                        threads_list.Add(threadsave);
                         return "success_mirr";
                     }
                 }
@@ -381,6 +389,8 @@ namespace EasySave.Controller
                 {
                     Thread threadsave = new Thread(new ParameterizedThreadStart(task.LaunchSaveInc));
                     threadsave.Start(fulldiff);
+                    threadsave.Name = task.name;
+                    threads_list.Add(threadsave);
                     return "success_diff";
                 }
             }
@@ -426,6 +436,42 @@ namespace EasySave.Controller
                     View.Dispatcher.BeginInvoke(new Action(() => { View.progressbartask.Value = Convert.ToInt16(val); }));
                 }
                 View.Refresh();
+            }
+        }
+        public void Play_Pause(string name)
+        {
+            foreach(IBackup backup in backup)
+            {
+                if(backup.name == name)
+                {
+                    backup.is_on_break = !backup.is_on_break;
+                }
+            }
+        }
+
+        public void Stop(string name)
+        {
+            foreach(Thread th in threads_list)
+            {
+                Console.WriteLine(th.Name);
+                if(th.Name == name)
+                {
+                    threads_list.Remove(th);
+                    th.Abort();
+                    View.progressbartask.Value = 0;
+                }
+            }
+        }
+
+        public void KillThread(string name)
+        {
+            foreach (Thread th in threads_list)
+            {
+                if (th.Name == name)
+                {
+                    threads_list.Remove(th);
+                    th.Abort();
+                }
             }
         }
        

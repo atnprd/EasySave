@@ -62,6 +62,8 @@ namespace EasySave.Model
 
             m_realTimeMonitoring.GenerateFinalLog();
             controller.Update_progressbar();
+
+            controller.KillThread(name);
         }
 
         //Mirror save

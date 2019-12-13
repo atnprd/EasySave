@@ -237,7 +237,6 @@ namespace EasySave.View
                 current_targetpath = item[2];
                 progressbartask.Visibility = Visibility.Visible;
                 pause.Visibility = Visibility.Visible;
-                play.Visibility = Visibility.Visible;
                 stop.Visibility = Visibility.Visible;
                 
             }
@@ -266,7 +265,20 @@ namespace EasySave.View
         {
             this.progressbartask.Refresh();
         }
-
-     
+        private void PlayPause(object sender, RoutedEventArgs e)
+        {
+            if(current_name != null)
+            { 
+                controller.Play_Pause(current_name);
+            }
+        }
+        
+        private void Stop(object sender, RoutedEventArgs e)
+        {
+            if (current_name != null)
+            {
+                controller.Stop(current_name);
+            }
+        }
     }
 }

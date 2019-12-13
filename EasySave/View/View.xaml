@@ -44,11 +44,9 @@
         <Button Content="..." HorizontalAlignment="Left" Height="22" Margin="473,162,0,0" VerticalAlignment="Top" Width="16" Click="Add_sourcefolder"/>
         <Button Content="..." HorizontalAlignment="Left" Height="24" Margin="473,202,0,0" VerticalAlignment="Top" Width="16" Click="Add_targetfolder"/>
 
-        <Button Content="▶" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="21" Margin="337,558,0,0" Name="play" Visibility="Hidden" >
+        <Button Content="▶/||" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="21" Margin="367,558,0,0" Name="pause" Visibility="Hidden" Click="PlayPause">
         </Button>
-        <Button Content="||" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="21" Margin="367,558,0,0" Name="pause" Visibility="Hidden">
-        </Button>
-        <Button Content="■" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="21" Margin="397,558,0,0" Name="stop" Visibility="Hidden">
+        <Button Content="■" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="21" Margin="397,558,0,0" Name="stop" Visibility="Hidden" Click="Stop">
         </Button>
 
 

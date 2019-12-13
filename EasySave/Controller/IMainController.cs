@@ -25,5 +25,8 @@ namespace EasySave.Controller
         void Close();
         bool IsAPriorityTaskRunning();
         void Update_progressbar();
+        void Play_Pause(string name);
+        void Stop(string name);
+        void KillThread(string name);
     }
 }
