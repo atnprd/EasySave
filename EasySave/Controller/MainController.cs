@@ -46,8 +46,9 @@ namespace EasySave.Controller
 
         private static Mutex _mutex = null;
         public void Run()
+        // Program Entry
         {
-             
+
             const string appName = "EasySave";
             bool createdNew;
             _mutex = new Mutex(true, appName, out createdNew);
@@ -70,6 +71,7 @@ namespace EasySave.Controller
 
         }
         public void StartWindow()
+        // Method starting the window
         {
             Frame app = new Frame();
             app.InitFrame(this);
@@ -253,6 +255,7 @@ namespace EasySave.Controller
             }
         }
         public string Add_save(string name, string source_folder, string target_folder, string backuptype)
+        // method that adds a save to the back up list; this method also checks every exceptions
         {
             if (name == "")
             {
@@ -286,6 +289,7 @@ namespace EasySave.Controller
 
         }
         public string Remove_task(int indextask)
+        // Method that removes 1 task from the backup list
         {
             for (int i = 0; i < backup.Count; i++)
             {
@@ -297,6 +301,7 @@ namespace EasySave.Controller
             return "success_delete";
         }
         public string Remove_alltasks()
+        // Method that removes all tasks from the backup list
         {
             if (backup.Count != 0)
             {
@@ -324,6 +329,7 @@ namespace EasySave.Controller
             return null;
         }
         public string Save_alltasks()
+        // Method that saves all tasks in the backup list
         {
             int count = 0;
 
@@ -381,6 +387,7 @@ namespace EasySave.Controller
             return null;
         }
         public string Save_task(int indextask)
+        // Method that saves 1 task in the backup list
         {
             foreach (IBackup task in backup)
             {
@@ -408,6 +415,7 @@ namespace EasySave.Controller
 
         }
         public string Save_diff(bool fulldiff, int indextask)
+        // Method that saves as a differencial backup when pressing yes on the popup
         {
             foreach (IBackup task in backup)
             {
@@ -423,15 +431,18 @@ namespace EasySave.Controller
             return null;
         }
         public IBackup Last_backup()
+        // return last backup added
         {
             return backup.Last();
         }
 
         public Dictionary<string, Dictionary<string,string>> getLanguageDict()
+        //language swap method
         {
             return Utils.loadLanguage();
         }
         public string Informations_items(int index)
+        //method associating saves with save informations
         {
             foreach (IBackup item in backup)
             {
@@ -455,6 +466,7 @@ namespace EasySave.Controller
             return ret;
         }
         public void Update_progressbar()
+        // Progress bar method
         {
             if (View.current_name == null && View.current_targetpath == null)
             {
@@ -470,6 +482,7 @@ namespace EasySave.Controller
             }
         }
         public void Play_Pause(string name)
+        // Play\Pause method
         {
             for (int i = 0; i < threads_list.Count; i++)
             {
@@ -489,6 +502,7 @@ namespace EasySave.Controller
         }
 
         public void Stop(string name)
+        // Stop method
         {
             for (int i = 0; i < threads_list.Count; i++)
             {
@@ -508,6 +522,7 @@ namespace EasySave.Controller
         }
 
         public void KillThread(string name)
+        // Method stopping all threads
         {
             for (int i = 0; i < threads_list.Count; i++)
             {

@@ -42,11 +42,13 @@ namespace EasySave.View
             this.Loaded += UserControl1_Loaded;
         }
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
+        // Event broughing to window_Closing
         {
             Window window = Window.GetWindow(this);
             window.Closing += window_Closing;
         }
         void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
+        // Method closing correctly the window and checking if Easy Save is making a save
         {
             string current_thread = "";
             foreach (var th in controller.threads_list)
@@ -80,6 +82,7 @@ namespace EasySave.View
         }
 
         private void Add_sourcefolder(object sender, RoutedEventArgs e)
+        // Method handling the source folder browse button
         {
             using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
             {
@@ -92,6 +95,7 @@ namespace EasySave.View
         }
 
         private void Add_targetfolder(object sender, RoutedEventArgs e)
+        // Method handling the target folder browse button
         {
             using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
             {
@@ -104,6 +108,7 @@ namespace EasySave.View
         }
 
         private void Add_save(object sender, RoutedEventArgs e)
+        // Method handling the button "Add save" 
         {
             bool mirr_check = mirror_button.IsChecked ?? false;
             bool diff_check = diff_button.IsChecked ?? false;
@@ -141,6 +146,7 @@ namespace EasySave.View
         }
 
         private void Delete_item(object sender, RoutedEventArgs e)
+        // Method handling the button "Delete" 
         {
             if (Save_task.SelectedItem != null)
             {
@@ -150,6 +156,7 @@ namespace EasySave.View
             }
         }
         private void Delete_allitems(object sender, RoutedEventArgs e)
+        // Method handling the button "Delete all" 
         {
             string response = controller.Remove_alltasks();
             while(Save_task.Items.Count > 0)
@@ -160,6 +167,7 @@ namespace EasySave.View
         }
         
         private void Save_item(object sender, RoutedEventArgs e)
+        // Method handling the button "save" 
         {
             if (Save_task.SelectedItem != null)
             {
@@ -183,6 +191,7 @@ namespace EasySave.View
             }
         }
         public void Display_error_success(string mess)
+        // Method that uses the dictionnary to display a message after an event
         {
             switch (mess)
             {
@@ -251,6 +260,7 @@ namespace EasySave.View
             }
         }
         public MessageBoxResult Messbx(string name)
+        // Message box asking user if he wants a full save or not after selecting differential backup
         {
             MessageBoxResult result = MessageBox.Show(dict["full_save_diff_all"] + name + " ?", dict["full_save_diff"], MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             return result;
@@ -263,12 +273,14 @@ namespace EasySave.View
         }
 
         private void Saves_items(object sender, RoutedEventArgs e)
+        // "save all tasks" button handling 
         {
             controller.Save_alltasks();
 
         }
 
         private void Save_task_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        // Displaying information after double clicking on the backup
         {
             if (Save_task.SelectedIndex != -1)
             {
@@ -288,6 +300,7 @@ namespace EasySave.View
         }
         
         private void Open_blacklist(object sender, RoutedEventArgs e)
+        // Opening the software blacklist file
         {
             System.Diagnostics.Process.Start("notepad.exe", ConfigurationSettings.AppSettings["softwareBlacklist"]);
             /*string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
@@ -297,6 +310,7 @@ namespace EasySave.View
             File.WriteAllText("..\\..\\Model\\software_blacklist.json", output);*/
         }
         private void Open_cryptextension(object sender, RoutedEventArgs e)
+        // Opening the extension list file
         {
             System.Diagnostics.Process.Start("notepad.exe", ConfigurationSettings.AppSettings["ExtensionList"]);
             /*string json = File.ReadAllText("..\\..\\Model\\software_blacklist.json");
@@ -307,10 +321,12 @@ namespace EasySave.View
         }
 
         public void Refresh()
+        // visual progressbar refresh
         {
             this.progressbartask.Refresh();
         }
         private void Switch_language(object sender, RoutedEventArgs e)
+        // Method modifying language in the inteface
         {
             dict = Switch_dict();
             save_name.Content = dict["save_name"];
@@ -354,14 +370,16 @@ namespace EasySave.View
         }
 
         private void PlayPause(object sender, RoutedEventArgs e)
+        // Play/Pause method, view management 
         {
-            if(current_name != null)
+            if (current_name != null)
             { 
                 controller.Play_Pause(current_name);
             }
         }
-        
+
         private void Stop(object sender, RoutedEventArgs e)
+        // Stop method, view management
         {
             if (current_name != null)
             {
@@ -369,6 +387,7 @@ namespace EasySave.View
             }
         }
         private void Update_sizefile(object sender, RoutedEventArgs e)
+        // File size entering handling method
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.AppSettings.Settings.Remove("MaxSizeFile");
