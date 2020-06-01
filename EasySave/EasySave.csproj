@@ -110,6 +110,7 @@
     <Content Include="Ressources\CryptoSoft\hostpolicy.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DistantConsole\" />
     <Folder Include="Logs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
