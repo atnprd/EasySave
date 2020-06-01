@@ -1,0 +1,473 @@
+[
+  {
+    "size_file": "18212864 ko",
+    "name_file": "Overcooked.exe",
+    "timestamp": "01 06 2020 : 22:42:03:7005",
+    "time_transfer": 28.8088,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "4 ko",
+    "name_file": "test.txt",
+    "timestamp": "01 06 2020 : 22:42:03:9404",
+    "time_transfer": 216.46220000000002,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "1\r\n ms"
+  }
+]
+[
+  {
+    "size_file": "159 ko",
+    "name_file": "BC01D4E240DC9578D365C4AD40EFBA98.mancpn",
+    "timestamp": "01 06 2020 : 22:42:03:9754",
+    "time_transfer": 13.7675,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "58501 ko",
+    "name_file": "BC01D4E240DC9578D365C4AD40EFBA98.manifest",
+    "timestamp": "01 06 2020 : 22:42:03:9963",
+    "time_transfer": 10.9703,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "27 ko",
+    "name_file": "app.info",
+    "timestamp": "01 06 2020 : 22:42:04:0282",
+    "time_transfer": 12.7193,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "186728 ko",
+    "name_file": "globalgamemanagers",
+    "timestamp": "01 06 2020 : 22:42:04:0511",
+    "time_transfer": 11.0532,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "125368 ko",
+    "name_file": "globalgamemanagers.assets",
+    "timestamp": "01 06 2020 : 22:42:04:0751",
+    "time_transfer": 13.2034,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "10196 ko",
+    "name_file": "level0",
+    "timestamp": "01 06 2020 : 22:42:04:1020",
+    "time_transfer": 10.7941,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "52524 ko",
+    "name_file": "level1",
+    "timestamp": "01 06 2020 : 22:42:04:1249",
+    "time_transfer": 10.2384,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "139584 ko",
+    "name_file": "level1.resS",
+    "timestamp": "01 06 2020 : 22:42:04:1499",
+    "time_transfer": 10.414,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "1133260 ko",
+    "name_file": "level10",
+    "timestamp": "01 06 2020 : 22:42:04:1728",
+    "time_transfer": 10.572700000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "1260200 ko",
+    "name_file": "level11",
+    "timestamp": "01 06 2020 : 22:42:04:1958",
+    "time_transfer": 12.2689,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level11.resS",
+    "timestamp": "01 06 2020 : 22:42:04:2248",
+    "time_transfer": 15.538300000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "635116 ko",
+    "name_file": "level12",
+    "timestamp": "01 06 2020 : 22:42:04:2467",
+    "time_transfer": 10.448500000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level12.resS",
+    "timestamp": "01 06 2020 : 22:42:04:2706",
+    "time_transfer": 13.199200000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "1145740 ko",
+    "name_file": "level13",
+    "timestamp": "01 06 2020 : 22:42:04:2946",
+    "time_transfer": 10.3888,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level13.resS",
+    "timestamp": "01 06 2020 : 22:42:04:3165",
+    "time_transfer": 10.6338,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "1392272 ko",
+    "name_file": "level14",
+    "timestamp": "01 06 2020 : 22:42:04:3464",
+    "time_transfer": 17.372500000000002,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "11388 ko",
+    "name_file": "level15",
+    "timestamp": "01 06 2020 : 22:42:04:3813",
+    "time_transfer": 13.0701,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "956540 ko",
+    "name_file": "level16",
+    "timestamp": "01 06 2020 : 22:42:04:4062",
+    "time_transfer": 11.3332,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "593028 ko",
+    "name_file": "level17",
+    "timestamp": "01 06 2020 : 22:42:04:4282",
+    "time_transfer": 11.185400000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level17.resS",
+    "timestamp": "01 06 2020 : 22:42:04:4511",
+    "time_transfer": 11.0402,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "682848 ko",
+    "name_file": "level18",
+    "timestamp": "01 06 2020 : 22:42:04:4760",
+    "time_transfer": 13.051,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level18.resS",
+    "timestamp": "01 06 2020 : 22:42:04:5082",
+    "time_transfer": 12.4327,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "3609236 ko",
+    "name_file": "level19",
+    "timestamp": "01 06 2020 : 22:42:04:5322",
+    "time_transfer": 12.6815,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level19.resS",
+    "timestamp": "01 06 2020 : 22:42:04:5561",
+    "time_transfer": 11.450700000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "620072 ko",
+    "name_file": "level2",
+    "timestamp": "01 06 2020 : 22:42:04:5790",
+    "time_transfer": 10.0638,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level2.resS",
+    "timestamp": "01 06 2020 : 22:42:04:5989",
+    "time_transfer": 9.9187000000000012,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "4484992 ko",
+    "name_file": "level20",
+    "timestamp": "01 06 2020 : 22:42:04:6319",
+    "time_transfer": 16.624000000000002,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level20.resS",
+    "timestamp": "01 06 2020 : 22:42:04:6528",
+    "time_transfer": 10.018600000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "4230548 ko",
+    "name_file": "level21",
+    "timestamp": "01 06 2020 : 22:42:04:6758",
+    "time_transfer": 11.6629,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level21.resS",
+    "timestamp": "01 06 2020 : 22:42:04:6997",
+    "time_transfer": 11.6607,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "6574212 ko",
+    "name_file": "level22",
+    "timestamp": "01 06 2020 : 22:42:04:7286",
+    "time_transfer": 16.491400000000002,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level22.resS",
+    "timestamp": "01 06 2020 : 22:42:04:7665",
+    "time_transfer": 18.7828,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "1269004 ko",
+    "name_file": "level23",
+    "timestamp": "01 06 2020 : 22:42:04:7986",
+    "time_transfer": 14.455300000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "1238320 ko",
+    "name_file": "level24",
+    "timestamp": "01 06 2020 : 22:42:04:8265",
+    "time_transfer": 13.062700000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "629932 ko",
+    "name_file": "level25",
+    "timestamp": "01 06 2020 : 22:42:04:8505",
+    "time_transfer": 10.930800000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level25.resS",
+    "timestamp": "01 06 2020 : 22:42:04:8754",
+    "time_transfer": 11.4323,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "520180 ko",
+    "name_file": "level26",
+    "timestamp": "01 06 2020 : 22:42:04:9053",
+    "time_transfer": 11.419,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level26.resS",
+    "timestamp": "01 06 2020 : 22:42:04:9273",
+    "time_transfer": 10.3041,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "590560 ko",
+    "name_file": "level27",
+    "timestamp": "01 06 2020 : 22:42:04:9542",
+    "time_transfer": 15.2697,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "131232 ko",
+    "name_file": "level27.resS",
+    "timestamp": "01 06 2020 : 22:42:04:9811",
+    "time_transfer": 11.0725,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
+[
+  {
+    "size_file": "693304 ko",
+    "name_file": "level28",
+    "timestamp": "01 06 2020 : 22:42:05:0055",
+    "time_transfer": 10.428700000000001,
+    "folder_source": "D:\\Overcooked",
+    "folder_target": "D:\\",
+    "time_crypt": "0"
+  }
+]
