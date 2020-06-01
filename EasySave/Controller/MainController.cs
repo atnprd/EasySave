@@ -8,6 +8,9 @@ using EasySave.View;
 using EasySave.Model;
 using System.Threading;
 using System.Windows;
+using System.IO;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace EasySave.Controller
 {
@@ -25,7 +28,7 @@ namespace EasySave.Controller
         public List<IBackup> backup { get => m_backup; set => m_backup = value; }
         public View.View View { get; set; }
         public string[] blacklisted_apps { get => m_blacklisted_apps; set => m_blacklisted_apps = value; }
-        private List<Thread> threads_list { get => m_threads_list; set => m_threads_list = value; }
+        public List<Thread> threads_list { get => m_threads_list; set => m_threads_list = value; }
 
         public MainController()
         {
@@ -53,7 +56,9 @@ namespace EasySave.Controller
             {
                 Application.Current.Shutdown();
             }
-            
+
+            CheckExistingFiles();
+
             DistantConsoleServer server = new DistantConsoleServer(this);
             Thread ServerThread = new Thread(server.RunServer);
             ServerThread.Start();
@@ -72,7 +77,7 @@ namespace EasySave.Controller
 
         public void Close()
         {
-            frameThread.Abort();
+            Process.GetCurrentProcess().Kill();
         }
 
         //method that process data in consoleMode
@@ -293,9 +298,28 @@ namespace EasySave.Controller
         }
         public string Remove_alltasks()
         {
-            if (backup.Count != 0) {
-                backup.Clear();
-                return "success_deleteall";
+            if (backup.Count != 0)
+            {
+                string current_thread = "";
+                foreach (var th in this.threads_list)
+                {
+                    if (th.IsAlive)
+                    {
+                        current_thread = current_thread + " " + th.Name;
+                    }
+                }
+                if (current_thread != "")
+                {
+                    MessageBoxResult result = System.Windows.MessageBox.Show("these task(s) are still in progress:" + current_thread + " ,do you want to stop them?", " close", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        foreach (var th in this.threads_list)
+                        {
+                            th.Abort();
+                        }
+                        return "success_deleteall";
+                    }
+                }
             }
             return null;
         }
@@ -447,18 +471,19 @@ namespace EasySave.Controller
         }
         public void Play_Pause(string name)
         {
-            foreach(IBackup backup in backup)
+            for (int i = 0; i < threads_list.Count; i++)
             {
-                if(backup.name == name)
+                if (threads_list[i].Name == name)
                 {
-                    if (backup.is_on_break)
+                    if (threads_list[i].ThreadState == System.Threading.ThreadState.Suspended)
                     {
-                        backup.is_on_break = false;
+                        threads_list[i].Resume();
                     }
                     else
                     {
-                        backup.is_on_break = true;
-                    }       
+                        threads_list[i].Suspend();
+                    }
+
                 }
             }
         }
@@ -500,6 +525,34 @@ namespace EasySave.Controller
                 }
             }
         }
-       
+
+        public void CheckExistingFiles()
+        {
+            if (!File.Exists(ConfigurationSettings.AppSettings["CryptoSoftPath"]))
+            {
+                MessageBox.Show("CryptoSoft not found");
+                Process.GetCurrentProcess().Kill();
+            }
+            if (!File.Exists(ConfigurationSettings.AppSettings["softwareBlacklist"]))
+            {
+                MessageBox.Show("Software blacklist not found");
+                Process.GetCurrentProcess().Kill();
+            }
+            if (!File.Exists(ConfigurationSettings.AppSettings["ExtensionList"]))
+            {
+                MessageBox.Show("List of extensions to crypt not found");
+                Process.GetCurrentProcess().Kill();
+            }
+            if (!File.Exists(ConfigurationSettings.AppSettings["PriorityList"]))
+            {
+                MessageBox.Show("List of extensions to prioritarize not found");
+                Process.GetCurrentProcess().Kill();
+            }
+            if (!File.Exists(ConfigurationSettings.AppSettings["LanguageDict"]))
+            {
+                MessageBox.Show("Language dictionnary not found");
+                Process.GetCurrentProcess().Kill();
+            }
+        }
     }
 }

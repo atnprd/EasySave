@@ -26,7 +26,7 @@ namespace EasySave.View
         Dictionary<string, Dictionary<string, string>> language_dict;
         Dictionary<string, string> dict;
 
-        
+
 
         public View(IMainController c)
         {
@@ -39,6 +39,44 @@ namespace EasySave.View
             language_dict = controller.getLanguageDict();
             dict = language_dict["english"];
             language = "en";
+            this.Loaded += UserControl1_Loaded;
+        }
+        void UserControl1_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
+            window.Closing += window_Closing;
+        }
+        void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
+        {
+            string current_thread = "";
+            foreach (var th in controller.threads_list)
+            {
+                if (th.IsAlive)
+                {
+                    current_thread = current_thread + " " + th.Name;
+                }
+            }
+            if (current_thread != "")
+            {
+                MessageBoxResult result = MessageBox.Show("these task(s) are still in progress:" + current_thread + " ,do you want to close the application?", " close", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                if (result == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                }
+                else if (result == MessageBoxResult.Yes)
+                {
+                    foreach (var th in controller.threads_list)
+                    {
+                        th.Abort();
+                    }
+                    controller.Close();
+                }
+            }
+            else
+            {
+                controller.Close();
+            }
+
         }
 
         private void Add_sourcefolder(object sender, RoutedEventArgs e)

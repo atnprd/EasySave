@@ -54,18 +54,25 @@ namespace EasySave.Model
         //Launching save, setting directory to copy and create save path
         public void LaunchSave()
         {
-           
-            current_file = 0;
-            DirectoryInfo di = new DirectoryInfo(m_source_folder);
-            string path = target_folder + '/' + name;
-            FullSavePrio(di, path);
-            FullSave(di, path);
 
-            m_realTimeMonitoring.GenerateFinalLog();
-            controller.Update_progressbar();
+            try
+            {
+                current_file = 0;
+                DirectoryInfo di = new DirectoryInfo(m_source_folder);
+                string path = target_folder + '/' + name;
+                FullSavePrio(di, path);
+                FullSave(di, path);
 
-            controller.KillThread(name);
-            
+                m_realTimeMonitoring.GenerateFinalLog();
+                controller.Update_progressbar();
+
+                controller.KillThread(name);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
         }
 
         //Mirror save
@@ -81,7 +88,11 @@ namespace EasySave.Model
             //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
-                while (is_on_break || Utils.checkBusinessSoft(controller.blacklisted_apps) || controller.IsAPriorityTaskRunning()) { }
+                if (Utils.checkBusinessSoft(controller.blacklisted_apps))
+                {
+                    System.Windows.MessageBox.Show("A black listed application has been detected, current tasks have been cancelled.");
+                    Thread.CurrentThread.Abort();
+                }
                 if (!Utils.IsPriority(fi.Extension))
                 {
                     if(fi.Length> Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
@@ -118,7 +129,11 @@ namespace EasySave.Model
             //foreach file in source directory, copy it in target directory
             foreach (FileInfo fi in di.GetFiles())
             {
-                while ( is_on_break || Utils.checkBusinessSoft(controller.blacklisted_apps)){}
+                if (Utils.checkBusinessSoft(controller.blacklisted_apps))
+                {
+                    System.Windows.MessageBox.Show("A black listed application has been detected, current tasks have been cancelled.");
+                    Thread.CurrentThread.Abort();
+                }
                 if (Utils.IsPriority(fi.Extension))
                 {
                     if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){

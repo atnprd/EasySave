@@ -2,6 +2,8 @@
 using System;
 using System.Configuration;
 using System.IO;
+using System.Threading;
+using System.Windows;
 
 namespace EasySave.Model
 {
@@ -51,51 +53,65 @@ namespace EasySave.Model
         //launch save, check if it is the first save, if it is do a full save, else do an incremental save
         public void LaunchSave()
         {
-            current_file = 0;
-            DirectoryInfo di = new DirectoryInfo(m_source_folder);
-            if (first_save)
+            try
             {
-                string target_path = target_folder + '/' + name + "/completeBackup/";
-                first_save = false;
-                FullSavePrio(di, target_path);
-                FullSave(di, target_path);
+                current_file = 0;
+                DirectoryInfo di = new DirectoryInfo(m_source_folder);
+                if (first_save)
+                {
+                    string target_path = target_folder + '/' + name + "/completeBackup/";
+                    first_save = false;
+                    FullSavePrio(di, target_path);
+                    FullSave(di, target_path);
+                }
+                else
+                {
+                    string complete_path = target_folder + '/' + name + "/completeBackup/";
+                    string target_path = target_folder + '/' + name + "/tempBackup/";
+
+                    IncrementSavePrio(di, target_path, complete_path);
+                    IncrementSave(di, target_path, complete_path);
+                }
+                m_realTimeMonitoring.GenerateFinalLog();
+                controller.Update_progressbar();
+
+                controller.KillThread(name);
             }
-            else
+            catch (Exception ex)
             {
-                string complete_path = target_folder + '/' + name + "/completeBackup/";
-                string target_path = target_folder + '/' + name + "/tempBackup/";
-
-                IncrementSavePrio(di, target_path, complete_path);
-                IncrementSave(di, target_path, complete_path);
-            }
-            m_realTimeMonitoring.GenerateFinalLog();
-            controller.Update_progressbar();
-
-            controller.KillThread(name);
+                MessageBox.Show(ex.ToString());
+            } 
         }
         //launch save, user choose if it is a full or incremental save, if it is the first save he can't force incremental save
         public void LaunchSaveInc(object full_save)
         {
-            current_file = 0;
-            DirectoryInfo di = new DirectoryInfo(m_source_folder);
-            if (!(bool)full_save && !first_save)
+            try
             {
-                string complete_path = target_folder + '/' + name + "/completeBackup/";
-                string target_path = target_folder + '/' + name + "/tempBackup/";
-                IncrementSavePrio(di, target_path, complete_path);
-                IncrementSave(di, target_path, complete_path);
-            }
-            else
-            {
-                string complete_path = target_folder + '/' + name + "/completeBackup/";
-                first_save = false;
-                FullSavePrio(di, complete_path);
-                FullSave(di, complete_path);
-            }
-            m_realTimeMonitoring.GenerateFinalLog();
-            controller.Update_progressbar();
+                current_file = 0;
+                DirectoryInfo di = new DirectoryInfo(m_source_folder);
+                if (!(bool)full_save && !first_save)
+                {
+                    string complete_path = target_folder + '/' + name + "/completeBackup/";
+                    string target_path = target_folder + '/' + name + "/tempBackup/";
+                    IncrementSavePrio(di, target_path, complete_path);
+                    IncrementSave(di, target_path, complete_path);
+                }
+                else
+                {
+                    string complete_path = target_folder + '/' + name + "/completeBackup/";
+                    first_save = false;
+                    FullSavePrio(di, complete_path);
+                    FullSave(di, complete_path);
+                }
+                m_realTimeMonitoring.GenerateFinalLog();
+                controller.Update_progressbar();
 
-            controller.KillThread(name);
+                controller.KillThread(name);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         //Mirror save
@@ -109,7 +125,11 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
-                while (is_on_break || Utils.checkBusinessSoft(controller.blacklisted_apps) || controller.IsAPriorityTaskRunning()) { }
+                if (Utils.checkBusinessSoft(controller.blacklisted_apps))
+                {
+                    System.Windows.MessageBox.Show("A black listed application has been detected, current tasks have been cancelled.");
+                    Thread.CurrentThread.Abort();
+                }
                 if (!Utils.IsPriority(fi.Extension))
                 {
                     if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
@@ -142,7 +162,11 @@ namespace EasySave.Model
             }
             foreach (FileInfo fi in di.GetFiles())
             {
-                while (is_on_break || Utils.checkBusinessSoft(controller.blacklisted_apps)) { }
+                if (Utils.checkBusinessSoft(controller.blacklisted_apps))
+                {
+                    System.Windows.MessageBox.Show("A black listed application has been detected, current tasks have been cancelled.");
+                    Thread.CurrentThread.Abort();
+                }
                 if (Utils.IsPriority(fi.Extension))
                 {
                     if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
@@ -182,7 +206,11 @@ namespace EasySave.Model
                 {
                     is_on_break = true;
                 }
-                while (is_on_break || Utils.checkBusinessSoft(controller.blacklisted_apps) || controller.IsAPriorityTaskRunning()) { }
+                if (Utils.checkBusinessSoft(controller.blacklisted_apps))
+                {
+                    System.Windows.MessageBox.Show("A black listed application has been detected, current tasks have been cancelled.");
+                    Thread.CurrentThread.Abort();
+                }
                 if (!Utils.IsPriority(fi.Extension))
                 {
                     if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){
@@ -219,7 +247,11 @@ namespace EasySave.Model
             DirectoryInfo dirComplete = new DirectoryInfo(complete_path);
             foreach (FileInfo fi in di.GetFiles())
             {
-                while (is_on_break || Utils.checkBusinessSoft(controller.blacklisted_apps)) { }
+                if (Utils.checkBusinessSoft(controller.blacklisted_apps))
+                {
+                    System.Windows.MessageBox.Show("A black listed application has been detected, current tasks have been cancelled.");
+                    Thread.CurrentThread.Abort();
+                }
                 if (Utils.IsPriority(fi.Extension))
                 {
                     if (fi.Length > Convert.ToInt16(ConfigurationSettings.AppSettings["MaxSizeFile"])){

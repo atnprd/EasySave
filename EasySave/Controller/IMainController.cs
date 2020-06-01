@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EasySave.Controller
@@ -11,9 +12,9 @@ namespace EasySave.Controller
     public interface IMainController
     {   
         List<IBackup> backup { get; set; }
+        List<Thread> threads_list { get; set; }
         View.View View { get; set; }
         string[] blacklisted_apps { get; set; }
-
         string Add_save(string name, string source_folder, string target_folder, string backuptype);
         IBackup Last_backup();
         string Remove_task(int indextask);

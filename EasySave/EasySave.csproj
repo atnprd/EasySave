@@ -88,6 +88,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Ressources\CryptoSoft\CryptoSoftMini.deps.json" />
+    <None Include="Ressources\CryptoSoft\CryptoSoftMini.runtimeconfig.dev.json" />
+    <None Include="Ressources\CryptoSoft\CryptoSoftMini.runtimeconfig.json" />
     <None Include="Ressources\crypt_extension.json" />
     <None Include="Ressources\priority_extension.json" />
     <None Include="Ressources\software_blacklist.json" />
@@ -99,6 +102,15 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Ressources\CryptoSoft\CryptoSoftMini.dll" />
+    <Content Include="Ressources\CryptoSoft\CryptoSoftMini.exe" />
+    <Content Include="Ressources\CryptoSoft\CryptoSoftMini.pdb" />
+    <Content Include="Ressources\CryptoSoft\hostfxr.dll" />
+    <Content Include="Ressources\CryptoSoft\hostpolicy.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
